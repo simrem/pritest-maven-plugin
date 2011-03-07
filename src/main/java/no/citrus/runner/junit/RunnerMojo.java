@@ -17,6 +17,7 @@ import no.citrus.runner.junit.priority.PriorityList;
 import no.citrus.runner.junit.reporter.Reporter;
 import no.citrus.runner.junit.test.CitrusTester;
 
+import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -60,6 +61,15 @@ public class RunnerMojo extends AbstractMojo {
      */
     protected List<String> testClasspathElements;
 
+     /**
+     * The project dependency classpath
+     *
+     * @parameter expression="${project.dependencies}"
+     * @required
+     * @readonly
+     */
+    protected List<Dependency> dependencyClasspaths;
+
     /**
      * The directory containing generated test classes of the project being tested.
      * This will be included at the beginning of the test classpath.                                                                                                                            *
@@ -92,12 +102,13 @@ public class RunnerMojo extends AbstractMojo {
     	citrusClassPaths = new ArrayList<URL>();
     	addFileToClassPath(testOutputDirectory);
     	addFileToClassPath(classesDirectory);
+        //addFileToClassPath(new File("/home/simon/.m2/repository/"));
 
         URLClassLoader classLoader = new URLClassLoader(citrusClassPaths.toArray(new URL[]{}), this.getClass().getClassLoader());
 
         
         getLog().info("Fetching priority list...");
-        
+
         PriorityList priorityListService = new PriorityList(new OnlineClassService(citrusTechniqueUrl), new LocalClassService(testOutputDirectory));
         List<String> priorityList = new ArrayList<String>();
 		try {
