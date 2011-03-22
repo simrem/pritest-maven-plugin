@@ -39,7 +39,6 @@ public class ReporterTest {
         Document testResult = null;
         try {
             testResult = parseXmlStringToDocument(reporter.getXML());
-            System.out.println(reporter.getXML());
         } catch (JAXBException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (Exception e) {

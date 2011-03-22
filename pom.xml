@@ -14,6 +14,17 @@
         <jersey.version>1.4</jersey.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    
+    <repositories>
+  	  <repository>
+	      <id>javaparser</id>
+	      <name>JavaParser Repository</name>
+	      <url>http://javaparser.googlecode.com/svn/maven2</url>
+	      <snapshots>
+	          <enabled>false</enabled>
+	      </snapshots>
+	  </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -56,6 +67,11 @@
             <artifactId>jersey-json</artifactId>
             <version>${jersey.version}</version>
         </dependency>
+        <dependency>
+		    <groupId>com.google.code.javaparser</groupId>
+		    <artifactId>javaparser</artifactId>
+		    <version>1.0.8</version>
+		</dependency>
     </dependencies>
     <build>
         <plugins>
