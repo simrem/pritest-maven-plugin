@@ -20,10 +20,14 @@ public class ReferenceType {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (!(obj instanceof ReferenceType)) return false;
+		if (this == obj) {
+            return true;
+        }
+		if (!(obj instanceof ReferenceType)) {
+            return false;
+        }
 		
 		ReferenceType rt = (ReferenceType) obj;
-		return this.type == rt.getType() && this.variableName == rt.getVariableName();
+		return this.type.equals(rt.getType()) && this.variableName.equals(rt.getVariableName());
 	}
 }

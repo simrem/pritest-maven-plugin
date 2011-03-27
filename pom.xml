@@ -24,6 +24,10 @@
 	          <enabled>false</enabled>
 	      </snapshots>
 	  </repository>
+          <repository>
+              <id>java</id>
+              <url>http://download.java.net/maven/2</url>
+          </repository>
     </repositories>
 
     <dependencies>
