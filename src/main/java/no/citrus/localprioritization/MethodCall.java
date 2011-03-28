@@ -2,41 +2,39 @@ package no.citrus.localprioritization;
 
 public class MethodCall {
 
-	private final String methodName;
+    private String scope;
+    private final String methodName;
 
-	public MethodCall(String methodName) {
-		this.methodName = methodName;
+	public MethodCall(String scope, String methodName) {
+        this.scope = scope;
+        this.methodName = methodName;
 	}
 
-	public String getMethodName() {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MethodCall that = (MethodCall) o;
+
+        if (methodName != null ? !methodName.equals(that.methodName) : that.methodName != null) return false;
+        if (scope != null ? !scope.equals(that.scope) : that.scope != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = scope != null ? scope.hashCode() : 0;
+        result = 31 * result + (methodName != null ? methodName.hashCode() : 0);
+        return result;
+    }
+
+    public String getMethodName() {
 		return methodName;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((methodName == null) ? 0 : methodName.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		MethodCall other = (MethodCall) obj;
-		if (methodName == null) {
-			if (other.methodName != null)
-				return false;
-		} else if (!methodName.equals(other.methodName))
-			return false;
-		return true;
-	}
-
-
+    public String getScope() {
+        return scope;
+    }
 }
