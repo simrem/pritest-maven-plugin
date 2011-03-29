@@ -1,6 +1,5 @@
 package no.citrus.localprioritization;
 
-import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.visitor.VoidVisitorAdapter;

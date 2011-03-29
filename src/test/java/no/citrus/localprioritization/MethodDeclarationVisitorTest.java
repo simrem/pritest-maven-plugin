@@ -1,20 +1,20 @@
 package no.citrus.localprioritization;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.collection.IsCollectionContaining.hasItems;
-import static org.junit.Assert.assertThat;
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.TypeDeclaration;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.collection.IsCollectionContaining.hasItems;
+import static org.junit.Assert.assertThat;
 
 public class MethodDeclarationVisitorTest {
 	

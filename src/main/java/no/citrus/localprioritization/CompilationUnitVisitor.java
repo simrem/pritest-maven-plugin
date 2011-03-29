@@ -15,8 +15,8 @@ public class CompilationUnitVisitor extends GenericVisitorAdapter<List<ClassType
 		
 		if (cu.getTypes() != null) {
 			for (TypeDeclaration td : cu.getTypes()) {
-				ClassType ct = td.accept(new ClassOrInterfaceDeclarationVisitor(), obj);
-				classes.add(ct);
+				//ClassType ct = td.accept(new ClassOrInterfaceDeclarationVisitor(), obj);
+				//classes.add(ct);
 			}
 		}
 		
