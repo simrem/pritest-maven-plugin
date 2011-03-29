@@ -18,18 +18,18 @@ public class MethodCallVisitorTest {
 	
 	@Test
 	public void shouldFindMethodCallsInMethod() throws FileNotFoundException, ParseException {
-		FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/MethodCall.java");
+		FileInputStream fis = new FileInputStream("src/test/java/no/citrus/localprioritization/MethodCallVisitorTest.java");
 		CompilationUnit cu = JavaParser.parse(fis);
-
+		
 		TypeDeclaration td = cu.getTypes().get(0);
-		MethodDeclaration method = (MethodDeclaration) td.getMembers().get(4);
-
+		MethodDeclaration method = (MethodDeclaration) td.getMembers().get(0);
+		
 		MethodCallVisitor mcv = new MethodCallVisitor();
 		method.accept(mcv, null);
 
 		List<MethodCall> methodCalls = mcv.getMethodCalls();
 		
-		assertThat(methodCalls, hasItems(new MethodCall("scope", "hashCode"),
-                new MethodCall("methodName", "hashCode")));
+		assertThat(methodCalls, hasItems(new MethodCall("mcv", "getMethodCalls"),
+                new MethodCall("JavaParser", "parse")));
 	}
 }
