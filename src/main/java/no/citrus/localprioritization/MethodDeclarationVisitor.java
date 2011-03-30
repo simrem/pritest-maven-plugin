@@ -11,7 +11,7 @@ import java.util.List;
 public class MethodDeclarationVisitor extends VoidVisitorAdapter<Object> {
 	private List<MethodDecl> methodDeclarations;
 	
-	public MethodDeclarationVisitor(String className) {
+	public MethodDeclarationVisitor() {
 		methodDeclarations = new ArrayList<MethodDecl>();
 	}
 
@@ -21,8 +21,6 @@ public class MethodDeclarationVisitor extends VoidVisitorAdapter<Object> {
 
 	@Override
 	public void visit(MethodDeclaration n, Object arg1) {
-		//System.out.println("MethodDeclaration: " + n.getName() + " " + n.getType().toString());
-		
 		String returnType = null;
 		String methodName = n.getName();
 		
@@ -38,13 +36,7 @@ public class MethodDeclarationVisitor extends VoidVisitorAdapter<Object> {
 		
 		methodDeclarations.add(new MethodDecl(returnType, methodName));
 	}
-	/*
-	@Override
-	public void visit(ClassOrInterfaceDeclaration n, Object arg) {
-		System.out.println("-- ClassOrInterfaceDeclaration: " + n.getName());
-		super.visit(n, arg);
-	}
-	*/
+	
 	private class ReturnTypeVisitor extends VoidVisitorAdapter<Object> {
 
 		private String typeName;

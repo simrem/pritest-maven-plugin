@@ -10,7 +10,7 @@ import japa.parser.ast.visitor.VoidVisitorAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FieldVisitor extends VoidVisitorAdapter {
+public class FieldVisitor extends VoidVisitorAdapter<Object> {
     private List<ReferenceType> fields;
 
     public FieldVisitor() {
@@ -55,7 +55,7 @@ public class FieldVisitor extends VoidVisitorAdapter {
         }
     }
 
-    private class FieldTypeVisitor extends VoidVisitorAdapter {
+    private class FieldTypeVisitor extends VoidVisitorAdapter<Object> {
 
         private String name;
 

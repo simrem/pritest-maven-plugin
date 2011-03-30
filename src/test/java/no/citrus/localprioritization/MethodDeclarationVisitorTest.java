@@ -5,14 +5,12 @@ import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.TypeDeclaration;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.collection.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
 
@@ -25,7 +23,7 @@ public class MethodDeclarationVisitorTest {
 		FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/MethodDeclarationVisitor.java");
 		CompilationUnit cu = JavaParser.parse(fis);
 		
-		MethodDeclarationVisitor mdv = new MethodDeclarationVisitor("MethodDeclarationVisitor");
+		MethodDeclarationVisitor mdv = new MethodDeclarationVisitor();
 		TypeDeclaration td = cu.getTypes().get(0);
 		td.accept(mdv, null);
 		
@@ -37,11 +35,5 @@ public class MethodDeclarationVisitorTest {
 		assertThat(methodDeclarations, hasItems(
 				new MethodDecl("List", "getMethodDeclarations"),
 				new MethodDecl("void", "visit")));
-	}
-	
-	@Test
-	@Ignore
-	public void shouldNotIncludeMethodsFromInnerClass() {
-		assertThat(methodDeclarations, not(hasItems(new MethodDecl("String", "getTypeName"))));
 	}
 }

@@ -4,7 +4,6 @@ import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -55,22 +54,36 @@ public class ClassOrInterfaceDeclarationVisitorTest {
     }
 
     @Test
-    @Ignore
     public void shouldIntegrateWithFieldVisitor() {
-        ClassType ct = classes.get(0);
-        List<ReferenceType> fields = ct.getFields();
+        ClassType outerClass = classes.get(0);
+        ClassType firstInnerClass = classes.get(1);
+        ClassType secondInnerClass = classes.get(2);
 
-        assertThat(fields.size(), is(equalTo(1)));
-        assertThat(fields, hasItem(new ReferenceType("List", "fields")));
+        assertThat(outerClass.getFields().size(), is(equalTo(1)));
+        assertThat(outerClass.getFields(), hasItem(new ReferenceType("List", "fields")));
+        
+        assertThat(firstInnerClass.getFields().size(), is(equalTo(0)));
+        
+        assertThat(secondInnerClass.getFields().size(), is(equalTo(1)));
+        assertThat(secondInnerClass.getFields(), hasItem(new ReferenceType("String", "name")));
     }
 
     @Test
-    @Ignore
-	public void shouldFindDeclaredMethodsInClass() {
-        List<MethodDecl> methodDeclarations = classes.get(0).getMethodDeclarations();
-
-		assertThat(methodDeclarations, hasItems(
+	public void shouldIntegrateWithMethodDeclarationVisitor() {
+        ClassType outerClass = classes.get(0);
+        ClassType firstInnerClass = classes.get(1);
+        ClassType secondInnerClass = classes.get(2);
+        
+        assertThat(outerClass.getMethodDeclarations().size(), is(equalTo(2)));
+		assertThat(outerClass.getMethodDeclarations(), hasItems(
 				new MethodDecl("List", "getFields"),
 				new MethodDecl("void", "visit")));
+		
+		assertThat(firstInnerClass.getMethodDeclarations().size(), is(equalTo(2)));
+		
+		assertThat(secondInnerClass.getMethodDeclarations().size(), is(equalTo(2)));
+		assertThat(secondInnerClass.getMethodDeclarations(), hasItems(
+				new MethodDecl("void", "visit"),
+				new MethodDecl("String", "getName")));
 	}
 }
