@@ -33,7 +33,7 @@ public class ClassOrInterfaceDeclarationVisitor extends GenericVisitorAdapter<Cl
 
         classes.add(newClass);
 
-        classes.addAll(cidVisitor.getClasses());
+        newClass.getInnerClasses().addAll(cidVisitor.getClasses());
         
         return classType;
 	}

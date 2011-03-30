@@ -1,13 +1,17 @@
 package no.citrus.localprioritization;
 
+import java.util.List;
+
 public class MethodDecl {
 
 	private final String returnType;
 	private final String methodName;
+	private List<String> parameters;
 
-	public MethodDecl(String returnType, String methodName) {
+	public MethodDecl(String returnType, String methodName, List<String> parameters) {
 		this.returnType = returnType;
 		this.methodName = methodName;
+		this.parameters = parameters;
 	}
 
 	public String getReturnType() {
@@ -17,6 +21,10 @@ public class MethodDecl {
 	public String getMethodName() {
 		return methodName;
 	}
+	
+	public List<String> getParameters() {
+		return this.parameters;
+	}
 
 	@Override
 	public int hashCode() {
@@ -24,6 +32,8 @@ public class MethodDecl {
 		int result = 1;
 		result = prime * result
 				+ ((methodName == null) ? 0 : methodName.hashCode());
+		result = prime * result
+				+ ((parameters == null) ? 0 : parameters.hashCode());
 		result = prime * result
 				+ ((returnType == null) ? 0 : returnType.hashCode());
 		return result;
@@ -43,6 +53,11 @@ public class MethodDecl {
 				return false;
 		} else if (!methodName.equals(other.methodName))
 			return false;
+		if (parameters == null) {
+			if (other.parameters != null)
+				return false;
+		} else if (!parameters.equals(other.parameters))
+			return false;
 		if (returnType == null) {
 			if (other.returnType != null)
 				return false;
@@ -50,6 +65,4 @@ public class MethodDecl {
 			return false;
 		return true;
 	}
-
-	
 }

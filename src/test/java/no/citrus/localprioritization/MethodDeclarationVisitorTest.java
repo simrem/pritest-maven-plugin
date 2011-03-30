@@ -9,9 +9,12 @@ import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionContaining.hasItems;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class MethodDeclarationVisitorTest {
@@ -32,8 +35,21 @@ public class MethodDeclarationVisitorTest {
 	
 	@Test
 	public void shouldFindDeclaredMethodInClass() {
+		List<String> parameterTypes1 = new ArrayList<String>();
+		List<String> parameterTypes2 = new ArrayList<String>();
+		
+		parameterTypes2.add("MethodDeclaration");
+		parameterTypes2.add("Object");
+		
+		for (String s : methodDeclarations.get(1).getParameters()) {
+			System.out.println(" --| param: " + s);
+		}
+		
 		assertThat(methodDeclarations, hasItems(
-				new MethodDecl("List", "getMethodDeclarations"),
-				new MethodDecl("void", "visit")));
+				new MethodDecl("List", "getMethodDeclarations", parameterTypes1),
+				new MethodDecl("void", "visit", parameterTypes2)));
+		
+		//assertThat(methodDeclarations.get(0).getParameters().size(), is(equalTo(0)));
+		//assertThat(methodDeclarations.get(1).getParameters().size(), is(equalTo(2)));
 	}
 }
