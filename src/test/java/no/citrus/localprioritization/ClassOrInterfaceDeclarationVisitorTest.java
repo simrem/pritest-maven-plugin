@@ -55,13 +55,18 @@ public class ClassOrInterfaceDeclarationVisitorTest {
     }
 
     @Test
-    @Ignore
     public void shouldIntegrateWithFieldVisitor() {
-        ClassType ct = classes.get(0);
-        List<ReferenceType> fields = ct.getFields();
+        ClassType ct1 = classes.get(0);
+        ClassType ct2 = classes.get(1);
+        ClassType ct3 = classes.get(2);
 
-        assertThat(fields.size(), is(equalTo(1)));
-        assertThat(fields, hasItem(new ReferenceType("List", "fields")));
+        assertThat(ct1.getFields().size(), is(equalTo(1)));
+        assertThat(ct1.getFields(), hasItem(new ReferenceType("List", "fields")));
+        
+        assertThat(ct2.getFields().size(), is(equalTo(0)));
+        
+        assertThat(ct3.getFields().size(), is(equalTo(1)));
+        assertThat(ct3.getFields(), hasItem(new ReferenceType("String", "name")));
     }
 
     @Test

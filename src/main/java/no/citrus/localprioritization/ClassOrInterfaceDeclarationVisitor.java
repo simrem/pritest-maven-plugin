@@ -3,12 +3,12 @@ package no.citrus.localprioritization;
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
-import japa.parser.ast.visitor.VoidVisitorAdapter;
+import japa.parser.ast.visitor.GenericVisitorAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassOrInterfaceDeclarationVisitor extends VoidVisitorAdapter<Object> {
+public class ClassOrInterfaceDeclarationVisitor extends GenericVisitorAdapter<ClassType, ClassType> {
 
     private List<ClassType> classes;
 
@@ -17,7 +17,7 @@ public class ClassOrInterfaceDeclarationVisitor extends VoidVisitorAdapter<Objec
     }
 
     @Override
-	public void visit(ClassOrInterfaceDeclaration cid, Object obj) {
+	public ClassType visit(ClassOrInterfaceDeclaration cid, ClassType classType) {
 		String className = cid.getName();
 
         ClassType newClass = new ClassType(className);
@@ -26,19 +26,28 @@ public class ClassOrInterfaceDeclarationVisitor extends VoidVisitorAdapter<Objec
 
         if (cid.getMembers() != null) {
             for (BodyDeclaration bd : cid.getMembers()) {
-                bd.accept(cidVisitor, null);
+                bd.accept(cidVisitor, newClass);
             }
         }
-
-        //FieldVisitor fv = new FieldVisitor();
-        //cid.accept(fv, null);
 
         classes.add(newClass);
 
         classes.addAll(cidVisitor.getClasses());
+        
+        return classType;
 	}
 
-    public List<ClassType> getClasses() {
+    @Override
+	public ClassType visit(FieldDeclaration fieldDeclaration, ClassType classType) {
+    	FieldVisitor fv = new FieldVisitor();
+    	fieldDeclaration.accept(fv, classType);
+    	
+    	classType.getFields().addAll(fv.getFields());
+    	
+		return classType;
+	}
+
+	public List<ClassType> getClasses() {
         return classes;
     }
 }
