@@ -72,10 +72,16 @@
             <version>${jersey.version}</version>
         </dependency>
         <dependency>
-		    <groupId>com.google.code.javaparser</groupId>
-		    <artifactId>javaparser</artifactId>
-		    <version>1.0.8</version>
-		</dependency>
+            <groupId>com.google.code.javaparser</groupId>
+            <artifactId>javaparser</artifactId>
+            <version>1.0.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse</groupId>
+            <artifactId>jgit</artifactId>
+            <version>0.12.0.201103291411</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
