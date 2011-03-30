@@ -3,6 +3,7 @@ package no.citrus.localprioritization;
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
+import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.visitor.GenericVisitorAdapter;
 
 import java.util.ArrayList;
@@ -44,6 +45,16 @@ public class ClassOrInterfaceDeclarationVisitor extends GenericVisitorAdapter<Cl
     	
     	classType.getFields().addAll(fv.getFields());
     	
+		return classType;
+	}
+
+	@Override
+	public ClassType visit(MethodDeclaration methodDeclaration, ClassType classType) {
+		MethodDeclarationVisitor mdv = new MethodDeclarationVisitor();
+		methodDeclaration.accept(mdv, classType);
+		
+		classType.getMethodDeclarations().addAll(mdv.getMethodDeclarations());
+		
 		return classType;
 	}
 
