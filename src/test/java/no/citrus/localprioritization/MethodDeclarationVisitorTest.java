@@ -41,15 +41,11 @@ public class MethodDeclarationVisitorTest {
 		parameterTypes2.add("MethodDeclaration");
 		parameterTypes2.add("Object");
 		
-		for (String s : methodDeclarations.get(1).getParameters()) {
-			System.out.println(" --| param: " + s);
-		}
-		
 		assertThat(methodDeclarations, hasItems(
 				new MethodDecl("List", "getMethodDeclarations", parameterTypes1),
 				new MethodDecl("void", "visit", parameterTypes2)));
 		
-		//assertThat(methodDeclarations.get(0).getParameters().size(), is(equalTo(0)));
-		//assertThat(methodDeclarations.get(1).getParameters().size(), is(equalTo(2)));
+		assertThat(methodDeclarations.get(0).getParameters().size(), is(equalTo(0)));
+		assertThat(methodDeclarations.get(1).getParameters().size(), is(equalTo(2)));
 	}
 }

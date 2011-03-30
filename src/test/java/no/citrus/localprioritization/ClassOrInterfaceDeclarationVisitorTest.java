@@ -4,11 +4,11 @@ import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -71,22 +71,31 @@ public class ClassOrInterfaceDeclarationVisitorTest {
     }
 
     @Test
-    @Ignore
 	public void shouldIntegrateWithMethodDeclarationVisitor() {
         ClassType outerClass = classes.get(0);
         ClassType firstInnerClass = classes.get(0).getInnerClasses().get(0);
         ClassType secondInnerClass = classes.get(0).getInnerClasses().get(1);
+
+        List<String> params1 = new ArrayList<String>();
+        List<String> params2 = new ArrayList<String>();
+        List<String> params3 = new ArrayList<String>();
+        List<String> params4 = new ArrayList<String>();
+
+        params2.add("FieldDeclaration");
+        params2.add("Object");
+        params3.add("ClassOrInterfaceType");
+        params3.add("Object");
         
         assertThat(outerClass.getMethodDeclarations().size(), is(equalTo(2)));
 		assertThat(outerClass.getMethodDeclarations(), hasItems(
-				new MethodDecl("List", "getFields", null),
-				new MethodDecl("void", "visit", null)));
+				new MethodDecl("List", "getFields", params1),
+				new MethodDecl("void", "visit", params2)));
 		
 		assertThat(firstInnerClass.getMethodDeclarations().size(), is(equalTo(2)));
 		
 		assertThat(secondInnerClass.getMethodDeclarations().size(), is(equalTo(2)));
 		assertThat(secondInnerClass.getMethodDeclarations(), hasItems(
-				new MethodDecl("void", "visit", null),
-				new MethodDecl("String", "getName", null)));
+				new MethodDecl("void", "visit", params3),
+				new MethodDecl("String", "getName", params4)));
 	}
 }
