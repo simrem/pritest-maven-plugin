@@ -5,12 +5,12 @@ import java.util.List;
 
 import org.codehaus.jettison.json.JSONException;
 
-public class PriorityList {
+public class PriorityList2 {
 	
 	private final ClassService localClassService;
 	private final ClassService onlineClassService;
 	
-	public PriorityList(ClassService onlineClassService, ClassService localClassService){
+	public PriorityList2(ClassService onlineClassService, ClassService localClassService){
 		this.localClassService = localClassService;
 		this.onlineClassService = onlineClassService;
 	}
@@ -19,6 +19,28 @@ public class PriorityList {
 		List<String> localTestClasses = this.localClassService.getClassList();
 		List<String> onlineTestClasses = new ArrayList<String>();
 		
+		String technique = ((OnlineClassService) this.onlineClassService).getTechniqueURL();
+		int techniqueNumber = Integer.parseInt(technique.substring(technique.length()-1, technique.length()));
+		
+		switch (techniqueNumber) {
+			case 1: case 2: case 3:
+				return onlineListStrategy(localTestClasses, onlineTestClasses);
+		
+			case 4:
+				return technique4Strategy(localTestClasses);
+				
+			case 5:
+				// Sveinung sin case.
+		}
+		return new ArrayList<String>();
+	}
+	
+	private List<String> technique4Strategy(List<String> localTestClasses) {
+		Technique4Ranker t4 = new Technique4Ranker(localTestClasses);
+		return t4.getTechnique4PriorityList();
+	}
+
+	private List<String> onlineListStrategy(List<String> localTestClasses, List<String> onlineTestClasses) {
 		try {
 			onlineTestClasses.addAll(this.onlineClassService.getClassList());
 		} catch (Exception e) {
