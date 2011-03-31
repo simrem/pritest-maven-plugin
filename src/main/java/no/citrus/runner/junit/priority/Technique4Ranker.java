@@ -45,7 +45,7 @@ public class Technique4Ranker {
 	public List<String> callGitStatus() throws NoWorkTreeException, IOException {
 		List<String> gitStatusList = new ArrayList<String>();
 		
-		// Må få tak i parent-project basedir her, og sette som repoPath.
+		// Maa faa tak i parent-project basedir her, og sette som repoPath.
 		File repoPath = new File("/Users/oyvindvol/dev/citrus-junit-runner/.git");
 		RepositoryBuilder repoBuilder = new RepositoryBuilder();
 		Repository repo = repoBuilder.setGitDir(repoPath).build();
