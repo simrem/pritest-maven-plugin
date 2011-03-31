@@ -35,7 +35,7 @@ public class Technique4Ranker {
 		
 		for (String localTestClass : localTestClasses) {
 			if (!finalList.contains(localTestClass)) {
-				finalList.add(localTestClass);
+					finalList.add(localTestClass);
 			}
 		}
 		
@@ -45,7 +45,8 @@ public class Technique4Ranker {
 	public List<String> callGitStatus() throws NoWorkTreeException, IOException {
 		List<String> gitStatusList = new ArrayList<String>();
 		
-		File repoPath = new File("/home/oyvindvol/dev/citrus-junit-runner/.git");
+		// Må få tak i parent-project basedir her, og sette som repoPath.
+		File repoPath = new File("/Users/oyvindvol/dev/citrus-junit-runner/.git");
 		RepositoryBuilder repoBuilder = new RepositoryBuilder();
 		Repository repo = repoBuilder.setGitDir(repoPath).build();
 		
@@ -70,7 +71,7 @@ public class Technique4Ranker {
 				
 				if (!listToAddStringTo.contains(fileName)) {
 					fileName = fileName.replaceAll("/", ".");
-					listToAddStringTo.add(fileName.substring(0, fileName.length()-5) + "Test.java");
+					listToAddStringTo.add(fileName.substring(0, fileName.length()-5) + "Test");
 					return true;
 				}
 			}

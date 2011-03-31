@@ -13,7 +13,7 @@ import com.sun.jersey.api.client.WebResource;
 public class OnlineClassService implements ClassService {
 
 	private final String techniqueURL;
-	
+
 	public OnlineClassService(String techniqueURL){
 		this.techniqueURL = techniqueURL;
 	}
@@ -31,5 +31,8 @@ public class OnlineClassService implements ClassService {
         }
         return data;
 	}
-
+	
+	public String getTechniqueURL() {
+		return techniqueURL;
+	}
 }

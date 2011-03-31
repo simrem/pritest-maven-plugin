@@ -15,7 +15,7 @@ public class PriorityList {
 		this.onlineClassService = onlineClassService;
 	}
 	
-	public List<String> getPriorityList() throws JSONException, Exception{
+	public List<String> getPriorityList() throws JSONException, Exception {
 		List<String> localTestClasses = this.localClassService.getClassList();
 		List<String> onlineTestClasses = new ArrayList<String>();
 		

@@ -20,9 +20,9 @@ public class Technique4RankerTest {
 
 	@BeforeClass
 	public static void beforeClass() {
-		localTestClasses.add("classATest.java");
-		localTestClasses.add("classBTest.java");
-		localTestClasses.add("classCTest.java");
+		localTestClasses.add("classATest");
+		localTestClasses.add("classBTest");
+		localTestClasses.add("classCTest");
 	}
 	
 	@Before
@@ -32,9 +32,9 @@ public class Technique4RankerTest {
 	
 	@Test
 	public void should_instantiate_with_elements_from_localTestClasses() {
-		assertThat(t4.getLocalTestClasses().get(0), equalTo("classATest.java"));
-		assertThat(t4.getLocalTestClasses().get(1), equalTo("classBTest.java"));
-		assertThat(t4.getLocalTestClasses().get(2), equalTo("classCTest.java"));
+		assertThat(t4.getLocalTestClasses().get(0), equalTo("classATest"));
+		assertThat(t4.getLocalTestClasses().get(1), equalTo("classBTest"));
+		assertThat(t4.getLocalTestClasses().get(2), equalTo("classCTest"));
 	}
 	
 	@Test
