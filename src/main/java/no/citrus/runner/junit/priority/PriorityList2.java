@@ -1,5 +1,6 @@
 package no.citrus.runner.junit.priority;
 
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,10 @@ public class PriorityList2 {
 				return technique4Strategy(localTestClasses);
 				
 			case 5:
-				// Sveinung sin case.
+				return technique5Strategy();
+				
+			case 6:
+				// Sveinung sin teknikk.
 		}
 		return new ArrayList<String>();
 	}
@@ -38,6 +42,31 @@ public class PriorityList2 {
 	private List<String> technique4Strategy(List<String> localTestClasses) {
 		Technique4Ranker t4 = new Technique4Ranker(localTestClasses);
 		return t4.getTechnique4PriorityList();
+	}
+	
+	private List<String> technique5Strategy() {
+		Technique5Ranker t5 = new Technique5Ranker();
+		List<String> t5GitStatusList = t5.getTechnique5PriorityList();
+		
+		List<String> contactCitrusList = new ArrayList<String>();
+		try {
+			// Her vil vi ha tak i samme liste som dersom man bruker teknikk3.
+			contactCitrusList = this.onlineClassService.getClassList();
+		} catch (ConnectException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		for (String s : contactCitrusList) {
+			if (!t5GitStatusList.contains(s)) {
+				t5GitStatusList.add(s);
+			}
+		}
+		
+		return t5GitStatusList;
 	}
 
 	private List<String> onlineListStrategy(List<String> localTestClasses, List<String> onlineTestClasses) {

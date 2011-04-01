@@ -11,15 +11,11 @@ import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryBuilder;
 
-public class Technique4Ranker {
-	
-	private List<String> localTestClasses = new ArrayList<String>();
+public class Technique5Ranker {
 
-	public Technique4Ranker(List<String> localTestClasses) {
-		this.localTestClasses = localTestClasses;
-	}
+	public Technique5Ranker() { }
 	
-	public List<String> getTechnique4PriorityList() {
+	public List<String> getTechnique5PriorityList() {
 		List<String> gitStatusList = new ArrayList<String>();
 		try {
 			gitStatusList = callGitStatus();
@@ -28,21 +24,12 @@ public class Technique4Ranker {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		List<String> finalList = new ArrayList<String>();
 		
-		finalList.addAll(gitStatusList);
-		
-		for (String localTestClass : localTestClasses) {
-			if (!finalList.contains(localTestClass)) {
-					finalList.add(localTestClass);
-			}
-		}
-		
-		return finalList;
+		return gitStatusList;
 	}
 	
 	public List<String> callGitStatus() throws NoWorkTreeException, IOException {
-		List<String> gitStatusList = new ArrayList<String>();
+		List<String> callGitList = new ArrayList<String>();
 		
 		// Maa faa tak i parent-project basedir her, og sette som repoPath.
 		File repoPath = new File("/Users/oyvindvol/dev/citrus-junit-runner/.git");
@@ -53,14 +40,14 @@ public class Technique4Ranker {
 		Status status = git.status().call();
 			
 		for (String untrackedFile : status.getUntracked()) {
-			addIfJavaSuffix(untrackedFile, gitStatusList);
+			addIfJavaSuffix(untrackedFile, callGitList);
 		}
 		
 		for (String modifiedFile : status.getModified()) {
-			addIfJavaSuffix(modifiedFile, gitStatusList);
+			addIfJavaSuffix(modifiedFile, callGitList);
 		}
 		
-		return gitStatusList;
+		return callGitList;
 	}
 	
 	private boolean addIfJavaSuffix(String fileName, List<String> listToAddStringTo) {
@@ -78,8 +65,4 @@ public class Technique4Ranker {
 		
 		return false;
 	} 
-	
-	public List<String> getLocalTestClasses() {
-		return localTestClasses;
-	}
 }
