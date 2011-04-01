@@ -11,10 +11,10 @@ import java.util.List;
 
 public class ClassOrInterfaceDeclarationVisitor extends GenericVisitorAdapter<ClassType, ClassType> {
 
-    private List<ClassType> classes;
+    private List<ClassType> types;
 
     public ClassOrInterfaceDeclarationVisitor() {
-        this.classes = new ArrayList<ClassType>();
+        this.types = new ArrayList<ClassType>();
     }
 
     @Override
@@ -31,9 +31,9 @@ public class ClassOrInterfaceDeclarationVisitor extends GenericVisitorAdapter<Cl
             }
         }
 
-        classes.add(newClass);
+        types.add(newClass);
 
-        newClass.getInnerClasses().addAll(cidVisitor.getClasses());
+        newClass.getInnerClasses().addAll(cidVisitor.getTypes());
         
         return classType;
 	}
@@ -58,7 +58,7 @@ public class ClassOrInterfaceDeclarationVisitor extends GenericVisitorAdapter<Cl
 		return classType;
 	}
 
-	public List<ClassType> getClasses() {
-        return classes;
+	public List<ClassType> getTypes() {
+        return types;
     }
 }

@@ -30,7 +30,7 @@ public class ClassOrInterfaceDeclarationVisitorTest {
 
 		cu.accept(cidv, null);
 
-        classes = cidv.getClasses();
+        classes = cidv.getTypes();
 	}
 
 	@Test
