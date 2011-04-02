@@ -1,10 +1,11 @@
-package no.citrus.localprioritization;
+package no.citrus.localprioritization.visitor;
 
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.visitor.GenericVisitorAdapter;
+import no.citrus.localprioritization.model.ClassType;
 
 import java.util.ArrayList;
 import java.util.List;

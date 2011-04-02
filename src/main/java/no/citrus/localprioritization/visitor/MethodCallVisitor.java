@@ -1,9 +1,10 @@
-package no.citrus.localprioritization;
+package no.citrus.localprioritization.visitor;
 
 import japa.parser.ast.expr.MethodCallExpr;
 import japa.parser.ast.expr.NameExpr;
 import japa.parser.ast.visitor.GenericVisitorAdapter;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
+import no.citrus.localprioritization.model.MethodCall;
 
 import java.util.ArrayList;
 import java.util.List;

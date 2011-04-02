@@ -1,10 +1,11 @@
-package no.citrus.localprioritization;
+package no.citrus.localprioritization.visitor;
 
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
+import no.citrus.localprioritization.model.MethodCall;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -17,8 +18,8 @@ import static org.junit.Assert.assertThat;
 public class MethodCallVisitorTest {
 	
 	@Test
-	public void shouldFindMethodCallsInMethod() throws FileNotFoundException, ParseException {
-		FileInputStream fis = new FileInputStream("src/test/java/no/citrus/localprioritization/MethodCallVisitorTest.java");
+	public void should_find_method_calls_in_method() throws FileNotFoundException, ParseException {
+		FileInputStream fis = new FileInputStream("src/test/java/no/citrus/localprioritization/visitor/MethodCallVisitorTest.java");
 		CompilationUnit cu = JavaParser.parse(fis);
 		
 		TypeDeclaration td = cu.getTypes().get(0);

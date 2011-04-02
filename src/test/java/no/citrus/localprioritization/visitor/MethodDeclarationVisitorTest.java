@@ -1,9 +1,10 @@
-package no.citrus.localprioritization;
+package no.citrus.localprioritization.visitor;
 
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.TypeDeclaration;
+import no.citrus.localprioritization.model.MethodDecl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ public class MethodDeclarationVisitorTest {
 
 	@Before
 	public void setup() throws FileNotFoundException, ParseException {
-		FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/MethodDeclarationVisitor.java");
+		FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/visitor/MethodDeclarationVisitor.java");
 		CompilationUnit cu = JavaParser.parse(fis);
 		
 		MethodDeclarationVisitor mdv = new MethodDeclarationVisitor();
@@ -34,7 +35,7 @@ public class MethodDeclarationVisitorTest {
 	}
 	
 	@Test
-	public void shouldFindDeclaredMethodInClass() {
+	public void should_find_declared_method_in_class() {
 		List<String> parameterTypes1 = new ArrayList<String>();
 		List<String> parameterTypes2 = new ArrayList<String>();
 		

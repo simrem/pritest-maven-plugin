@@ -1,9 +1,10 @@
-package no.citrus.localprioritization;
+package no.citrus.localprioritization.visitor;
 
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.TypeDeclaration;
+import no.citrus.localprioritization.model.ReferenceType;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -16,8 +17,8 @@ import static org.junit.Assert.assertThat;
 public class FieldVisitorTest {
 
     @Test
-    public void shouldFindFieldsInClass() throws FileNotFoundException, ParseException {
-        FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/ReferenceType.java");
+    public void should_find_fields_in_class() throws FileNotFoundException, ParseException {
+        FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/model/ReferenceType.java");
 		CompilationUnit cu = JavaParser.parse(fis);
 
 		TypeDeclaration td = cu.getTypes().get(0);

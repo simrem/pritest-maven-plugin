@@ -1,4 +1,4 @@
-package no.citrus.localprioritization;
+package no.citrus.localprioritization.visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,7 @@ import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.expr.NameExpr;
 import japa.parser.ast.expr.QualifiedNameExpr;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
+import no.citrus.localprioritization.model.ClassType;
 
 public class CompilationUnitVisitor extends VoidVisitorAdapter<Object> {
 

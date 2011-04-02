@@ -1,4 +1,4 @@
-package no.citrus.localprioritization;
+package no.citrus.localprioritization.visitor;
 
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.VariableDeclarator;
@@ -6,6 +6,7 @@ import japa.parser.ast.body.VariableDeclaratorId;
 import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.visitor.GenericVisitorAdapter;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
+import no.citrus.localprioritization.model.ReferenceType;
 
 import java.util.ArrayList;
 import java.util.List;

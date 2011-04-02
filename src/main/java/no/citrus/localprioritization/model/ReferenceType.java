@@ -1,4 +1,4 @@
-package no.citrus.localprioritization;
+package no.citrus.localprioritization.model;
 
 public class ReferenceType {
 
