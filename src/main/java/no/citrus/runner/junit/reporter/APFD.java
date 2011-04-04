@@ -23,7 +23,8 @@ public class APFD {
     			}
     		}
     	}
-    	double result = 1 - (tf / ( testCaseNumber * numberOfFailedTests )) + (1 / (2 * testCaseNumber));
+    	double result = 1.0 - (tf / ( testCaseNumber * numberOfFailedTests )) + (1.0 / (2.0 * testCaseNumber));
+    	System.out.println("APFD result: " + result);
     	return result;
 	}
 }
