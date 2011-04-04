@@ -33,10 +33,19 @@ public class CompilationUnitVisitorTest {
 	}
 	
 	@Test
-	public void should_integrate_with_ClassOrInterfaceDeclarationVisitor() {
+	public void should_integrate_with_ClassOrInterfaceDeclarationVisitors_class_name() {
 		List<ClassType> types = cuv.getTypes();
 		
 		assertThat(types.get(0).getName(), is(equalTo("FieldVisitor")));
+	}
+	
+	@Test
+	public void should_integrate_with_ClassOrInterfaceDeclarationVisitors_package_name() {
+		List<ClassType> types = cuv.getTypes();
+		
+		assertThat(types.get(0).getPackageName(), is(equalTo("no.citrus.localprioritization.visitor")));
+		assertThat(types.get(0).getInnerClasses().get(0).getPackageName(),
+				is(equalTo("no.citrus.localprioritization.visitor.FieldVisitor")));
 	}
 	
 	@Test

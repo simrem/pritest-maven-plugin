@@ -25,12 +25,8 @@ public class CompilationUnitVisitor extends VoidVisitorAdapter<Object> {
 	
 	@Override
 	public void visit(CompilationUnit cu, Object obj) {
-		if (cu.getTypes() != null) {
-			for (TypeDeclaration td : cu.getTypes()) {
-				ClassOrInterfaceDeclarationVisitor cidv = new ClassOrInterfaceDeclarationVisitor();
-				td.accept(cidv, null);
-				this.types = cidv.getTypes();
-			}
+		if (cu.getPackage() != null) {
+			this.packageName = cu.getPackage().getName().toString();
 		}
 		
 		if (cu.getImports() != null) {
@@ -41,15 +37,19 @@ public class CompilationUnitVisitor extends VoidVisitorAdapter<Object> {
 			}
 		}
 		
-		if (cu.getPackage() != null) {
-			this.packageName = cu.getPackage().getName().toString();
+		if (cu.getTypes() != null) {
+			for (TypeDeclaration td : cu.getTypes()) {
+				ClassOrInterfaceDeclarationVisitor cidv = new ClassOrInterfaceDeclarationVisitor(this.packageName);
+				td.accept(cidv, null);
+				this.types.addAll(cidv.getTypes());
+			}
 		}
 	}
-
+	
 	public List<ClassType> getTypes() {
 		return types;
 	}
-
+	
 	public List<String> getImportStatements() {
 		return this.importStatements;
 	}

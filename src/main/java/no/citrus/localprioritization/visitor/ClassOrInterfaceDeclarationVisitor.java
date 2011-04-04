@@ -13,18 +13,21 @@ import java.util.List;
 public class ClassOrInterfaceDeclarationVisitor extends GenericVisitorAdapter<ClassType, ClassType> {
 
     private List<ClassType> types;
+	private final String packageName;
 
-    public ClassOrInterfaceDeclarationVisitor() {
-        this.types = new ArrayList<ClassType>();
+    public ClassOrInterfaceDeclarationVisitor(String packageName) {
+        this.packageName = packageName;
+		this.types = new ArrayList<ClassType>();
     }
 
     @Override
 	public ClassType visit(ClassOrInterfaceDeclaration cid, ClassType classType) {
 		String className = cid.getName();
 
-        ClassType newClass = new ClassType(className);
+        ClassType newClass = new ClassType(this.packageName, className);
 
-        ClassOrInterfaceDeclarationVisitor cidVisitor = new ClassOrInterfaceDeclarationVisitor();
+        ClassOrInterfaceDeclarationVisitor cidVisitor =
+        	new ClassOrInterfaceDeclarationVisitor(this.packageName + "." + newClass.getName());
 
         if (cid.getMembers() != null) {
             for (BodyDeclaration bd : cid.getMembers()) {

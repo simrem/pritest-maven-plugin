@@ -9,9 +9,11 @@ public class ClassType {
     private List<MethodDecl> methodDeclarations;
     private List<ReferenceType> fields;
 	private List<ClassType> innerClasses;
+	private String packageName;
 
-    public ClassType(String name) {
-		this.name = name;
+    public ClassType(String packageName, String className) {
+		this.packageName = packageName;
+		this.name = className;
         this.fields = new ArrayList<ReferenceType>();
         this.methodDeclarations = new ArrayList<MethodDecl>();
         this.innerClasses = new ArrayList<ClassType>();
@@ -31,5 +33,9 @@ public class ClassType {
 
 	public List<ClassType> getInnerClasses() {
 		return this.innerClasses;
+	}
+
+	public String getPackageName() {
+		return packageName;
 	}
 }

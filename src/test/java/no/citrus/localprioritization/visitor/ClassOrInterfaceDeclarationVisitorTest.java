@@ -30,7 +30,7 @@ public class ClassOrInterfaceDeclarationVisitorTest {
 		FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/visitor/FieldVisitor.java");
 		CompilationUnit cu = JavaParser.parse(fis);
 
-        ClassOrInterfaceDeclarationVisitor cidv = new ClassOrInterfaceDeclarationVisitor();
+        ClassOrInterfaceDeclarationVisitor cidv = new ClassOrInterfaceDeclarationVisitor("");
 
 		cu.accept(cidv, null);
 

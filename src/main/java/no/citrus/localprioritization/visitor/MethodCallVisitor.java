@@ -97,7 +97,5 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Object> {
 		public NestedMethodCall getNestedCall() {
 			return nestedCall;
 		}
-    	
-		
     }
 }
