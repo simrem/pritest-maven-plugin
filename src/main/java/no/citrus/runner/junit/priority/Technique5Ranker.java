@@ -12,8 +12,12 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryBuilder;
 
 public class Technique5Ranker {
+	
+	private File basedir;
 
-	public Technique5Ranker() { }
+	public Technique5Ranker(File basedir) {
+		this.basedir = basedir;
+	}
 	
 	public List<String> getTechnique5PriorityList() {
 		List<String> gitStatusList = new ArrayList<String>();
@@ -32,7 +36,7 @@ public class Technique5Ranker {
 		List<String> callGitList = new ArrayList<String>();
 		
 		// Maa faa tak i parent-project basedir her, og sette som repoPath.
-		File repoPath = new File("/Users/oyvindvol/dev/citrus-junit-runner/.git");
+		File repoPath = new File(this.basedir.getAbsolutePath() + "/.git");
 		RepositoryBuilder repoBuilder = new RepositoryBuilder();
 		Repository repo = repoBuilder.setGitDir(repoPath).build();
 		

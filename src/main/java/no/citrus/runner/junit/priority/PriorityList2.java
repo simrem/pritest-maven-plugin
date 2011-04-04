@@ -1,5 +1,6 @@
 package no.citrus.runner.junit.priority;
 
+import java.io.File;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +11,12 @@ public class PriorityList2 {
 	
 	private final ClassService localClassService;
 	private final ClassService onlineClassService;
+	private final File baseDir;
 	
-	public PriorityList2(ClassService onlineClassService, ClassService localClassService){
+	public PriorityList2(ClassService onlineClassService, ClassService localClassService, File basedir){
 		this.localClassService = localClassService;
 		this.onlineClassService = onlineClassService;
+		this.baseDir = basedir;
 	}
 	
 	public List<String> getPriorityList() throws JSONException, Exception {
@@ -26,7 +29,7 @@ public class PriorityList2 {
 		switch (techniqueNumber) {
 			case 1: case 2: case 3:
 				return onlineListStrategy(localTestClasses, onlineTestClasses);
-		
+
 			case 4:
 				return technique4Strategy(localTestClasses);
 				
@@ -40,12 +43,12 @@ public class PriorityList2 {
 	}
 	
 	private List<String> technique4Strategy(List<String> localTestClasses) {
-		Technique4Ranker t4 = new Technique4Ranker(localTestClasses);
+		Technique4Ranker t4 = new Technique4Ranker(localTestClasses, this.baseDir);
 		return t4.getTechnique4PriorityList();
 	}
 	
 	private List<String> technique5Strategy() {
-		Technique5Ranker t5 = new Technique5Ranker();
+		Technique5Ranker t5 = new Technique5Ranker(this.baseDir);
 		List<String> t5GitStatusList = t5.getTechnique5PriorityList();
 		
 		List<String> contactCitrusList = new ArrayList<String>();
