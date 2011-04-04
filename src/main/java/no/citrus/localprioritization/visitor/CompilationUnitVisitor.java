@@ -15,10 +15,12 @@ public class CompilationUnitVisitor extends VoidVisitorAdapter<Object> {
 
 	private List<ClassType> types;
 	private List<String> importStatements;
+	private String packageName;
 	
 	public CompilationUnitVisitor() {
 		this.types = new ArrayList<ClassType>();
 		this.importStatements = new ArrayList<String>();
+		this.packageName = null;
 	}
 	
 	@Override
@@ -38,6 +40,10 @@ public class CompilationUnitVisitor extends VoidVisitorAdapter<Object> {
 				this.importStatements.add(iv.getImportStatement());
 			}
 		}
+		
+		if (cu.getPackage() != null) {
+			this.packageName = cu.getPackage().getName().toString();
+		}
 	}
 
 	public List<ClassType> getTypes() {
@@ -46,6 +52,10 @@ public class CompilationUnitVisitor extends VoidVisitorAdapter<Object> {
 
 	public List<String> getImportStatements() {
 		return this.importStatements;
+	}
+	
+	public String getPackageName() {
+		return this.packageName;
 	}
 	
 	private class ImportVisitor extends VoidVisitorAdapter<String> {

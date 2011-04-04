@@ -8,7 +8,6 @@ import no.citrus.localprioritization.model.ClassType;
 import no.citrus.localprioritization.visitor.CompilationUnitVisitor;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -47,5 +46,12 @@ public class CompilationUnitVisitorTest {
 		assertThat(imports, hasItems(
 				"japa.parser.ast.body.FieldDeclaration",
 				"japa.parser.ast.body.VariableDeclarator"));
+	}
+	
+	@Test
+	public void should_get_package_name() {
+		String packageName = cuv.getPackageName();
+		
+		assertThat(packageName, is(equalTo("no.citrus.localprioritization.visitor")));
 	}
 }
