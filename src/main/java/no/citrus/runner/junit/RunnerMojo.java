@@ -13,7 +13,7 @@ import javax.xml.bind.JAXBException;
 import no.citrus.restapi.model.Measure;
 import no.citrus.runner.junit.priority.LocalClassService;
 import no.citrus.runner.junit.priority.OnlineClassService;
-import no.citrus.runner.junit.priority.PriorityList;
+import no.citrus.runner.junit.priority.PriorityList2;
 import no.citrus.runner.junit.reporter.Reporter;
 import no.citrus.runner.junit.test.CitrusTester;
 
@@ -109,7 +109,7 @@ public class RunnerMojo extends AbstractMojo {
         
         getLog().info("Fetching priority list...");
 
-        PriorityList priorityListService = new PriorityList(new OnlineClassService(citrusTechniqueUrl), new LocalClassService(testOutputDirectory));
+        PriorityList2 priorityListService = new PriorityList2(new OnlineClassService(citrusTechniqueUrl), new LocalClassService(testOutputDirectory), basedir);
         List<String> priorityList = new ArrayList<String>();
 		try {
 			priorityList.addAll(priorityListService.getPriorityList());

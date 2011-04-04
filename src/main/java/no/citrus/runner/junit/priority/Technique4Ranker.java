@@ -14,9 +14,11 @@ import org.eclipse.jgit.lib.RepositoryBuilder;
 public class Technique4Ranker {
 	
 	private List<String> localTestClasses = new ArrayList<String>();
+	private File basedir;
 
-	public Technique4Ranker(List<String> localTestClasses) {
+	public Technique4Ranker(List<String> localTestClasses, File basedir) {
 		this.localTestClasses = localTestClasses;
+		this.basedir = basedir;
 	}
 	
 	public List<String> getTechnique4PriorityList() {
@@ -45,7 +47,7 @@ public class Technique4Ranker {
 		List<String> gitStatusList = new ArrayList<String>();
 		
 		// Maa faa tak i parent-project basedir her, og sette som repoPath.
-		File repoPath = new File("/Users/oyvindvol/dev/citrus-junit-runner/.git");
+		File repoPath = new File(basedir.getAbsolutePath() + "/.git");
 		RepositoryBuilder repoBuilder = new RepositoryBuilder();
 		Repository repo = repoBuilder.setGitDir(repoPath).build();
 		
@@ -78,8 +80,4 @@ public class Technique4Ranker {
 		
 		return false;
 	} 
-	
-	public List<String> getLocalTestClasses() {
-		return localTestClasses;
-	}
 }
