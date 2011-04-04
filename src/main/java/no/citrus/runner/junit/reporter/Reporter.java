@@ -30,7 +30,8 @@ public class Reporter {
 	
 	public void sendReport() throws ClientHandlerException, JAXBException{
 		StringBuffer sb = getMeasureListAsXML();
-		System.out.println(sb.toString());
+		//System.out.println(sb.toString());
+        System.out.println("Sending report to " + reportURL);
 		Client c = Client.create();  
 		WebResource r = c.resource(reportURL);  
 		r.type("application/xml").post(String.class, sb.toString());
