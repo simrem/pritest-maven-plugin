@@ -25,7 +25,7 @@ public class CompilationUnitVisitorTest {
 
 	@BeforeClass
 	public static void setup_class() throws FileNotFoundException, ParseException {
-		FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/visitor/FieldVisitor.java");
+		FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/visitor/CompilationUnitVisitor.java");
 		CompilationUnit cu = JavaParser.parse(fis);
 		
 		cuv = new CompilationUnitVisitor();
@@ -36,7 +36,7 @@ public class CompilationUnitVisitorTest {
 	public void should_integrate_with_ClassOrInterfaceDeclarationVisitors_class_name() {
 		List<ClassType> types = cuv.getTypes();
 		
-		assertThat(types.get(0).getName(), is(equalTo("FieldVisitor")));
+		assertThat(types.get(0).getName(), is(equalTo("CompilationUnitVisitor")));
 	}
 	
 	@Test
@@ -45,7 +45,7 @@ public class CompilationUnitVisitorTest {
 		
 		assertThat(types.get(0).getPackageName(), is(equalTo("no.citrus.localprioritization.visitor")));
 		assertThat(types.get(0).getInnerClasses().get(0).getPackageName(),
-				is(equalTo("no.citrus.localprioritization.visitor.FieldVisitor")));
+				is(equalTo("no.citrus.localprioritization.visitor.CompilationUnitVisitor")));
 	}
 	
 	@Test
@@ -53,8 +53,8 @@ public class CompilationUnitVisitorTest {
 		List<String> imports = cuv.getImportStatements();
 		
 		assertThat(imports, hasItems(
-				"japa.parser.ast.body.FieldDeclaration",
-				"japa.parser.ast.body.VariableDeclarator"));
+				"no.citrus.localprioritization.model.ClassType",
+				"japa.parser.ast.visitor.VoidVisitorAdapter"));
 	}
 	
 	@Test
