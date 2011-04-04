@@ -1,4 +1,4 @@
-package no.citrus.localprioritization;
+package no.citrus.localprioritization.visitor;
 
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
