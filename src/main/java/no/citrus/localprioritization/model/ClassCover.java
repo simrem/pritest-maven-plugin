@@ -1,5 +1,6 @@
 package no.citrus.localprioritization.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ClassCover {
@@ -9,6 +10,7 @@ public class ClassCover {
 
     public ClassCover(String className) {
         this.className = className;
+        methods = new HashMap<String, MethodCover>();
     }
 
     @Override

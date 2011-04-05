@@ -73,9 +73,9 @@ public class MethodCoverageVisitorTest {
     }
 
     @Test
-    @Ignore
     public void should_find_methods_declared_within_classes() {
         assertThat(methodDeclarationVisitorClass.getMethods().values(), hasItems(
+                new MethodCover("void", "visit"),
                 new MethodCover("List", "getMethodDeclarations")
         ));
     }

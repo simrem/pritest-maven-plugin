@@ -6,8 +6,11 @@ import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 import no.citrus.localprioritization.model.ClassCover;
 import no.citrus.localprioritization.model.ClassType;
+import no.citrus.localprioritization.model.MethodCover;
+import no.citrus.localprioritization.model.MethodDecl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
@@ -21,8 +24,6 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
 
     @Override
     public void visit(ClassOrInterfaceDeclaration n, ClassCover arg) {
-        System.out.println("- ClassOrInterfaceDeclaration: " + n.getName());
-
         ClassCover currentClass = new ClassCover(n.getName());
 
         if (n.getMembers() != null) {
@@ -36,7 +37,15 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
 
     @Override
     public void visit(MethodDeclaration n, ClassCover arg) {
-        System.out.println("-- MethodDeclaration: " + n.getName());
+        MethodDeclarationVisitor mdv = new MethodDeclarationVisitor();
+		n.accept(mdv, null);
+
+		List<MethodDecl> methodDeclarations = mdv.getMethodDeclarations();
+        for (MethodDecl md : methodDeclarations) {
+            String returnType = md.getReturnType();
+            String methodName = md.getMethodName();
+            arg.getMethods().put(returnType + "." + methodName, new MethodCover(returnType, methodName));
+        }
     }
 
     public Map<String,ClassCover> getCoveredClasses() {
