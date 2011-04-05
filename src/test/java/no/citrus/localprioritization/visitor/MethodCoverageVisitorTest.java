@@ -5,8 +5,10 @@ import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import no.citrus.localprioritization.model.ClassCover;
 import no.citrus.localprioritization.model.ClassType;
+import no.citrus.localprioritization.model.MethodCover;
 import no.citrus.localprioritization.model.MethodDecl;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -18,13 +20,12 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.collection.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
 
 public class MethodCoverageVisitorTest {
 
     private ClassCover methodDeclarationVisitorClass;
-    private ClassCover returnTypeVisitor;
-    private ClassCover parameterVisitor;
 
     @Before
     public void setup_class() throws FileNotFoundException, ParseException {
@@ -55,21 +56,27 @@ public class MethodCoverageVisitorTest {
         params3.add("A");
         secondClass.getMethodDeclarations().add(new MethodDecl("void", "accept", params3));
 
+        classesInProject.put("MethodDeclarationVisitor", callingClass);
         classesInProject.put("MethodDeclaration", firstClass);
+        classesInProject.put("Parameter", secondClass);
 
         MethodCoverageVisitor mvc = new MethodCoverageVisitor(classesInProject);
         cu.getTypes().get(0).accept(mvc, null);
         Map<String, ClassCover> coveredClasses = mvc.getCoveredClasses();
 
         methodDeclarationVisitorClass = coveredClasses.get("MethodDeclarationVisitor");
-        returnTypeVisitor = coveredClasses.get("ReturnTypeVisitor");
-        parameterVisitor = coveredClasses.get("ParameterVisitor");
     }
 
     @Test
     public void should_find_classes_in_compilation_unit() {
         assertThat(methodDeclarationVisitorClass.getClassName(), is(equalTo("MethodDeclarationVisitor")));
-        assertThat(returnTypeVisitor.getClassName(), is(equalTo("ReturnTypeVisitor")));
-        assertThat(parameterVisitor.getClassName(), is(equalTo("ParameterVisitor")));
+    }
+
+    @Test
+    @Ignore
+    public void should_find_methods_declared_within_classes() {
+        assertThat(methodDeclarationVisitorClass.getMethods().values(), hasItems(
+                new MethodCover("List", "getMethodDeclarations")
+        ));
     }
 }

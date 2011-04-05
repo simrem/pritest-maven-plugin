@@ -2,7 +2,6 @@ package no.citrus.localprioritization.visitor;
 
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.Parameter;
-import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 import no.citrus.localprioritization.model.MethodDecl;
 
@@ -48,39 +47,5 @@ public class MethodDeclarationVisitor extends VoidVisitorAdapter<Object> {
 		
 		methodDeclarations.add(new MethodDecl(returnType, methodName, parameters));
 	}
-	
-	private class ReturnTypeVisitor extends VoidVisitorAdapter<Object> {
 
-		private String typeName;
-
-		@Override
-		public void visit(ClassOrInterfaceType n, Object arg1) {
-			this.typeName = n.getName();
-		}
-		
-		public String getTypeName() {
-			return typeName;
-		}
-	}
-	
-	private class ParameterVisitor extends VoidVisitorAdapter<Object> {
-
-		private String parameterName = null;
-
-		@Override
-		public void visit(Parameter parameter, Object obj) {
-			if (parameter.getType() != null) {
-				parameter.getType().accept(this, obj);
-			}
-		}
-
-		@Override
-		public void visit(ClassOrInterfaceType cit, Object obj) {
-			parameterName = cit.getName();
-		}
-
-		public String getParameterName() {
-			return parameterName;
-		}
-	}
 }

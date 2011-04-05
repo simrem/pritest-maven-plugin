@@ -36,7 +36,7 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
 
     @Override
     public void visit(MethodDeclaration n, ClassCover arg) {
-
+        System.out.println("-- MethodDeclaration: " + n.getName());
     }
 
     public Map<String,ClassCover> getCoveredClasses() {
