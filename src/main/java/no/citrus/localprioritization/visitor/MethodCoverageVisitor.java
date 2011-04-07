@@ -4,11 +4,9 @@ import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
-import no.citrus.localprioritization.model.ClassCover;
-import no.citrus.localprioritization.model.ClassType;
-import no.citrus.localprioritization.model.MethodCover;
-import no.citrus.localprioritization.model.MethodDecl;
+import no.citrus.localprioritization.model.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +30,7 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
             }
         }
 
-        coveredClasses.put(currentClass.getClassName(), currentClass);
+        coveredClasses.put(currentClass.getName(), currentClass);
     }
 
     @Override
@@ -45,8 +43,18 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
             String returnType = md.getReturnType();
             String methodName = md.getMethodName();
             List<String> parameters = md.getParameters();
+            List<ProcessedMethodCall> methodCalls = new ArrayList<ProcessedMethodCall>();
+
+            if (n.getBody() != null) {
+                MethodCallVisitor mcv = new MethodCallVisitor();
+                n.getBody().accept(mcv, null);
+
+                for (RawMethodCall rawMethodCall : mcv.getRawMethodCalls()) {
+                    // TODO: implement some shit here
+                }
+            }
             
-            arg.getMethods().put(returnType + "." + methodName, new MethodCover(returnType, methodName, parameters));
+            arg.getMethods().put(returnType + "." + methodName, new MethodCover(arg.getName(), returnType, methodName, parameters, methodCalls));
         }
     }
 

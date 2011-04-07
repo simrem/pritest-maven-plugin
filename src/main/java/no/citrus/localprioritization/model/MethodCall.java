@@ -1,14 +1,19 @@
 package no.citrus.localprioritization.model;
 
-public class MethodCall {
+/**
+ * Created by IntelliJ IDEA.
+ * User: sveinung
+ * Date: 4/7/11
+ * Time: 9:03 PM
+ * To change this template use File | Settings | File Templates.
+ */
+public abstract class MethodCall {
 
-    private String scope;
-    private final String methodName;
+    protected final String methodName;
 
-	public MethodCall(String scope, String methodName) {
-        this.scope = scope;
+    public MethodCall(String methodName) {
         this.methodName = methodName;
-	}
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -18,23 +23,16 @@ public class MethodCall {
         MethodCall that = (MethodCall) o;
 
         if (methodName != null ? !methodName.equals(that.methodName) : that.methodName != null) return false;
-        if (scope != null ? !scope.equals(that.scope) : that.scope != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = scope != null ? scope.hashCode() : 0;
-        result = 31 * result + (methodName != null ? methodName.hashCode() : 0);
-        return result;
+        return methodName != null ? methodName.hashCode() : 0;
     }
 
     public String getMethodName() {
 		return methodName;
 	}
-
-    public String getScope() {
-        return scope;
-    }
 }

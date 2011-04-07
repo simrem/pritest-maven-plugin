@@ -5,7 +5,7 @@ import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
-import no.citrus.localprioritization.model.MethodCall;
+import no.citrus.localprioritization.model.RawMethodCall;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -28,10 +28,10 @@ public class MethodCallVisitorTest {
 		MethodCallVisitor mcv = new MethodCallVisitor();
 		method.accept(mcv, null);
 
-		List<MethodCall> methodCalls = mcv.getMethodCalls();
+		List<RawMethodCall> methodCalls = mcv.getRawMethodCalls();
 		
-		assertThat(methodCalls, hasItems(new MethodCall("n", "getName"),
-                new MethodCall("n", "getScope"),
-                new MethodCall("methodCalls", "add")));
+		assertThat(methodCalls, hasItems(new RawMethodCall("n", "getName"),
+                new RawMethodCall("n", "getScope"),
+                new RawMethodCall("methodCalls", "add")));
 	}
 }

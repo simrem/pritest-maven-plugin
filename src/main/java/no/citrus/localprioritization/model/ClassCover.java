@@ -5,11 +5,11 @@ import java.util.Map;
 
 public class ClassCover {
 
-    private String className;
+    private String name;
     private Map<String, MethodCover> methods;
 
     public ClassCover(String className) {
-        this.className = className;
+        this.name = className;
         methods = new HashMap<String, MethodCover>();
     }
 
@@ -20,7 +20,7 @@ public class ClassCover {
 
         ClassCover that = (ClassCover) o;
 
-        if (className != null ? !className.equals(that.className) : that.className != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (methods != null ? !methods.equals(that.methods) : that.methods != null) return false;
 
         return true;
@@ -28,13 +28,13 @@ public class ClassCover {
 
     @Override
     public int hashCode() {
-        int result = className != null ? className.hashCode() : 0;
+        int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (methods != null ? methods.hashCode() : 0);
         return result;
     }
 
-    public String getClassName() {
-        return className;
+    public String getName() {
+        return name;
     }
 
     public Map<String, MethodCover> getMethods() {
