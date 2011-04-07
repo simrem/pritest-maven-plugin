@@ -8,7 +8,6 @@ import no.citrus.localprioritization.model.ClassType;
 import no.citrus.localprioritization.model.MethodCover;
 import no.citrus.localprioritization.model.MethodDecl;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -28,7 +27,7 @@ public class MethodCoverageVisitorTest {
     private ClassCover methodDeclarationVisitorClass;
 
     @Before
-    public void setup_class() throws FileNotFoundException, ParseException {
+    public void setup() throws FileNotFoundException, ParseException {
         FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/visitor/MethodDeclarationVisitor.java");
 		CompilationUnit cu = JavaParser.parse(fis);
 
@@ -74,9 +73,14 @@ public class MethodCoverageVisitorTest {
 
     @Test
     public void should_find_methods_declared_within_classes() {
+    	List<String> params1 = new ArrayList<String>();
+    	
+    	params1.add("MethodDeclaration");
+    	params1.add("Object");
+    	
         assertThat(methodDeclarationVisitorClass.getMethods().values(), hasItems(
-                new MethodCover("void", "visit"),
-                new MethodCover("List", "getMethodDeclarations")
+                new MethodCover("void", "visit", params1),
+                new MethodCover("List", "getMethodDeclarations", new ArrayList<String>())
         ));
     }
 }

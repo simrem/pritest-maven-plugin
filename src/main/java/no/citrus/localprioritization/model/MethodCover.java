@@ -1,12 +1,16 @@
 package no.citrus.localprioritization.model;
 
+import java.util.List;
+
 public class MethodCover {
     private String returnType;
     private String methodName;
+	private List<String> params;
 
-    public MethodCover(String returnType, String methodName) {
+    public MethodCover(String returnType, String methodName, List<String> params) {
         this.returnType = returnType;
         this.methodName = methodName;
+		this.params = params;
     }
 
     @Override
@@ -36,4 +40,8 @@ public class MethodCover {
     public String getMethodName() {
         return methodName;
     }
+
+	public List<String> getParams() {
+		return params;
+	}
 }
