@@ -60,6 +60,8 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
                     ReferenceType variable = localVariables.get(rawMethodCall.getScope());
                     if (variable != null) {
                     	//System.out.println("--- Var: " + variable.getVariableName());
+                    } else {
+                    	//variable = classesInProject.get(key)
                     }
                 }
             }
