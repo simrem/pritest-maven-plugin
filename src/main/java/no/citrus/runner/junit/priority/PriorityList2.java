@@ -1,30 +1,33 @@
 package no.citrus.runner.junit.priority;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONException;
+import org.eclipse.jgit.errors.NoWorkTreeException;
 
 public class PriorityList2 {
 	
 	private final ClassService localClassService;
 	private final ClassService onlineClassService;
 	private final File baseDir;
+	private final int techniqueNumber;
 	
-	public PriorityList2(ClassService onlineClassService, ClassService localClassService, File basedir){
+	
+	public PriorityList2(ClassService onlineClassService, ClassService localClassService, File basedir, int techniqueNumber){
 		this.localClassService = localClassService;
 		this.onlineClassService = onlineClassService;
 		this.baseDir = basedir;
+		this.techniqueNumber = techniqueNumber;
+		
 	}
 	
-	public List<String> getPriorityList() throws JSONException, Exception {
+	public List<String> getPriorityList() throws JSONException, NoWorkTreeException, IOException, Exception {
 		List<String> localTestClasses = this.localClassService.getClassList();
 		List<String> onlineTestClasses = new ArrayList<String>();
-		
-		String technique = ((OnlineClassService) this.onlineClassService).getTechniqueURL();
-		int techniqueNumber = Integer.parseInt(technique.substring(technique.length()-1, technique.length()));
 		
 		switch (techniqueNumber) {
 			case 1: case 2: case 3:
@@ -42,12 +45,12 @@ public class PriorityList2 {
 		return new ArrayList<String>();
 	}
 	
-	private List<String> technique4Strategy(List<String> localTestClasses) {
+	private List<String> technique4Strategy(List<String> localTestClasses) throws NoWorkTreeException, IOException {
 		Technique4Ranker t4 = new Technique4Ranker(localTestClasses, this.baseDir);
 		return t4.getTechnique4PriorityList();
 	}
 	
-	private List<String> technique5Strategy() {
+	private List<String> technique5Strategy() throws NoWorkTreeException, IOException {
 		Technique5Ranker t5 = new Technique5Ranker(this.baseDir);
 		List<String> t5GitStatusList = t5.getTechnique5PriorityList();
 		

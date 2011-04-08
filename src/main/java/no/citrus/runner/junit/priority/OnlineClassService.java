@@ -13,15 +13,17 @@ import com.sun.jersey.api.client.WebResource;
 public class OnlineClassService implements ClassService {
 
 	private final String techniqueURL;
+	private final int techniqueNumber;
 
-	public OnlineClassService(String techniqueURL){
+	public OnlineClassService(String techniqueURL, int techniqueNumber){
 		this.techniqueURL = techniqueURL;
+		this.techniqueNumber = techniqueNumber;
 	}
 	
 	@Override
 	public List<String> getClassList() throws Exception, JSONException, ConnectException {
         Client c = Client.create();
-        WebResource r = c.resource(techniqueURL);
+        WebResource r = c.resource(techniqueURL + techniqueNumber);
         String result = r.get(String.class);
 
         JSONArray jsonArray = new JSONArray(result);

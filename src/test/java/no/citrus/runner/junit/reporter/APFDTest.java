@@ -42,7 +42,7 @@ public class APFDTest {
     }
     
     @Test
-    public void shouldCalculateAPFDTest(){
+    public void should_calculate_APFD_test(){
     	
     	APFD apfd = new APFD(measureList);
     	double result = apfd.calculateAPFD(); 

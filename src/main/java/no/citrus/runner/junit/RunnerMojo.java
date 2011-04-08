@@ -1,12 +1,14 @@
 package no.citrus.runner.junit;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
@@ -17,12 +19,14 @@ import no.citrus.runner.junit.priority.PriorityList2;
 import no.citrus.runner.junit.reporter.Reporter;
 import no.citrus.runner.junit.test.CitrusTester;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.jettison.json.JSONException;
+import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.junit.runners.model.InitializationError;
 
 import com.sun.jersey.api.client.ClientHandlerException;
@@ -94,7 +98,13 @@ public class RunnerMojo extends AbstractMojo {
     /**
      * @parameter
      */
+    private int techniqueNumber;
+    
+    /**
+     * @parameter
+     */
     private String reportUrl;
+    
 
     private List<URL> citrusClassPaths;
 
@@ -102,14 +112,16 @@ public class RunnerMojo extends AbstractMojo {
     	citrusClassPaths = new ArrayList<URL>();
     	addFileToClassPath(testOutputDirectory);
     	addFileToClassPath(classesDirectory);
-        //addFileToClassPath(new File("/home/simon/.m2/repository/"));
-
+    	for (Artifact artifact : (Set<Artifact>) mavenProject.getArtifacts()) {
+            addFileToClassPath(artifact.getFile());
+        }
+    	getLog().info(String.format("Technique Number = %d", techniqueNumber));
         URLClassLoader classLoader = new URLClassLoader(citrusClassPaths.toArray(new URL[]{}), this.getClass().getClassLoader());
-
+        
         
         getLog().info("Fetching priority list...");
 
-        PriorityList2 priorityListService = new PriorityList2(new OnlineClassService(citrusTechniqueUrl), new LocalClassService(testOutputDirectory), basedir);
+        PriorityList2 priorityListService = new PriorityList2(new OnlineClassService(citrusTechniqueUrl, techniqueNumber), new LocalClassService(testOutputDirectory), basedir, techniqueNumber);
         List<String> priorityList = new ArrayList<String>();
 		try {
 			priorityList.addAll(priorityListService.getPriorityList());
@@ -117,9 +129,13 @@ public class RunnerMojo extends AbstractMojo {
 			e1.printStackTrace();
 		} catch (JSONException e1) {
 			e1.printStackTrace();
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
+		} catch (NoWorkTreeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 		Reporter reporter = new Reporter(reportUrl, new ArrayList<Measure>());
         try {
             getLog().debug("Initializing CitrusTester with testOrder: " + priorityList.toString());

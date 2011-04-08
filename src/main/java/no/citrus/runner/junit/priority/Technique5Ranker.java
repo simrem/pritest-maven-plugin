@@ -19,16 +19,9 @@ public class Technique5Ranker {
 		this.basedir = basedir;
 	}
 	
-	public List<String> getTechnique5PriorityList() {
+	public List<String> getTechnique5PriorityList() throws NoWorkTreeException, IOException {
 		List<String> gitStatusList = new ArrayList<String>();
-		try {
-			gitStatusList = callGitStatus();
-		} catch (NoWorkTreeException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		gitStatusList = callGitStatus();
 		return gitStatusList;
 	}
 	
@@ -55,13 +48,13 @@ public class Technique5Ranker {
 	}
 	
 	private boolean addIfJavaSuffix(String fileName, List<String> listToAddStringTo) {
-		if(fileName.endsWith(".java")) {
-			
-			if (!(fileName.substring(fileName.length()-9, fileName.length()-5).equals("Test"))) {
-				
+		if(fileName.endsWith(".java") && fileName.startsWith("src/main/java/")) {
+			fileName = fileName.substring("src/main/java/".length(), fileName.length() - ".java".length());
+			if (fileName.length() > 0 && !fileName.endsWith("Test")) {
 				if (!listToAddStringTo.contains(fileName)) {
 					fileName = fileName.replaceAll("/", ".");
-					listToAddStringTo.add(fileName.substring(0, fileName.length()-5) + "Test");
+					fileName = fileName + "Test";
+					listToAddStringTo.add(fileName);
 					return true;
 				}
 			}

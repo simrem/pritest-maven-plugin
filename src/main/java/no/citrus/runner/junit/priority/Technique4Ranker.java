@@ -11,6 +11,7 @@ import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryBuilder;
 
+
 public class Technique4Ranker {
 	
 	private List<String> localTestClasses = new ArrayList<String>();
@@ -21,15 +22,9 @@ public class Technique4Ranker {
 		this.basedir = basedir;
 	}
 	
-	public List<String> getTechnique4PriorityList() {
+	public List<String> getTechnique4PriorityList() throws NoWorkTreeException, IOException {
 		List<String> gitStatusList = new ArrayList<String>();
-		try {
-			gitStatusList = callGitStatus();
-		} catch (NoWorkTreeException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		gitStatusList = callGitStatus();
 		List<String> finalList = new ArrayList<String>();
 		
 		finalList.addAll(gitStatusList);
@@ -46,7 +41,6 @@ public class Technique4Ranker {
 	public List<String> callGitStatus() throws NoWorkTreeException, IOException {
 		List<String> gitStatusList = new ArrayList<String>();
 		
-		// Maa faa tak i parent-project basedir her, og sette som repoPath.
 		File repoPath = new File(basedir.getAbsolutePath() + "/.git");
 		RepositoryBuilder repoBuilder = new RepositoryBuilder();
 		Repository repo = repoBuilder.setGitDir(repoPath).build();
@@ -66,13 +60,14 @@ public class Technique4Ranker {
 	}
 	
 	private boolean addIfJavaSuffix(String fileName, List<String> listToAddStringTo) {
-		if(fileName.endsWith(".java")) {
-			
-			if (!(fileName.substring(fileName.length()-9, fileName.length()-5).equals("Test"))) {
+		if(fileName.endsWith(".java") && fileName.startsWith("src/main/java/")) {
+			fileName = fileName.substring("src/main/java/".length(), fileName.length() - ".java".length());
+			if (fileName.length() > 0 && !fileName.endsWith("Test")) {
 				
 				if (!listToAddStringTo.contains(fileName)) {
 					fileName = fileName.replaceAll("/", ".");
-					listToAddStringTo.add(fileName.substring(0, fileName.length()-5) + "Test");
+					fileName = fileName + "Test";
+					listToAddStringTo.add(fileName);
 					return true;
 				}
 			}
