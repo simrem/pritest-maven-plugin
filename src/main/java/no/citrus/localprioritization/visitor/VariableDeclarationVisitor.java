@@ -1,7 +1,7 @@
 package no.citrus.localprioritization.visitor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import no.citrus.localprioritization.model.ReferenceType;
 import japa.parser.ast.body.VariableDeclarator;
@@ -10,10 +10,10 @@ import japa.parser.ast.visitor.VoidVisitorAdapter;
 
 public class VariableDeclarationVisitor extends VoidVisitorAdapter<Object> {
 
-	private List<ReferenceType> variables;
+	private Map<String, ReferenceType> variables;
 	
 	public VariableDeclarationVisitor() {
-		this.variables = new ArrayList<ReferenceType>();
+		this.variables = new HashMap<String, ReferenceType>();
 	}
 
 	@Override
@@ -25,15 +25,14 @@ public class VariableDeclarationVisitor extends VoidVisitorAdapter<Object> {
 		if (arg0.getVars() != null) {
 			for (VariableDeclarator vd : arg0.getVars()) {
                 String name = vd.accept(new VariableVisitor(), null);
-                variables.add(new ReferenceType(type, name));
+                variables.put(name, new ReferenceType(type, name));
             }
 		}
 		
 		super.visit(arg0, arg1);
 	}
 	
-	public List<ReferenceType> getVariables() {
+	public Map<String, ReferenceType> getVariables() {
 		return this.variables;
 	}
-
 }

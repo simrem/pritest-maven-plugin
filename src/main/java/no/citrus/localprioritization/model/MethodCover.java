@@ -6,10 +6,11 @@ public class MethodCover {
     private String className;
     private String returnType;
     private String methodName;
-	private List<String> parameters;
+	private List<ReferenceType> parameters;
     private List<ProcessedMethodCall> methodCalls;
 
-    public MethodCover(String className, String returnType, String methodName, List<String> params, List<ProcessedMethodCall> methodCalls) {
+    public MethodCover(String className, String returnType, String methodName,
+    		List<ReferenceType> params, List<ProcessedMethodCall> methodCalls) {
         this.className = className;
         this.returnType = returnType;
         this.methodName = methodName;
@@ -51,7 +52,7 @@ public class MethodCover {
         return methodName;
     }
 
-	public List<String> getParameters() {
+	public List<ReferenceType> getParameters() {
 		return parameters;
 	}
 

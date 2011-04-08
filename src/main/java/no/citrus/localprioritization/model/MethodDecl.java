@@ -6,9 +6,9 @@ public class MethodDecl {
 
 	private final String returnType;
 	private final String methodName;
-	private List<String> parameters;
+	private List<ReferenceType> parameters;
 
-	public MethodDecl(String returnType, String methodName, List<String> parameters) {
+	public MethodDecl(String returnType, String methodName, List<ReferenceType> parameters) {
 		this.returnType = returnType;
 		this.methodName = methodName;
 		this.parameters = parameters;
@@ -22,7 +22,7 @@ public class MethodDecl {
 		return methodName;
 	}
 	
-	public List<String> getParameters() {
+	public List<ReferenceType> getParameters() {
 		return this.parameters;
 	}
 

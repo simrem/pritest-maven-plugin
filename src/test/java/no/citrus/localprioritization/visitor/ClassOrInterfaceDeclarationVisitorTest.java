@@ -73,14 +73,14 @@ public class ClassOrInterfaceDeclarationVisitorTest {
         ClassType outerClass = classes.get(0);
         ClassType innerClass = classes.get(0).getInnerClasses().get(0);
 
-        List<String> params1 = new ArrayList<String>();
-        List<String> params2 = new ArrayList<String>();
-        List<String> params3 = new ArrayList<String>();
+        List<ReferenceType> params1 = new ArrayList<ReferenceType>();
+        List<ReferenceType> params2 = new ArrayList<ReferenceType>();
+        List<ReferenceType> params3 = new ArrayList<ReferenceType>();
 
-        params2.add("CompilationUnit");
-        params2.add("Object");
-        params3.add("QualifiedNameExpr");
-        params3.add("String");
+        params2.add(new ReferenceType("CompilationUnit", "cu"));
+        params2.add(new ReferenceType("Object", "obj"));
+        params3.add(new ReferenceType("QualifiedNameExpr", "n"));
+        params3.add(new ReferenceType("String", "arg"));
         
         assertThat(outerClass.getMethodDeclarations().size(), is(equalTo(4)));
 		assertThat(outerClass.getMethodDeclarations(), hasItems(

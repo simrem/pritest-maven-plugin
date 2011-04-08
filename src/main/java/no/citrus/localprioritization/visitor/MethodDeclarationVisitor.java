@@ -4,6 +4,7 @@ import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.Parameter;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 import no.citrus.localprioritization.model.MethodDecl;
+import no.citrus.localprioritization.model.ReferenceType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,13 +36,13 @@ public class MethodDeclarationVisitor extends VoidVisitorAdapter<Object> {
 			}
 		}
 		
-		List<String> parameters = new ArrayList<String>();
+		List<ReferenceType> parameters = new ArrayList<ReferenceType>();
 		
 		if (n.getParameters() != null) {
 			for (Parameter p : n.getParameters()) {
 				ParameterVisitor pv = new ParameterVisitor();
 				p.accept(pv, null);
-				parameters.add(pv.getParameterName());
+				parameters.add(new ReferenceType(pv.getParameterType(), pv.getParameterVariable()));
 			}
 		}
 		

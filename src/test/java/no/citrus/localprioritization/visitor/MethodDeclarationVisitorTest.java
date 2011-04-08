@@ -5,6 +5,8 @@ import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.TypeDeclaration;
 import no.citrus.localprioritization.model.MethodDecl;
+import no.citrus.localprioritization.model.ReferenceType;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,15 +38,16 @@ public class MethodDeclarationVisitorTest {
 	
 	@Test
 	public void should_find_declared_method_in_class() {
-		List<String> parameterTypes1 = new ArrayList<String>();
-		List<String> parameterTypes2 = new ArrayList<String>();
+		List<ReferenceType> parameterTypes1 = new ArrayList<ReferenceType>();
+		List<ReferenceType> parameterTypes2 = new ArrayList<ReferenceType>();
 		
-		parameterTypes2.add("MethodDeclaration");
-		parameterTypes2.add("Object");
+		parameterTypes2.add(new ReferenceType("MethodDeclaration", "n"));
+		parameterTypes2.add(new ReferenceType("Object", "arg1"));
 		
 		assertThat(methodDeclarations, hasItems(
 				new MethodDecl("List", "getMethodDeclarations", parameterTypes1),
-				new MethodDecl("void", "visit", parameterTypes2)));
+				new MethodDecl("void", "visit", parameterTypes2)
+		));
 		
 		assertThat(methodDeclarations.get(0).getParameters().size(), is(equalTo(0)));
 		assertThat(methodDeclarations.get(1).getParameters().size(), is(equalTo(2)));

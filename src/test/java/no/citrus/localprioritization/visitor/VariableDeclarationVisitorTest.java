@@ -8,7 +8,7 @@ import japa.parser.ast.CompilationUnit;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.List;
+import java.util.Map;
 
 import no.citrus.localprioritization.model.ReferenceType;
 
@@ -23,8 +23,8 @@ public class VariableDeclarationVisitorTest {
 		
 		VariableDeclarationVisitor vdv = new VariableDeclarationVisitor();
 		cu.getTypes().get(0).getMembers().get(6).accept(vdv, null);
-		List<ReferenceType> variables = vdv.getVariables();
+		Map<String, ReferenceType> variables = vdv.getVariables();
 		
-		assertThat(variables, hasItems(new ReferenceType("ReferenceType", "other")));
+		assertThat(variables.values(), hasItems(new ReferenceType("ReferenceType", "other")));
 	}
 }

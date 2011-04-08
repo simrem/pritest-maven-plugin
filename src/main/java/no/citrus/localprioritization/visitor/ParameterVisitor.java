@@ -13,21 +13,27 @@ import japa.parser.ast.visitor.VoidVisitorAdapter;
 */
 public class ParameterVisitor extends VoidVisitorAdapter<Object> {
 
-    private String parameterName = null;
+    private String parameterType = null;
+	private String parameterVariable;
 
     @Override
     public void visit(Parameter parameter, Object obj) {
         if (parameter.getType() != null) {
             parameter.getType().accept(this, obj);
         }
+        parameterVariable = parameter.getId().getName();
     }
 
     @Override
     public void visit(ClassOrInterfaceType cit, Object obj) {
-        parameterName = cit.getName();
+        parameterType = cit.getName();
     }
 
-    public String getParameterName() {
-        return parameterName;
+    public String getParameterType() {
+        return parameterType;
     }
+
+	public String getParameterVariable() {
+		return parameterVariable;
+	}
 }
