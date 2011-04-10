@@ -17,6 +17,8 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.collection.IsCollectionContaining.hasItem;
 import static org.hamcrest.collection.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
 
@@ -90,5 +92,15 @@ public class MethodCoverageVisitorTest {
                 new MethodCover("MethodDeclarationVisitor", "List", "getMethodDeclarations", new ArrayList<ReferenceType>(),
                         new ArrayList<ProcessedMethodCall>())
         ));
+    }
+
+    @Test
+    public void should_not_include_methods_not_belonging_to_the_analyzed_project() {
+        List<ReferenceType> parameters = new ArrayList<ReferenceType>();
+        parameters.add(new ReferenceType("E", "e"));
+
+        assertThat(methodDeclarationVisitorClass.getMethods().values(), not(hasItems(
+                new MethodCover("List", "boolean", "add", parameters, new ArrayList<ProcessedMethodCall>())
+        )));
     }
 }
