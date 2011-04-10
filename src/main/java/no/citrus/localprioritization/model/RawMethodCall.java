@@ -1,11 +1,13 @@
 package no.citrus.localprioritization.model;
 
+import java.util.List;
+
 public class RawMethodCall extends MethodCall {
 
     private String scope;
 
-    public RawMethodCall(String scope, String methodName) {
-        super(methodName);
+    public RawMethodCall(String scope, String methodName, List<String> parameters) {
+        super(methodName, parameters);
         this.scope = scope;
     }
 

@@ -55,20 +55,24 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
                 Map<String, ReferenceType> localVariables = vdv.getVariables();
 
                 for (RawMethodCall rawMethodCall : mcv.getRawMethodCalls()) {
-                    //System.out.println("-- methodCall: " + rawMethodCall.getScope() + " " + rawMethodCall.getMethodName());
-                    
                     ReferenceType variable = localVariables.get(rawMethodCall.getScope());
                     if (variable != null) {
-                    	//System.out.println("--- Var: " + variable.getVariableName());
+                        if (isClassInProject(variable)) {
+                            methodCalls.add(new ProcessedMethodCall(variable.getType(), rawMethodCall.getMethodName(), rawMethodCall.getParameters()));
+                        }
                     } else {
-                    	//variable = classesInProject.get(key)
+                    	//variable = classesInProject.get()
                     }
                 }
             }
-            
-            arg.getMethods().put(returnType + "." + methodName,
+
+            arg.getMethods().put(methodName,
             		new MethodCover(arg.getName(), returnType, methodName, parameters, methodCalls));
         }
+    }
+
+    private boolean isClassInProject(ReferenceType variable) {
+        return classesInProject.get(variable.getType()) != null;
     }
 
     public Map<String,ClassCover> getCoveredClasses() {

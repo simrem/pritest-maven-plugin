@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionContaining.hasItems;
@@ -29,9 +30,11 @@ public class MethodCallVisitorTest {
 		method.accept(mcv, null);
 
 		List<RawMethodCall> methodCalls = mcv.getRawMethodCalls();
+
+        List<String> methodCallsAddParameters = new ArrayList<String>();
 		
-		assertThat(methodCalls, hasItems(new RawMethodCall("n", "getName"),
-                new RawMethodCall("n", "getScope"),
-                new RawMethodCall("methodCalls", "add")));
+		assertThat(methodCalls, hasItems(new RawMethodCall("n", "getName", new ArrayList<String>()),
+                new RawMethodCall("n", "getScope", new ArrayList<String>()),
+                new RawMethodCall("methodCalls", "add", methodCallsAddParameters)));
 	}
 }

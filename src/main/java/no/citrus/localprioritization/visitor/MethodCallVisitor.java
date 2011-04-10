@@ -21,10 +21,11 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Object> {
 	public void visit(MethodCallExpr n, Object arg1) {
 		String methodName = n.getName();
         String scope = null;
+        List<String> parameters = new ArrayList<String>();
 
         if (n.getScope() != null) {
             scope = n.getScope().accept(new ScopeVisitor(), null);
-            NestedMethodCall nestedCall = n.getScope().accept(new ScopedMethodCallVisitor(), null);
+            //NestedMethodCall nestedCall = n.getScope().accept(new ScopedMethodCallVisitor(), null);
             
             //MethodCallVisitor mcv = new MethodCallVisitor();
             //n.getScope().accept(mcv, arg1);
@@ -34,9 +35,7 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Object> {
         System.out.print(scope + " ");
         System.out.println(methodName);
 		*/
-        methodCalls.add(new RawMethodCall(scope, methodName));
-                
-        //super.visit(n, arg1);
+        methodCalls.add(new RawMethodCall(scope, methodName, parameters));
 	}
 
 	public List<RawMethodCall> getRawMethodCalls() {

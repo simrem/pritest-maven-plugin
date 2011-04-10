@@ -53,9 +53,13 @@ public class MethodCoverageVisitorTest {
         params3.add(new ReferenceType("A", "arg"));
         secondClass.getMethodDeclarations().add(new MethodDecl("void", "accept", params3));
 
+        ClassType thirdClass = new ClassType("no.citrus.localprioritization.visitor", "ReturnTypeVisitor");
+        thirdClass.getMethodDeclarations().add(new MethodDecl("String", "getTypeName", new ArrayList<ReferenceType>()));
+
         classesInProject.put("MethodDeclarationVisitor", callingClass);
         classesInProject.put("MethodDeclaration", firstClass);
-        classesInProject.put("Parameter", secondClass);
+        //classesInProject.put("Parameter", secondClass);
+        classesInProject.put("ReturnTypeVisitor", thirdClass);
 
         MethodCoverageVisitor mvc = new MethodCoverageVisitor(classesInProject);
         cu.getTypes().get(0).accept(mvc, null);
@@ -70,7 +74,6 @@ public class MethodCoverageVisitorTest {
     }
 
     @Test
-    @Ignore
     public void should_find_methods_declared_within_classes() {
     	List<ReferenceType> params1 = new ArrayList<ReferenceType>();
     	
@@ -78,14 +81,14 @@ public class MethodCoverageVisitorTest {
     	params1.add(new ReferenceType("Object", "arg1"));
     	
         List<ProcessedMethodCall> methodCalls = new ArrayList<ProcessedMethodCall>();
-        methodCalls.add(new ProcessedMethodCall("MethodDeclaration", "getType", new ArrayList<String>()));
-        methodCalls.add(new ProcessedMethodCall("MethodDeclaration", "getParameters", new ArrayList<String>()));
-        //methodCalls.add(new ProcessedMethodCall("Parameter", "accept"));
+        //methodCalls.add(new ProcessedMethodCall("MethodDeclaration", "getType", new ArrayList<String>()));
+        //methodCalls.add(new ProcessedMethodCall("MethodDeclaration", "getParameters", new ArrayList<String>()));
+        methodCalls.add(new ProcessedMethodCall("ReturnTypeVisitor", "getTypeName", new ArrayList<String>()));
 
         assertThat(methodDeclarationVisitorClass.getMethods().values(), hasItems(
                 new MethodCover("MethodDeclarationVisitor", "void", "visit", params1, methodCalls),
                 new MethodCover("MethodDeclarationVisitor", "List", "getMethodDeclarations", new ArrayList<ReferenceType>(),
-                		new ArrayList<ProcessedMethodCall>())
+                        new ArrayList<ProcessedMethodCall>())
         ));
     }
 }

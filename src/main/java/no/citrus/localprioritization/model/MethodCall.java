@@ -1,18 +1,15 @@
 package no.citrus.localprioritization.model;
 
-/**
- * Created by IntelliJ IDEA.
- * User: sveinung
- * Date: 4/7/11
- * Time: 9:03 PM
- * To change this template use File | Settings | File Templates.
- */
+import java.util.List;
+
 public abstract class MethodCall {
 
-    protected final String methodName;
+    protected String methodName;
+    protected List<String> parameters;
 
-    public MethodCall(String methodName) {
+    public MethodCall(String methodName, List<String> parameters) {
         this.methodName = methodName;
+        this.parameters = parameters;
     }
 
     @Override
@@ -23,16 +20,23 @@ public abstract class MethodCall {
         MethodCall that = (MethodCall) o;
 
         if (methodName != null ? !methodName.equals(that.methodName) : that.methodName != null) return false;
+        if (parameters != null ? !parameters.equals(that.parameters) : that.parameters != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return methodName != null ? methodName.hashCode() : 0;
+        int result = methodName != null ? methodName.hashCode() : 0;
+        result = 31 * result + (parameters != null ? parameters.hashCode() : 0);
+        return result;
     }
 
     public String getMethodName() {
 		return methodName;
 	}
+
+    public List<String> getParameters() {
+        return parameters;
+    }
 }
