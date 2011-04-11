@@ -62,10 +62,10 @@ public class ClassOrInterfaceDeclarationVisitorTest {
         ClassType innerClass = classes.get(0).getInnerClasses().get(0);
 
         assertThat(outerClass.getFields().size(), is(equalTo(3)));
-        assertThat(outerClass.getFields(), hasItem(new ReferenceType("List", "types")));
+        assertThat(outerClass.getFields().values(), hasItem(new ReferenceType("List", "types")));
         
         assertThat(innerClass.getFields().size(), is(equalTo(1)));
-        assertThat(innerClass.getFields(), hasItem(new ReferenceType("String", "importStatement")));
+        assertThat(innerClass.getFields().values(), hasItem(new ReferenceType("String", "importStatement")));
     }
 
     @Test

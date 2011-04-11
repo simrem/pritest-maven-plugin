@@ -5,17 +5,17 @@ import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 import no.citrus.localprioritization.model.ReferenceType;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FieldVisitor extends VoidVisitorAdapter<Object> {
-    private List<ReferenceType> fields;
+    private Map<String, ReferenceType> fields;
 
     public FieldVisitor() {
-        this.fields = new ArrayList<ReferenceType>();
+        this.fields = new HashMap<String, ReferenceType>();
     }
 
-    public List<ReferenceType> getFields() {
+    public Map<String, ReferenceType> getFields() {
         return fields;
     }
 
@@ -30,7 +30,8 @@ public class FieldVisitor extends VoidVisitorAdapter<Object> {
                 for (VariableDeclarator vd : n.getVariables()) {
                     String name = vd.accept(new VariableVisitor(), null);
 
-                    this.fields.add(new ReferenceType(type, name));
+                    //this.fields.add(new ReferenceType(type, name));
+                    this.fields.put(name, new ReferenceType(type, name));
                 }
             }
         }

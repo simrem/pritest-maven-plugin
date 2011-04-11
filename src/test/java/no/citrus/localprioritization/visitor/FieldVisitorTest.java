@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.collection.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
@@ -25,9 +25,9 @@ public class FieldVisitorTest {
 
         FieldVisitor fieldVisitor = new FieldVisitor();
         td.accept(fieldVisitor, null);
-        List<ReferenceType> fields = fieldVisitor.getFields();
+        Map<String, ReferenceType> fields = fieldVisitor.getFields();
 
-        assertThat(fields, hasItems(new ReferenceType("String", "variableName"),
+        assertThat(fields.values(), hasItems(new ReferenceType("String", "variableName"),
         		new ReferenceType("String", "variableName")));
     }
 }

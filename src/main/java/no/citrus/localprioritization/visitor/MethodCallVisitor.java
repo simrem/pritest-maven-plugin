@@ -1,19 +1,28 @@
 package no.citrus.localprioritization.visitor;
 
+import japa.parser.ast.expr.Expression;
 import japa.parser.ast.expr.MethodCallExpr;
 import japa.parser.ast.expr.NameExpr;
+import japa.parser.ast.expr.NullLiteralExpr;
+import japa.parser.ast.expr.ObjectCreationExpr;
 import japa.parser.ast.visitor.GenericVisitorAdapter;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 import no.citrus.localprioritization.model.RawMethodCall;
+import no.citrus.localprioritization.model.ReferenceType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MethodCallVisitor extends VoidVisitorAdapter<Object> {
 
 	private List<RawMethodCall> methodCalls;
+	private final Map<String, ReferenceType> localVariables;
+	private final Map<String, ReferenceType> fieldVariables;
 	
-	public MethodCallVisitor() {
+	public MethodCallVisitor(Map<String, ReferenceType> localVariables, Map<String, ReferenceType> fieldVariables) {
+		this.localVariables = localVariables;
+		this.fieldVariables = fieldVariables;
 		this.methodCalls = new ArrayList<RawMethodCall>();
 	}
 
@@ -25,17 +34,17 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Object> {
 
         if (n.getScope() != null) {
             scope = n.getScope().accept(new ScopeVisitor(), null);
-            //NestedMethodCall nestedCall = n.getScope().accept(new ScopedMethodCallVisitor(), null);
-            
-            //MethodCallVisitor mcv = new MethodCallVisitor();
-            //n.getScope().accept(mcv, arg1);
         }
-        /*
-        System.out.print("MethodCallExpr: ");
-        System.out.print(scope + " ");
-        System.out.println(methodName);
-		*/
-        methodCalls.add(new RawMethodCall(scope, methodName, parameters));
+        
+        if (n.getArgs() != null) {
+        	for (Expression expr : n.getArgs()) {
+        		String argument = expr.accept(new ArgumentVisitor(), null);
+        		System.out.println("--- expr: " + expr.toString() + " --- argument: " + argument);
+        	}
+        }
+        
+        RawMethodCall methodCall = new RawMethodCall(scope, methodName, parameters);
+        methodCalls.add(methodCall);
 	}
 
 	public List<RawMethodCall> getRawMethodCalls() {
@@ -97,4 +106,21 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Object> {
 			return nestedCall;
 		}
     }
+    
+    public class ArgumentVisitor extends GenericVisitorAdapter<String, Object> {
+
+		@Override
+		public String visit(NullLiteralExpr n, Object arg) {
+			System.out.println("---- NullLiteralExpr");
+			return "null";
+		}
+
+		@Override
+		public String visit(ObjectCreationExpr arg0, Object arg1) {
+			System.out.println("---- ObjectCreationExpr");
+			return arg0.getType().getName();
+		}
+
+    	
+	}
 }

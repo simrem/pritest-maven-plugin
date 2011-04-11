@@ -47,7 +47,8 @@ public class ClassOrInterfaceDeclarationVisitor extends GenericVisitorAdapter<Cl
     	FieldVisitor fv = new FieldVisitor();
     	fieldDeclaration.accept(fv, classType);
     	
-    	classType.getFields().addAll(fv.getFields());
+    	//classType.getFields().addAll(fv.getFields());
+    	classType.getFields().putAll(fv.getFields());
     	
 		return classType;
 	}
