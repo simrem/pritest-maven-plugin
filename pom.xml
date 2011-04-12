@@ -12,6 +12,7 @@
 
     <properties>
         <jersey.version>1.4</jersey.version>
+        <mockito.version>1.8.5</mockito.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     
@@ -81,6 +82,12 @@
             <artifactId>jgit</artifactId>
             <version>0.12.0.201103291411</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+             <groupId>org.mockito</groupId>
+             <artifactId>mockito-core</artifactId>
+             <version>${mockito.version}</version>
+             <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
