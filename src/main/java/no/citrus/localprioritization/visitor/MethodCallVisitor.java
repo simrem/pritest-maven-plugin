@@ -55,26 +55,30 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Object> {
         	for (Expression expr : n.getArgs()) {
         		ArgumentReference argument = expr.accept(new ArgumentVisitor(), null);
         		
-        		if (argument != null) {
-	        		if (argument.getType() != null) {
-	        			parameters.add(argument.getType());
-	        		
-	        		} else if (argument.getVariableName() != null) {
-	        			ReferenceType variable = localVariables.get(argument.getVariableName());
-	        			if (variable != null) {
-	        				parameters.add(variable.getType());
-	        			} else {
-	        				variable = fieldVariables.get(argument.getVariableName());
-	        				if (variable != null) {
-	        					parameters.add(variable.getType());
-	        				}
-	        			}
-	        		}
-        		}
+        		addTypeNameToParameterList(parameters, argument);
         	}
         }
 		
 		return parameters;
+	}
+
+	private void addTypeNameToParameterList(List<String> parameters, ArgumentReference argument) {
+		if (argument != null) {
+			if (argument.getType() != null) {
+				parameters.add(argument.getType());
+			
+			} else if (argument.getVariableName() != null) {
+				ReferenceType variable = localVariables.get(argument.getVariableName());
+				if (variable != null) {
+					parameters.add(variable.getType());
+				} else {
+					variable = fieldVariables.get(argument.getVariableName());
+					if (variable != null) {
+						parameters.add(variable.getType());
+					}
+				}
+			}
+		}
 	}
     
 	public List<RawMethodCall> getRawMethodCalls() {
