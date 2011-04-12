@@ -49,13 +49,12 @@ public class MethodCallVisitorTest {
 	@Test
 	public void should_find_method_calls_in_method() {
         assertThat(methodCalls, hasItems(
-				new RawMethodCall("n", "getName", new ArrayList<String>()),
-                new RawMethodCall("n", "getScope", new ArrayList<String>())
+				new RawMethodCall("n", "getName", new ArrayList<String>())
 		));
 	}
 	
 	@Test
-	public void should_discover_the_type_of_parameters() {
+	public void should_discover_the_type_of_parameters_where_local_variables_are_refered() {
 		List<String> methodCallsAddParameters = new ArrayList<String>();
 		methodCallsAddParameters.add("RawMethodCall");
 		

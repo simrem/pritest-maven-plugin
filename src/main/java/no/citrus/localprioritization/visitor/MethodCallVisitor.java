@@ -30,13 +30,28 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Object> {
 	public void visit(MethodCallExpr n, Object arg1) {
 		String methodName = n.getName();
         String scope = null;
-        List<String> parameters = new ArrayList<String>();
+        List<String> parameters;
         
-        if (n.getScope() != null) {
+        scope = retrieveScope(n);
+        
+        parameters = retrieveArguments(n);
+        
+        RawMethodCall methodCall = new RawMethodCall(scope, methodName, parameters);
+        methodCalls.add(methodCall);
+	}
+    
+    private String retrieveScope(MethodCallExpr n) {
+		String scope = null;
+		if (n.getScope() != null) {
             scope = n.getScope().accept(new ScopeVisitor(), null);
         }
-        
-        if (n.getArgs() != null) {
+		return scope;
+	}
+
+	private List<String> retrieveArguments(MethodCallExpr n) {
+		List<String> parameters = new ArrayList<String>();
+		
+		if (n.getArgs() != null) {
         	for (Expression expr : n.getArgs()) {
         		ArgumentReference argument = expr.accept(new ArgumentVisitor(), null);
         		
@@ -48,14 +63,18 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Object> {
 	        			ReferenceType variable = localVariables.get(argument.getVariableName());
 	        			if (variable != null) {
 	        				parameters.add(variable.getType());
+	        			} else {
+	        				variable = fieldVariables.get(argument.getVariableName());
+	        				if (variable != null) {
+	        					parameters.add(variable.getType());
+	        				}
 	        			}
 	        		}
         		}
         	}
         }
-        
-        RawMethodCall methodCall = new RawMethodCall(scope, methodName, parameters);
-        methodCalls.add(methodCall);
+		
+		return parameters;
 	}
     
 	public List<RawMethodCall> getRawMethodCalls() {
