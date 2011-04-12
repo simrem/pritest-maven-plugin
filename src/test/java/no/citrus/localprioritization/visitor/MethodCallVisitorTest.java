@@ -9,7 +9,6 @@ import no.citrus.localprioritization.model.RawMethodCall;
 import no.citrus.localprioritization.model.ReferenceType;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -36,6 +35,7 @@ public class MethodCallVisitorTest {
 		
 		Map<String, ReferenceType> localVariables = new HashMap<String, ReferenceType>();
 		localVariables.put("n", new ReferenceType("MethodCallExpr", "n"));
+		localVariables.put("methodCall", new ReferenceType("RawMethodCall", "methodCall"));
 		
 		Map<String, ReferenceType> fieldVariables = new HashMap<String, ReferenceType>();
 		fieldVariables.put("methodCalls", new ReferenceType("List", "methodCalls"));
@@ -55,7 +55,6 @@ public class MethodCallVisitorTest {
 	}
 	
 	@Test
-	@Ignore
 	public void should_discover_the_type_of_parameters() {
 		List<String> methodCallsAddParameters = new ArrayList<String>();
 		methodCallsAddParameters.add("RawMethodCall");

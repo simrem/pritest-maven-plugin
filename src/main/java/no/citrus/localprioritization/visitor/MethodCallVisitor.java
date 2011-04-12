@@ -25,32 +25,43 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Object> {
 		this.fieldVariables = fieldVariables;
 		this.methodCalls = new ArrayList<RawMethodCall>();
 	}
-
+	
     @Override
 	public void visit(MethodCallExpr n, Object arg1) {
 		String methodName = n.getName();
         String scope = null;
         List<String> parameters = new ArrayList<String>();
-
+        
         if (n.getScope() != null) {
             scope = n.getScope().accept(new ScopeVisitor(), null);
         }
         
         if (n.getArgs() != null) {
         	for (Expression expr : n.getArgs()) {
-        		String argument = expr.accept(new ArgumentVisitor(), null);
-        		System.out.println("--- expr: " + expr.toString() + " --- argument: " + argument);
+        		ArgumentReference argument = expr.accept(new ArgumentVisitor(), null);
+        		
+        		if (argument != null) {
+	        		if (argument.getType() != null) {
+	        			parameters.add(argument.getType());
+	        		
+	        		} else if (argument.getVariableName() != null) {
+	        			ReferenceType variable = localVariables.get(argument.getVariableName());
+	        			if (variable != null) {
+	        				parameters.add(variable.getType());
+	        			}
+	        		}
+        		}
         	}
         }
         
         RawMethodCall methodCall = new RawMethodCall(scope, methodName, parameters);
         methodCalls.add(methodCall);
 	}
-
+    
 	public List<RawMethodCall> getRawMethodCalls() {
 		return methodCalls;
 	}
-
+	
     private class ScopeVisitor extends GenericVisitorAdapter<String, Object> {
 
         @Override
@@ -107,20 +118,40 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Object> {
 		}
     }
     
-    public class ArgumentVisitor extends GenericVisitorAdapter<String, Object> {
+    public class ArgumentVisitor extends GenericVisitorAdapter<ArgumentReference, Object> {
 
 		@Override
-		public String visit(NullLiteralExpr n, Object arg) {
-			System.out.println("---- NullLiteralExpr");
-			return "null";
+		public ArgumentReference visit(NullLiteralExpr n, Object arg) {
+			return new ArgumentReference(true);
 		}
 
 		@Override
-		public String visit(ObjectCreationExpr arg0, Object arg1) {
-			System.out.println("---- ObjectCreationExpr");
-			return arg0.getType().getName();
+		public ArgumentReference visit(ObjectCreationExpr arg0, Object arg1) {
+			return new ArgumentReference(arg0.getType().getName(), null);
 		}
 
-    	
+		@Override
+		public ArgumentReference visit(NameExpr n, Object arg) {
+			return new ArgumentReference(null, n.getName());
+		}
+	}
+    
+    public class ArgumentReference extends ReferenceType {
+
+		private final boolean isNull;
+
+		public ArgumentReference(String type, String variableName) {
+			super(type, variableName);
+			this.isNull = false;
+		}
+
+		public ArgumentReference(boolean isNull) {
+			super(null, null);
+			this.isNull = isNull;
+		}
+
+		public boolean isNull() {
+			return isNull;
+		}
 	}
 }
