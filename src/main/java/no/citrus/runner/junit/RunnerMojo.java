@@ -115,10 +115,10 @@ public class RunnerMojo extends AbstractMojo {
     	for (Artifact artifact : (Set<Artifact>) mavenProject.getArtifacts()) {
             addFileToClassPath(artifact.getFile());
         }
-    	getLog().info(String.format("Technique Number = %d", techniqueNumber));
+    	
         URLClassLoader classLoader = new URLClassLoader(citrusClassPaths.toArray(new URL[]{}), this.getClass().getClassLoader());
         
-        
+        getLog().info(String.format("Technique Number = %d", techniqueNumber));
         getLog().info("Fetching priority list...");
 
         PriorityList2 priorityListService = new PriorityList2(new OnlineClassService(citrusTechniqueUrl, techniqueNumber), new LocalClassService(testOutputDirectory), basedir, techniqueNumber);
