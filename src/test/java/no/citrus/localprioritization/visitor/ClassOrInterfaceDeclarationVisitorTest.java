@@ -82,14 +82,16 @@ public class ClassOrInterfaceDeclarationVisitorTest {
         params3.add(new ReferenceType("QualifiedNameExpr", "n"));
         params3.add(new ReferenceType("String", "arg"));
         
-        assertThat(outerClass.getMethodDeclarations().size(), is(equalTo(4)));
+        assertThat(outerClass.getMethodDeclarations().size(), is(equalTo(5)));
 		assertThat(outerClass.getMethodDeclarations(), hasItems(
                 new MethodDecl("List", "getImportStatements", params1),
-                new MethodDecl("void", "visit", params2)));
+                new MethodDecl("void", "visit", params2)
+        ));
 		
 		assertThat(innerClass.getMethodDeclarations().size(), is(equalTo(4)));
 		assertThat(innerClass.getMethodDeclarations(), hasItems(
                 new MethodDecl("String", "getImportStatement", params1),
-                new MethodDecl("void", "visit", params3)));
+                new MethodDecl("void", "visit", params3)
+        ));
 	}
 }

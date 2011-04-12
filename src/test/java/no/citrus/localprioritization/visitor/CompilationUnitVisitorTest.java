@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -62,5 +63,15 @@ public class CompilationUnitVisitorTest {
 		String packageName = cuv.getPackageName();
 		
 		assertThat(packageName, is(equalTo("no.citrus.localprioritization.visitor")));
+	}
+	
+	@Test
+	public void should_provide_class_types_in_a_map() {
+		Map<String, ClassType> types = cuv.getTypesAsMapItems();
+		
+		ClassType type = types.get("CompilationUnitVisitor");
+		
+		assertThat(type.getName(), is(equalTo("CompilationUnitVisitor")));
+		assertThat(type.getMethodDeclarations().get(0).getMethodName(), is(equalTo("visit")));
 	}
 }

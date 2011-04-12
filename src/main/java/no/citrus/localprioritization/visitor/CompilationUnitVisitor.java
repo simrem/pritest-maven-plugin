@@ -1,7 +1,9 @@
 package no.citrus.localprioritization.visitor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
@@ -92,5 +94,15 @@ public class CompilationUnitVisitor extends VoidVisitorAdapter<Object> {
 		public String getImportStatement() {
 			return importStatement;
 		}
+	}
+
+	public Map<String, ClassType> getTypesAsMapItems() {
+		Map<String, ClassType> types = new HashMap<String, ClassType>();
+		
+		for (ClassType type : this.types) {
+			types.put(type.getName(), type);
+		}
+		
+		return types;
 	}
 }
