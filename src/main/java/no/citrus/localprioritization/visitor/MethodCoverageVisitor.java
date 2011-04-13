@@ -40,6 +40,7 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
     	String returnType = methodDeclaration.getReturnType();
         String methodName = methodDeclaration.getMethodName();
         List<ReferenceType> parameters = methodDeclaration.getParameters();
+        
         List<ProcessedMethodCall> methodCalls = new ArrayList<ProcessedMethodCall>();
 
         if (n.getBody() != null) {
