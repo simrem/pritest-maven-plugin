@@ -16,16 +16,16 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 
-public class ClassTypeListProviderTest {
+public class ClassTypeProviderTest {
 	
-	private ClassTypeListProvider classTypeListProvider;
+	private ClassTypeProvider classTypeProvider;
 	private List<File> projectFiles;
 	
 	@Before
 	public void setup() throws ParseException, IOException{
 		File projectDirectory = new File("src/main/java/");
 		this.projectFiles = ClassListProvider.getFileList(projectDirectory, new String[] {".java"});
-		classTypeListProvider = new ClassTypeListProvider(this.projectFiles);
+		classTypeProvider = new ClassTypeProvider(this.projectFiles);
 	}
 	
 	@Test
@@ -35,7 +35,7 @@ public class ClassTypeListProviderTest {
 	
 	@Test
 	public void ensure_that_map_of_classtypes_has_items(){
-		Map<String, ClassType> classTypes = this.classTypeListProvider.getClassTypes();
+		Map<String, ClassType> classTypes = this.classTypeProvider.getClassTypes();
 		assertThat(classTypes.isEmpty(), equalTo(false));
 	}
 }

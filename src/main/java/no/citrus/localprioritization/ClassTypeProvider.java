@@ -13,12 +13,12 @@ import java.util.Map;
 import no.citrus.localprioritization.model.ClassType;
 import no.citrus.localprioritization.visitor.CompilationUnitVisitor;
 
-public class ClassTypeListProvider {
+public class ClassTypeProvider {
 
 	private List<File> projectFiles;
 	private Map<String, ClassType> classTypeMap = new HashMap<String, ClassType>();
 	
-	public ClassTypeListProvider(List<File> projectFiles) throws ParseException, IOException {
+	public ClassTypeProvider(List<File> projectFiles) throws ParseException, IOException {
 		this.projectFiles = projectFiles;
 		retrieveClassTypes();
 	}
