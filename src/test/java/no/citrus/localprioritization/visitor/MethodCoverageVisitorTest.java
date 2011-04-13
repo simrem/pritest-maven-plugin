@@ -59,19 +59,20 @@ public class MethodCoverageVisitorTest {
 
         classesInProject.put("MethodDeclarationVisitor", callingClass);
         classesInProject.put("MethodDeclaration", firstClass);
-        //classesInProject.put("Parameter", secondClass);
         classesInProject.put("ReturnTypeVisitor", thirdClass);
 
-        MethodCoverageVisitor mvc = new MethodCoverageVisitor(classesInProject);
-        cu.getTypes().get(0).accept(mvc, null);
-        Map<String, ClassCover> coveredClasses = mvc.getCoveredClasses();
+        MethodCoverageVisitor mcv = new MethodCoverageVisitor(classesInProject);
+        cu.getTypes().get(0).accept(mcv, null);
+        Map<String, ClassCover> coveredClasses = mcv.getCoveredClasses();
 
         methodDeclarationVisitorClass = coveredClasses.get("MethodDeclarationVisitor");
     }
 
     @Test
     public void should_find_classes_in_compilation_unit() {
-        assertThat(methodDeclarationVisitorClass.getName(), is(equalTo("MethodDeclarationVisitor")));
+        String className = methodDeclarationVisitorClass.getName();
+        
+        assertThat(className, is(equalTo("MethodDeclarationVisitor")));
     }
 
     @Test
@@ -82,8 +83,6 @@ public class MethodCoverageVisitorTest {
     	params1.add(new ReferenceType("Object", "arg1"));
     	
         List<ProcessedMethodCall> methodCalls = new ArrayList<ProcessedMethodCall>();
-        //methodCalls.add(new ProcessedMethodCall("MethodDeclaration", "getType", new ArrayList<String>()));
-        //methodCalls.add(new ProcessedMethodCall("MethodDeclaration", "getParameters", new ArrayList<String>()));
         methodCalls.add(new ProcessedMethodCall("ReturnTypeVisitor", "getTypeName", new ArrayList<String>()));
 
         assertThat(methodDeclarationVisitorClass.getMethods().values(), hasItems(
@@ -103,16 +102,30 @@ public class MethodCoverageVisitorTest {
     
     @Test
     public void should_include_methods_called_by_field_variables() throws ParseException, FileNotFoundException {
-    	FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/visitor/MethodCoverageVisitor.java");
+    	FileInputStream fis = new FileInputStream("src/test/java/no/citrus/localprioritization/visitor/MethodCoverageVisitorTest.java");
 		CompilationUnit cu = JavaParser.parse(fis);
 		
 		Map<String, ClassType> classesInProject = new HashMap<String, ClassType>();
 		
-		ClassType mapClass = new ClassType("java.util", "Map");
-		List<ReferenceType> parameters = new ArrayList<ReferenceType>();
-		parameters.add(new ReferenceType("String", "key"));
-		parameters.add(new ReferenceType("ClassCover", "value"));
-		mapClass.getMethodDeclarations().add(new MethodDecl("Object", "put", parameters));
-		classesInProject.put("Map", mapClass);
+		ClassType classCoverClass = new ClassType("no.citrus.localprioritization.model", "ClassCover");
+		classCoverClass.getMethodDeclarations().add(new MethodDecl("String", "getName", new ArrayList<ReferenceType>()));
+		classesInProject.put("ClassCover", classCoverClass);
+
+        ClassType theTestClass = new ClassType("no.citrus.localprioritization.visitor", "MethodCoverageVisitorTest");
+        theTestClass.getMethodDeclarations().add(new MethodDecl("void", "should_find_classes_in_compilation_unit", new ArrayList<ReferenceType>()));
+        theTestClass.getFields().put("methodDeclarationVisitorClass", new ReferenceType("ClassCover", "methodDeclarationVisitorClass"));
+        classesInProject.put("MethodCoverageVisitorTest", theTestClass);
+
+        MethodCoverageVisitor mcv = new MethodCoverageVisitor(classesInProject);
+        cu.accept(mcv, null);
+        Map<String, ClassCover> coveredClasses = mcv.getCoveredClasses();
+
+        List<ProcessedMethodCall> methodCalls = new ArrayList<ProcessedMethodCall>();
+        methodCalls.add(new ProcessedMethodCall("ClassCover", "getName", new ArrayList<String>()));
+
+        assertThat(coveredClasses.get("MethodCoverageVisitorTest").getMethods().values(), hasItems(
+                new MethodCover("MethodCoverageVisitorTest", "void", "should_find_classes_in_compilation_unit",
+                        new ArrayList<ReferenceType>(), methodCalls)
+        ));
     }
 }

@@ -51,7 +51,7 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
             n.getBody().accept(mcv, null);
             
             for (RawMethodCall rawMethodCall : mcv.getRawMethodCalls()) {
-            	ProcessedMethodCall processedMethodCall = processRawMethodCall(localVariables, rawMethodCall);
+            	ProcessedMethodCall processedMethodCall = processRawMethodCall(localVariables, rawMethodCall, arg);
             	if (processedMethodCall != null) {
             		methodCalls.add(processedMethodCall);
             	}
@@ -65,7 +65,7 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
 	private Map<String, ReferenceType> retrieveFieldVariablesOfCurrentClass(ClassCover arg) {
 		ClassType currentClass = classesInProject.get(arg.getName());
 		Map<String, ReferenceType> fieldVariables =
-			(currentClass != null ? currentClass.getFields() : new HashMap<String, ReferenceType>());
+			    (currentClass != null ? currentClass.getFields() : new HashMap<String, ReferenceType>());
 		return fieldVariables;
 	}
     
@@ -78,14 +78,20 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
     	return localVariables;
     }
     
-    private ProcessedMethodCall processRawMethodCall(Map<String, ReferenceType> localVariables, RawMethodCall rawMethodCall) {
+    private ProcessedMethodCall processRawMethodCall(Map<String, ReferenceType> localVariables, RawMethodCall rawMethodCall, ClassCover belongingClass) {
     	ReferenceType variable = localVariables.get(rawMethodCall.getScope());
         if (variable != null) {
             if (isClassInProject(variable)) {
                 return new ProcessedMethodCall(variable.getType(), rawMethodCall.getMethodName(), rawMethodCall.getParameters());
             }
         } else {
-        	//variable = classesInProject.get()
+            ClassType currentClass = classesInProject.get(belongingClass.getName());
+            if (currentClass != null) {
+                variable = currentClass.getFields().get(rawMethodCall.getScope());
+                if (variable != null) {
+                    return new ProcessedMethodCall(variable.getType(), rawMethodCall.getMethodName(), rawMethodCall.getParameters());
+                }
+            }
         }
         
         return null;
