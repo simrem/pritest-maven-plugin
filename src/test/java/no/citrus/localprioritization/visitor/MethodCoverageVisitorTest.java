@@ -4,6 +4,7 @@ import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import no.citrus.localprioritization.model.*;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -98,5 +99,20 @@ public class MethodCoverageVisitorTest {
         assertThat(methodDeclarationVisitorClass.getMethods().values(), not(hasItems(
                 new MethodCover("List", "boolean", "add", parameters, new ArrayList<ProcessedMethodCall>())
         )));
+    }
+    
+    @Test
+    public void should_include_methods_called_by_field_variables() throws ParseException, FileNotFoundException {
+    	FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/visitor/MethodCoverageVisitor.java");
+		CompilationUnit cu = JavaParser.parse(fis);
+		
+		Map<String, ClassType> classesInProject = new HashMap<String, ClassType>();
+		
+		ClassType mapClass = new ClassType("java.util", "Map");
+		List<ReferenceType> parameters = new ArrayList<ReferenceType>();
+		parameters.add(new ReferenceType("String", "key"));
+		parameters.add(new ReferenceType("ClassCover", "value"));
+		mapClass.getMethodDeclarations().add(new MethodDecl("Object", "put", parameters));
+		classesInProject.put("Map", mapClass);
     }
 }

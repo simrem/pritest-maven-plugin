@@ -62,8 +62,7 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
         		new MethodCover(arg.getName(), returnType, methodName, parameters, methodCalls));
     }
 
-	private Map<String, ReferenceType> retrieveFieldVariablesOfCurrentClass(
-			ClassCover arg) {
+	private Map<String, ReferenceType> retrieveFieldVariablesOfCurrentClass(ClassCover arg) {
 		ClassType currentClass = classesInProject.get(arg.getName());
 		Map<String, ReferenceType> fieldVariables =
 			(currentClass != null ? currentClass.getFields() : new HashMap<String, ReferenceType>());
