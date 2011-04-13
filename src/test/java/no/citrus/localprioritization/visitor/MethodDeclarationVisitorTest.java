@@ -3,7 +3,7 @@ package no.citrus.localprioritization.visitor;
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
-import japa.parser.ast.body.TypeDeclaration;
+import japa.parser.ast.body.BodyDeclaration;
 import no.citrus.localprioritization.model.MethodDecl;
 import no.citrus.localprioritization.model.ReferenceType;
 
@@ -15,14 +15,13 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.collection.IsCollectionContaining.hasItems;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class MethodDeclarationVisitorTest {
 	
-	private List<MethodDecl> methodDeclarations;
+	private MethodDecl methodDeclaration;
 
 	@Before
 	public void setup() throws FileNotFoundException, ParseException {
@@ -30,26 +29,17 @@ public class MethodDeclarationVisitorTest {
 		CompilationUnit cu = JavaParser.parse(fis);
 		
 		MethodDeclarationVisitor mdv = new MethodDeclarationVisitor();
-		TypeDeclaration td = cu.getTypes().get(0);
-		td.accept(mdv, null);
-		
-		methodDeclarations = mdv.getMethodDeclarations();
+		BodyDeclaration bd = cu.getTypes().get(0).getMembers().get(0);
+		methodDeclaration = bd.accept(mdv, null);
 	}
 	
 	@Test
-	public void should_find_declared_method_in_class() {
-		List<ReferenceType> parameterTypes1 = new ArrayList<ReferenceType>();
+	public void should_find_declared_method() {
 		List<ReferenceType> parameterTypes2 = new ArrayList<ReferenceType>();
 		
 		parameterTypes2.add(new ReferenceType("MethodDeclaration", "n"));
 		parameterTypes2.add(new ReferenceType("Object", "arg1"));
 		
-		assertThat(methodDeclarations, hasItems(
-				new MethodDecl("List", "getMethodDeclarations", parameterTypes1),
-				new MethodDecl("void", "visit", parameterTypes2)
-		));
-		
-		assertThat(methodDeclarations.get(0).getParameters().size(), is(equalTo(0)));
-		assertThat(methodDeclarations.get(1).getParameters().size(), is(equalTo(2)));
+		assertThat(methodDeclaration, is(equalTo(new MethodDecl("MethodDecl", "visit", parameterTypes2))));
 	}
 }

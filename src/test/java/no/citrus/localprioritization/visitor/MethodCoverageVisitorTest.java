@@ -88,9 +88,7 @@ public class MethodCoverageVisitorTest {
         methodCalls.add(new ProcessedMethodCall("ReturnTypeVisitor", "getTypeName", new ArrayList<String>()));
 
         assertThat(methodDeclarationVisitorClass.getMethods().values(), hasItems(
-                new MethodCover("MethodDeclarationVisitor", "void", "visit", params1, methodCalls),
-                new MethodCover("MethodDeclarationVisitor", "List", "getMethodDeclarations", new ArrayList<ReferenceType>(),
-                        new ArrayList<ProcessedMethodCall>())
+                new MethodCover("MethodDeclarationVisitor", "MethodDecl", "visit", params1, methodCalls)
         ));
     }
 

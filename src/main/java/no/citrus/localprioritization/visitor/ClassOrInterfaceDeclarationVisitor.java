@@ -6,6 +6,7 @@ import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.visitor.GenericVisitorAdapter;
 import no.citrus.localprioritization.model.ClassType;
+import no.citrus.localprioritization.model.MethodDecl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,10 +56,9 @@ public class ClassOrInterfaceDeclarationVisitor extends GenericVisitorAdapter<Cl
 
 	@Override
 	public ClassType visit(MethodDeclaration methodDeclaration, ClassType classType) {
-		MethodDeclarationVisitor mdv = new MethodDeclarationVisitor();
-		methodDeclaration.accept(mdv, classType);
+		MethodDecl methodDecl = methodDeclaration.accept(new MethodDeclarationVisitor(), classType);
 		
-		classType.getMethodDeclarations().addAll(mdv.getMethodDeclarations());
+		classType.getMethodDeclarations().add(methodDecl);
 		
 		return classType;
 	}

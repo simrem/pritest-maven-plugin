@@ -2,7 +2,7 @@ package no.citrus.localprioritization.visitor;
 
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.Parameter;
-import japa.parser.ast.visitor.VoidVisitorAdapter;
+import japa.parser.ast.visitor.GenericVisitorAdapter;
 import no.citrus.localprioritization.model.MethodDecl;
 import no.citrus.localprioritization.model.ReferenceType;
 
@@ -10,19 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MethodDeclarationVisitor extends VoidVisitorAdapter<Object> {
-	private List<MethodDecl> methodDeclarations;
+public class MethodDeclarationVisitor extends GenericVisitorAdapter<MethodDecl, Object> {
 	
-	public MethodDeclarationVisitor() {
-		methodDeclarations = new ArrayList<MethodDecl>();
-	}
-
-	public List<MethodDecl> getMethodDeclarations() {
-		return methodDeclarations;
-	}
-
 	@Override
-	public void visit(MethodDeclaration n, Object arg1) {
+	public MethodDecl visit(MethodDeclaration n, Object arg1) {
 		String returnType = null;
 		String methodName = n.getName();
 		
@@ -46,7 +37,7 @@ public class MethodDeclarationVisitor extends VoidVisitorAdapter<Object> {
 			}
 		}
 		
-		methodDeclarations.add(new MethodDecl(returnType, methodName, parameters));
+		return new MethodDecl(returnType, methodName, parameters);
 	}
 
 }

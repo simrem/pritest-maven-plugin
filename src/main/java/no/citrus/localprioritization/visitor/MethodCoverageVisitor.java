@@ -35,43 +35,39 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
 
     @Override
     public void visit(MethodDeclaration n, ClassCover arg) {
-        MethodDeclarationVisitor mdv = new MethodDeclarationVisitor();
-		n.accept(mdv, null);
+        MethodDecl methodDeclaration = n.accept(new MethodDeclarationVisitor(), null);
+    	
+    	String returnType = methodDeclaration.getReturnType();
+        String methodName = methodDeclaration.getMethodName();
+        List<ReferenceType> parameters = methodDeclaration.getParameters();
+        List<ProcessedMethodCall> methodCalls = new ArrayList<ProcessedMethodCall>();
 
-		List<MethodDecl> methodDeclarations = mdv.getMethodDeclarations();
-        for (MethodDecl md : methodDeclarations) {
-            String returnType = md.getReturnType();
-            String methodName = md.getMethodName();
-            List<ReferenceType> parameters = md.getParameters();
-            List<ProcessedMethodCall> methodCalls = new ArrayList<ProcessedMethodCall>();
+        if (n.getBody() != null) {
+        	VariableDeclarationVisitor vdv = new VariableDeclarationVisitor();
+        	n.getBody().accept(vdv, null);
+        	
+        	Map<String, ReferenceType> localVariables = vdv.getVariables();
+        	ClassType currentClass = classesInProject.get(arg.getName());
+        	Map<String, ReferenceType> fieldVariables =
+        		(currentClass != null ? currentClass.getFields() : new HashMap<String, ReferenceType>());
+        	
+            MethodCallVisitor mcv = new MethodCallVisitor(localVariables, fieldVariables);
+            n.getBody().accept(mcv, null);
 
-            if (n.getBody() != null) {
-            	VariableDeclarationVisitor vdv = new VariableDeclarationVisitor();
-            	n.getBody().accept(vdv, null);
-            	
-            	Map<String, ReferenceType> localVariables = vdv.getVariables();
-            	ClassType currentClass = classesInProject.get(arg.getName());
-            	Map<String, ReferenceType> fieldVariables =
-            		(currentClass != null ? currentClass.getFields() : new HashMap<String, ReferenceType>());
-            	
-                MethodCallVisitor mcv = new MethodCallVisitor(localVariables, fieldVariables);
-                n.getBody().accept(mcv, null);
-
-                for (RawMethodCall rawMethodCall : mcv.getRawMethodCalls()) {
-                    ReferenceType variable = localVariables.get(rawMethodCall.getScope());
-                    if (variable != null) {
-                        if (isClassInProject(variable)) {
-                            methodCalls.add(new ProcessedMethodCall(variable.getType(), rawMethodCall.getMethodName(), rawMethodCall.getParameters()));
-                        }
-                    } else {
-                    	//variable = classesInProject.get()
+            for (RawMethodCall rawMethodCall : mcv.getRawMethodCalls()) {
+                ReferenceType variable = localVariables.get(rawMethodCall.getScope());
+                if (variable != null) {
+                    if (isClassInProject(variable)) {
+                        methodCalls.add(new ProcessedMethodCall(variable.getType(), rawMethodCall.getMethodName(), rawMethodCall.getParameters()));
                     }
+                } else {
+                	//variable = classesInProject.get()
                 }
             }
-
-            arg.getMethods().put(methodName,
-            		new MethodCover(arg.getName(), returnType, methodName, parameters, methodCalls));
         }
+
+        arg.getMethods().put(methodName,
+        		new MethodCover(arg.getName(), returnType, methodName, parameters, methodCalls));
     }
 
     private boolean isClassInProject(ReferenceType variable) {

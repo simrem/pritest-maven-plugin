@@ -61,7 +61,7 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Object> {
 		
 		return parameters;
 	}
-
+	
 	private void addTypeNameToParameterList(List<String> parameters, ArgumentReference argument) {
 		if (argument != null) {
 			if (argument.getType() != null) {
@@ -141,7 +141,7 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Object> {
 		}
     }
     
-    public class ArgumentVisitor extends GenericVisitorAdapter<ArgumentReference, Object> {
+    private class ArgumentVisitor extends GenericVisitorAdapter<ArgumentReference, Object> {
 
 		@Override
 		public ArgumentReference visit(NullLiteralExpr n, Object arg) {
@@ -159,7 +159,7 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Object> {
 		}
 	}
     
-    public class ArgumentReference extends ReferenceType {
+    private class ArgumentReference extends ReferenceType {
 
 		private final boolean isNull;
 
