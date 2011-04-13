@@ -43,26 +43,17 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
         List<ProcessedMethodCall> methodCalls = new ArrayList<ProcessedMethodCall>();
 
         if (n.getBody() != null) {
-        	VariableDeclarationVisitor vdv = new VariableDeclarationVisitor();
-        	n.getBody().accept(vdv, null);
-        	
-        	Map<String, ReferenceType> localVariables = vdv.getVariables();
-        	ClassType currentClass = classesInProject.get(arg.getName());
-        	Map<String, ReferenceType> fieldVariables =
-        		(currentClass != null ? currentClass.getFields() : new HashMap<String, ReferenceType>());
+        	Map<String, ReferenceType> localVariables = extractLocalVariables(n);
+        	Map<String, ReferenceType> fieldVariables = retrieveFieldVariablesOfCurrentClass(arg);
         	
             MethodCallVisitor mcv = new MethodCallVisitor(localVariables, fieldVariables);
             n.getBody().accept(mcv, null);
-
+            
             for (RawMethodCall rawMethodCall : mcv.getRawMethodCalls()) {
-                ReferenceType variable = localVariables.get(rawMethodCall.getScope());
-                if (variable != null) {
-                    if (isClassInProject(variable)) {
-                        methodCalls.add(new ProcessedMethodCall(variable.getType(), rawMethodCall.getMethodName(), rawMethodCall.getParameters()));
-                    }
-                } else {
-                	//variable = classesInProject.get()
-                }
+            	ProcessedMethodCall processedMethodCall = processRawMethodCall(localVariables, rawMethodCall);
+            	if (processedMethodCall != null) {
+            		methodCalls.add(processedMethodCall);
+            	}
             }
         }
 
@@ -70,6 +61,36 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
         		new MethodCover(arg.getName(), returnType, methodName, parameters, methodCalls));
     }
 
+	private Map<String, ReferenceType> retrieveFieldVariablesOfCurrentClass(
+			ClassCover arg) {
+		ClassType currentClass = classesInProject.get(arg.getName());
+		Map<String, ReferenceType> fieldVariables =
+			(currentClass != null ? currentClass.getFields() : new HashMap<String, ReferenceType>());
+		return fieldVariables;
+	}
+    
+    private Map<String, ReferenceType> extractLocalVariables(MethodDeclaration n) {
+    	VariableDeclarationVisitor vdv = new VariableDeclarationVisitor();
+    	n.getBody().accept(vdv, null);
+    	
+    	Map<String, ReferenceType> localVariables = vdv.getVariables();
+    	
+    	return localVariables;
+    }
+    
+    private ProcessedMethodCall processRawMethodCall(Map<String, ReferenceType> localVariables, RawMethodCall rawMethodCall) {
+    	ReferenceType variable = localVariables.get(rawMethodCall.getScope());
+        if (variable != null) {
+            if (isClassInProject(variable)) {
+                return new ProcessedMethodCall(variable.getType(), rawMethodCall.getMethodName(), rawMethodCall.getParameters());
+            }
+        } else {
+        	//variable = classesInProject.get()
+        }
+        
+        return null;
+    }
+    
     private boolean isClassInProject(ReferenceType variable) {
         return classesInProject.get(variable.getType()) != null;
     }
