@@ -1,6 +1,7 @@
 package no.citrus.localprioritization;
 
 import japa.parser.ParseException;
+import japa.parser.ast.CompilationUnit;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,12 +21,13 @@ public class ClassTypeProviderTest {
 	
 	private ClassTypeProvider classTypeProvider;
 	private List<File> projectFiles;
+	private List<CompilationUnit> compilationUnits;
 	
 	@Before
 	public void setup() throws ParseException, IOException{
 		File projectDirectory = new File("src/main/java/");
-		this.projectFiles = ClassListProvider.getFileList(projectDirectory, new String[] {".java"});
-		classTypeProvider = new ClassTypeProvider(this.projectFiles);
+		projectFiles = ClassListProvider.getFileList(projectDirectory, new String[] {".java"});
+		compilationUnits = CompilationUnitProvider.getCompilationUnits(this.projectFiles);
 	}
 	
 	@Test
@@ -34,7 +36,8 @@ public class ClassTypeProviderTest {
 	}
 	
 	@Test
-	public void ensure_that_map_of_classtypes_has_items(){
+	public void ensure_that_map_of_classtypes_has_items() throws ParseException, IOException{
+		classTypeProvider = new ClassTypeProvider(compilationUnits);
 		Map<String, ClassType> classTypes = this.classTypeProvider.getClassTypes();
 		assertThat(classTypes.isEmpty(), equalTo(false));
 	}
