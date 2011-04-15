@@ -35,20 +35,25 @@ public class MethodCoverageSummarizerTest {
 		
 		ClassCover coveredClassB = new ClassCover("B");
 		List<ProcessedMethodCall> methodCallsB = new ArrayList<ProcessedMethodCall>();
-		//methodCallsB.add(new ProcessedMethodCall("C", "c", new ArrayList<String>()));
+		methodCallsB.add(new ProcessedMethodCall("D", "d", new ArrayList<String>()));
 		coveredClassB.getMethods().put("b", new MethodCover("B", "void", "b", 
 				new ArrayList<ReferenceType>(), methodCallsB));
 		coveredClasses.put("B", coveredClassB);
 		
 		ClassCover coveredClassC = new ClassCover("C");
-		coveredClassB.getMethods().put("c", new MethodCover("C", "void", "c", 
+		coveredClassC.getMethods().put("c", new MethodCover("C", "void", "c", 
 				new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>()));
 		coveredClasses.put("C", coveredClassC);
+		
+		ClassCover coveredClassD = new ClassCover("D");
+		coveredClassD.getMethods().put("d", new MethodCover("D", "void", "d", 
+				new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>()));
+		coveredClasses.put("D", coveredClassC);
 		
 		ClassCover coveredTestCase = new ClassCover("ATest");
 		List<ProcessedMethodCall> methodsCoveredByTest = new ArrayList<ProcessedMethodCall>();
 		methodsCoveredByTest.add(new ProcessedMethodCall("A", "a", new ArrayList<String>()));
-		coveredTestCase.getMethods().put("should_bla_bla", new MethodCover("ATest", "void", "should_bla_bla", 
+		coveredTestCase.getMethods().put("should_bla_bla", new MethodCover("ATest", "void", "should_bla_bla",
 				new ArrayList<ReferenceType>(), methodsCoveredByTest));
 		
 		MethodCoverageSummarizer mcs = new MethodCoverageSummarizer(coveredClasses, coveredTestCase);
@@ -64,6 +69,20 @@ public class MethodCoverageSummarizerTest {
 		assertThat(summarizedCoverageOfTestCase.values(), hasItems(
 				new MethodCover("A", "void", "a", new ArrayList<ReferenceType>(), answerMethodCallsA),
 				new MethodCover("B", "void", "b", new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>())
+		));
+	}
+	
+	@Test
+	public void should_find_parallell_method_calls() {
+		assertThat(summarizedCoverageOfTestCase.values(), hasItems(
+				new MethodCover("C", "void", "c", new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>())
+		));
+	}
+	
+	@Test
+	public void should_find_transitive_method_calls() {
+		assertThat(summarizedCoverageOfTestCase.values(), hasItems(
+				new MethodCover("D", "void", "d", new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>())
 		));
 	}
 	
