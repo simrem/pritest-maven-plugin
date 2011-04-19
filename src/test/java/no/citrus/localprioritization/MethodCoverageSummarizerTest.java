@@ -1,6 +1,7 @@
 package no.citrus.localprioritization;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import no.citrus.localprioritization.model.ProcessedMethodCall;
 import no.citrus.localprioritization.model.ReferenceType;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.collection.IsCollectionContaining.hasItems;
@@ -48,7 +50,7 @@ public class MethodCoverageSummarizerTest {
 		ClassCover coveredClassD = new ClassCover("D");
 		coveredClassD.getMethods().put("d", new MethodCover("D", "void", "d", 
 				new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>()));
-		coveredClasses.put("D", coveredClassC);
+		coveredClasses.put("D", coveredClassD);
 		
 		ClassCover coveredTestCase = new ClassCover("ATest");
 		List<ProcessedMethodCall> methodsCoveredByTest = new ArrayList<ProcessedMethodCall>();
@@ -67,8 +69,7 @@ public class MethodCoverageSummarizerTest {
 		answerMethodCallsA.add(new ProcessedMethodCall("C", "c", new ArrayList<String>()));
 		
 		assertThat(summarizedCoverageOfTestCase.values(), hasItems(
-				new MethodCover("A", "void", "a", new ArrayList<ReferenceType>(), answerMethodCallsA),
-				new MethodCover("B", "void", "b", new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>())
+				new MethodCover("A", "void", "a", new ArrayList<ReferenceType>(), answerMethodCallsA)
 		));
 	}
 	
