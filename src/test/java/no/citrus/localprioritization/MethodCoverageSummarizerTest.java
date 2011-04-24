@@ -1,7 +1,10 @@
 package no.citrus.localprioritization;
 
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.collection.IsCollectionContaining.hasItems;
+import static org.junit.Assert.assertThat;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +15,7 @@ import no.citrus.localprioritization.model.ProcessedMethodCall;
 import no.citrus.localprioritization.model.ReferenceType;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-
-import static org.hamcrest.collection.IsCollectionContaining.hasItems;
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertThat;
 
 public class MethodCoverageSummarizerTest {
 	
