@@ -25,7 +25,7 @@ public class MethodCoverageSummarizerTest {
 	public void setup() {
 		Map<String, ClassCover> coveredClasses = new HashMap<String, ClassCover>();
 		
-		ClassCover coveredClassA = new ClassCover("A");
+		ClassCover coveredClassA = new ClassCover("A", null);
 		List<ProcessedMethodCall> methodCallsA = new ArrayList<ProcessedMethodCall>();
 		methodCallsA.add(new ProcessedMethodCall("B", "b", new ArrayList<String>()));
 		methodCallsA.add(new ProcessedMethodCall("C", "c", new ArrayList<String>()));
@@ -33,24 +33,24 @@ public class MethodCoverageSummarizerTest {
 				new ArrayList<ReferenceType>(), methodCallsA));
 		coveredClasses.put("A", coveredClassA);
 		
-		ClassCover coveredClassB = new ClassCover("B");
+		ClassCover coveredClassB = new ClassCover("B", null);
 		List<ProcessedMethodCall> methodCallsB = new ArrayList<ProcessedMethodCall>();
 		methodCallsB.add(new ProcessedMethodCall("D", "d", new ArrayList<String>()));
 		coveredClassB.getMethods().put("b", new MethodCover("B", "void", "b", 
 				new ArrayList<ReferenceType>(), methodCallsB));
 		coveredClasses.put("B", coveredClassB);
 		
-		ClassCover coveredClassC = new ClassCover("C");
+		ClassCover coveredClassC = new ClassCover("C", null);
 		coveredClassC.getMethods().put("c", new MethodCover("C", "void", "c", 
 				new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>()));
 		coveredClasses.put("C", coveredClassC);
 		
-		ClassCover coveredClassD = new ClassCover("D");
+		ClassCover coveredClassD = new ClassCover("D", null);
 		coveredClassD.getMethods().put("d", new MethodCover("D", "void", "d", 
 				new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>()));
 		coveredClasses.put("D", coveredClassD);
 		
-		ClassCover coveredTestCase = new ClassCover("ATest");
+		ClassCover coveredTestCase = new ClassCover("ATest", null);
 		List<ProcessedMethodCall> methodsCoveredByTest = new ArrayList<ProcessedMethodCall>();
 		methodsCoveredByTest.add(new ProcessedMethodCall("A", "a", new ArrayList<String>()));
 		coveredTestCase.getMethods().put("should_bla_bla", new MethodCover("ATest", "void", "should_bla_bla",

@@ -7,9 +7,11 @@ public class ClassCover {
 
     private String name;
     private Map<String, MethodCover> methods;
+	private final String packageName;
 
-    public ClassCover(String className) {
+    public ClassCover(String className, String packageName) {
         this.name = className;
+		this.packageName = packageName;
         methods = new HashMap<String, MethodCover>();
     }
 
@@ -40,4 +42,8 @@ public class ClassCover {
     public Map<String, MethodCover> getMethods() {
         return methods;
     }
+
+	public String getPackageName() {
+		return packageName;
+	}
 }

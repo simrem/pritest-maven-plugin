@@ -1,8 +1,10 @@
 package no.citrus.localprioritization.visitor;
 
+import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
+import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 import no.citrus.localprioritization.model.*;
 
@@ -14,15 +16,29 @@ import java.util.Map;
 public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
     private Map<String, ClassCover> coveredClasses;
     private Map<String, ClassType> classesInProject;
+	private String packageName;
 
     public MethodCoverageVisitor(Map<String, ClassType> classesInProject) {
         coveredClasses = new HashMap<String, ClassCover>();
         this.classesInProject = classesInProject;
     }
-
+    
     @Override
+	public void visit(CompilationUnit arg0, ClassCover arg1) {
+		if (arg0.getPackage() != null) {
+			packageName = arg0.getPackage().getName().toString();
+		}
+    	
+		if (arg0.getTypes() != null) {
+			for (TypeDeclaration td : arg0.getTypes()) {
+				td.accept(this, arg1);
+			}
+		}
+	}
+
+	@Override
     public void visit(ClassOrInterfaceDeclaration n, ClassCover arg) {
-        ClassCover currentClass = new ClassCover(n.getName());
+        ClassCover currentClass = new ClassCover(n.getName(), packageName);
 
         if (n.getMembers() != null) {
             for (BodyDeclaration member : n.getMembers()) {
