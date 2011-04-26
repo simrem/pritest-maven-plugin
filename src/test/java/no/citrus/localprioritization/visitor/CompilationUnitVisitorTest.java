@@ -45,8 +45,6 @@ public class CompilationUnitVisitorTest {
 		List<ClassType> types = cuv.getTypes();
 		
 		assertThat(types.get(0).getPackageName(), is(equalTo("no.citrus.localprioritization.visitor")));
-		assertThat(types.get(0).getInnerClasses().get(0).getPackageName(),
-				is(equalTo("no.citrus.localprioritization.visitor.CompilationUnitVisitor")));
 	}
 	
 	@Test

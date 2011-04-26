@@ -79,7 +79,7 @@ public class PriorityList2 {
 		try {
 			onlineTestClasses.addAll(this.onlineClassService.getClassList());
 		} catch (Exception e) {
-			System.out.println("Could not conenct to server");
+			System.out.println("Could not connect to server");
 		}
 		
 		List<String> onlyLocal = new ArrayList<String>();

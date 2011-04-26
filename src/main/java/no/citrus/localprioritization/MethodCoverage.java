@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class MethodCoverage {
-    protected List<ClassCover> testCases;
+    protected List<String> testCases;
 
     public MethodCoverage() {
-        testCases = new ArrayList<ClassCover>();
+        testCases = new ArrayList<String>();
     }
 
     protected Map<String, ClassCover> retrieveClassCoverage(String pathToProjectSource)
@@ -35,7 +35,7 @@ public abstract class MethodCoverage {
 		return mcp.getMethodCoverage();
 	}
 
-    public List<ClassCover> getTestCases() {
+    public List<String> getTestCases() {
 		return testCases;
 	}
 

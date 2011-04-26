@@ -26,7 +26,7 @@ public class ClassOrInterfaceDeclarationVisitorTest {
 
 	@Before
 	public void setup() throws FileNotFoundException, ParseException {
-		FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/visitor/CompilationUnitVisitor.java");
+		FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/visitor/MethodCallVisitor.java");
 		CompilationUnit cu = JavaParser.parse(fis);
 
         ClassOrInterfaceDeclarationVisitor cidv = new ClassOrInterfaceDeclarationVisitor("");
@@ -40,58 +40,56 @@ public class ClassOrInterfaceDeclarationVisitorTest {
 	public void should_return_class_name() {
         ClassType classType = classes.get(0);
 
-        assertThat(classType.getName(), is(equalTo("CompilationUnitVisitor")));
+        assertThat(classType.getName(), is(equalTo("MethodCallVisitor")));
 	}
 
     @Test
     public void should_return_correct_amount_of_classes_from_compilation_unit() {
         assertThat(classes.size(), is(equalTo(1)));
-        assertThat(classes.get(0).getInnerClasses().size(), is(equalTo(1)));
+        assertThat(classes.get(0).getInnerClasses().size(), is(equalTo(5)));
     }
 	
 	@Test
     public void should_return_inner_classes() {
         ClassType innerClass = classes.get(0).getInnerClasses().get(0);
 
-        assertThat(innerClass.getName(), is(equalTo("ImportVisitor")));
+        assertThat(innerClass.getName(), is(equalTo("ScopeVisitor")));
     }
 
     @Test
     public void should_integrate_with_FieldVisitor() {
         ClassType outerClass = classes.get(0);
-        ClassType innerClass = classes.get(0).getInnerClasses().get(0);
+        ClassType innerClass = classes.get(0).getInnerClasses().get(2);
 
         assertThat(outerClass.getFields().size(), is(equalTo(3)));
-        assertThat(outerClass.getFields().values(), hasItem(new ReferenceType("List", "types")));
+        assertThat(outerClass.getFields().values(), hasItem(new ReferenceType("List", "methodCalls")));
         
-        assertThat(innerClass.getFields().size(), is(equalTo(1)));
-        assertThat(innerClass.getFields().values(), hasItem(new ReferenceType("String", "importStatement")));
+        assertThat(innerClass.getFields().size(), is(equalTo(3)));
+        assertThat(innerClass.getFields().values(), hasItem(new ReferenceType("String", "scope")));
     }
 
     @Test
 	public void should_integrate_with_MethodDeclarationVisitor() {
         ClassType outerClass = classes.get(0);
-        ClassType innerClass = classes.get(0).getInnerClasses().get(0);
+        ClassType innerClass = classes.get(0).getInnerClasses().get(2);
 
         List<ReferenceType> params1 = new ArrayList<ReferenceType>();
         List<ReferenceType> params2 = new ArrayList<ReferenceType>();
         List<ReferenceType> params3 = new ArrayList<ReferenceType>();
 
-        params2.add(new ReferenceType("CompilationUnit", "cu"));
-        params2.add(new ReferenceType("Object", "obj"));
-        params3.add(new ReferenceType("QualifiedNameExpr", "n"));
-        params3.add(new ReferenceType("String", "arg"));
+        params2.add(new ReferenceType("MethodCallExpr", "n"));
+        params2.add(new ReferenceType("Object", "arg1"));
         
         assertThat(outerClass.getMethodDeclarations().size(), is(equalTo(5)));
 		assertThat(outerClass.getMethodDeclarations(), hasItems(
-                new MethodDecl("List", "getImportStatements", params1),
+                new MethodDecl("List", "getRawMethodCalls", params1),
                 new MethodDecl("void", "visit", params2)
         ));
 		
-		assertThat(innerClass.getMethodDeclarations().size(), is(equalTo(4)));
+		assertThat(innerClass.getMethodDeclarations().size(), is(equalTo(3)));
 		assertThat(innerClass.getMethodDeclarations(), hasItems(
-                new MethodDecl("String", "getImportStatement", params1),
-                new MethodDecl("void", "visit", params3)
+                new MethodDecl("String", "getScope", params1),
+                new MethodDecl("NestedMethodCall", "getNestedCall", params3)
         ));
 	}
 }

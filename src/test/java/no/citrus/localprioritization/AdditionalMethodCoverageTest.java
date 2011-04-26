@@ -1,7 +1,6 @@
 package no.citrus.localprioritization;
 
 import japa.parser.ParseException;
-import no.citrus.localprioritization.model.ClassCover;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -18,7 +17,7 @@ public class AdditionalMethodCoverageTest {
     @Ignore
 	public void should_give_a_list_of_test_cases_with_size_greater_than_zero() throws ParseException, IOException {
 		AdditionalMethodCoverage tmc = new AdditionalMethodCoverage("src/main/java", "src/test/java");
-		List<ClassCover> testCases = tmc.getTestCases();
+		List<String> testCases = tmc.getTestCases();
 
 		assertThat(testCases.size(), is(not(0)));
 	}
