@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -145,12 +146,25 @@ public class RunnerMojo extends AbstractMojo {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        Date timestamp = new Date(System.currentTimeMillis());
+        try {
+			reporter.outputAPFDToFile("./apfd/" + this.techniqueNumber + "/", timestamp.toString() + "txt");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
         try {
 			reporter.sendReport();
 		} catch (ClientHandlerException e) {
 			getLog().error("Report not sent, could not connect to report server.");
 		} catch (JAXBException e) {
 			getLog().error("Exception - send report");
+		}
+
+		getLog().info("Output of prioritylist:");
+		for (String className : priorityList){
+			getLog().info(className);
 		}
     }
 

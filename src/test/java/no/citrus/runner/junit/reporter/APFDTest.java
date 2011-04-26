@@ -50,5 +50,29 @@ public class APFDTest {
     	assertThat(result, equalTo(0.25));
     }
     
+    @Test
+    public void should_support_all_failure_scenarios(){
+    	List<Measure> list = new ArrayList<Measure>();
+        for(int i = 0; i < 2; i++){
+            Measure testMeasure;
+            testMeasure = new Measure();
+            testMeasure.setName(String.format("Class%d", i));
+            testMeasure.setDate(new Date(System.currentTimeMillis()));
+            testMeasure.setChildren(new ArrayList<Measure>());
+            Measure failedTestMethod = new Measure();
+            failedTestMethod.failed = true;
+            failedTestMethod.setDate(new Date(System.currentTimeMillis()));
+            failedTestMethod.setName(String.format("MethodThatBelongsToClass%d", i));
+            	
+            testMeasure.getChildren().add(failedTestMethod);
+            
+            list.add(testMeasure);
+        }
+        
+        APFD apfd = new APFD(new MeasureList(list));
+        double result = apfd.calculateAPFD();
+        assertThat(result, equalTo(0.5));
+    }
+    
     
 }

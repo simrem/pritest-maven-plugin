@@ -6,6 +6,8 @@ import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.citrus.localprioritization.TotalMethodCoverage;
+
 import org.codehaus.jettison.json.JSONException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 
@@ -40,7 +42,8 @@ public class PriorityList2 {
 				return technique5Strategy();
 				
 			case 6:
-				// Sveinung sin teknikk.
+				TotalMethodCoverage tmc = new TotalMethodCoverage("src/main/java", "src/test/java");
+				return tmc.getTestCases();
 		}
 		return new ArrayList<String>();
 	}
