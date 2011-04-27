@@ -17,8 +17,10 @@ public class TotalMethodCoverage extends MethodCoverage {
 	}
 
     private void prioritizeTestCases(String pathToProjectSource, String pathToTestSuite) throws ParseException, IOException {
-        Map<String, ClassCover> sourceClassCover = retrieveClassCoverage(pathToProjectSource);
-        Map<String, ClassCover> testClassCover = retrieveClassCoverage(pathToTestSuite);
+    	retrieveCoverage(pathToProjectSource, pathToTestSuite);
+    	
+        Map<String, ClassCover> sourceClassCover = getSourceMethodCoverage();
+        Map<String, ClassCover> testClassCover = getTestSuiteMethodCoverage();
 
         List<SummarizedTestCase> prioritizedTestCases = new ArrayList<SummarizedTestCase>();
 
