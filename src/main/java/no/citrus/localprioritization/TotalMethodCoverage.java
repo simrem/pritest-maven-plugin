@@ -36,7 +36,7 @@ public class TotalMethodCoverage extends MethodCoverage {
         for (SummarizedTestCase stc : prioritizedTestCases) {
         	ClassCover testCase = stc.getTestCase();
             testCases.add(testCase.getPackageName() + "." + testCase.getName());
-//            System.out.println(testCase.getPackageName() + "." + testCase.getName() + " " + stc.getSummarizedCoverage().size());
+            System.out.println(testCase.getPackageName() + "." + testCase.getName() + " " + stc.getSummarizedCoverage().size());
         }
     }
 

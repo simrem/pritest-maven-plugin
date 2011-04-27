@@ -30,14 +30,14 @@ public class Reporter {
 		return measureList.getList().add(measure);
 	}
 	
-	public void outputAPFDToFile(String directory, String filename) throws IOException{
-		APFD apfd = new APFD(measureList);
-		apfd.outputToFile(directory, filename);
-	}
+//	public void outputAPFDToFile(String directory, String filename) throws IOException{
+//		APFD apfd = new APFD(measureList);
+//		apfd.outputToFile(directory, filename);
+//	}
 	
 	public void sendReport() throws ClientHandlerException, JAXBException{
 		StringBuffer sb = getMeasureListAsXML();
-		System.out.println(sb.toString());
+		//System.out.println(sb.toString());
         System.out.println("Sending report to " + reportURL);
 		Client c = Client.create();  
 		WebResource r = c.resource(reportURL);  
@@ -53,5 +53,8 @@ public class Reporter {
 		marshaller.marshal(measureList, sw);
 		
 		return sw.getBuffer();
+	}
+	public MeasureList getMeasureList(){
+		return measureList;
 	}
 }

@@ -6,17 +6,22 @@ import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.bind.JAXBException;
 
 import no.citrus.restapi.model.Measure;
+import no.citrus.restapi.model.MeasureList;
 import no.citrus.runner.junit.priority.LocalClassService;
 import no.citrus.runner.junit.priority.OnlineClassService;
 import no.citrus.runner.junit.priority.PriorityList2;
+import no.citrus.runner.junit.reporter.APFD;
 import no.citrus.runner.junit.reporter.Reporter;
 import no.citrus.runner.junit.test.CitrusTester;
 
@@ -118,57 +123,82 @@ public class RunnerMojo extends AbstractMojo {
         }
     	
         URLClassLoader classLoader = new URLClassLoader(citrusClassPaths.toArray(new URL[]{}), this.getClass().getClassLoader());
+        Reporter reporter = new Reporter(reportUrl, new ArrayList<Measure>());
         
         getLog().info(String.format("Technique Number = %d", techniqueNumber));
         getLog().info("Fetching priority list...");
-
-        PriorityList2 priorityListService = new PriorityList2(new OnlineClassService(citrusTechniqueUrl, techniqueNumber), new LocalClassService(testOutputDirectory), basedir, techniqueNumber);
-        List<String> priorityList = new ArrayList<String>();
-		try {
-			priorityList.addAll(priorityListService.getPriorityList());
-		} catch (ConnectException e1) {
-			e1.printStackTrace();
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		} catch (NoWorkTreeException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-		Reporter reporter = new Reporter(reportUrl, new ArrayList<Measure>());
-        try {
-            getLog().debug("Initializing CitrusTester with testOrder: " + priorityList.toString());
-            new CitrusTester(classLoader, priorityList, getLog(), reporter).execute();
-        } catch (InitializationError initializationError) {
-            initializationError.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        if(techniqueNumber == 0) {
+        	Map<Integer, List<String>> priorityLists = new HashMap<Integer, List<String>>();
+        	try {
+				collectAllPriorityLists(priorityLists);
+				new CitrusTester(classLoader, priorityLists.get(1), getLog(), reporter).execute();
+				priorityListsToAPFD(priorityLists, reporter.getMeasureList());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
         }
-        Date timestamp = new Date(System.currentTimeMillis());
-        try {
-			reporter.outputAPFDToFile("./apfd/" + this.techniqueNumber + "/", timestamp.toString() + "txt");
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-        
-        try {
-			reporter.sendReport();
-		} catch (ClientHandlerException e) {
-			getLog().error("Report not sent, could not connect to report server.");
-		} catch (JAXBException e) {
-			getLog().error("Exception - send report");
-		}
+        else {
+        	PriorityList2 priorityListService = new PriorityList2(new OnlineClassService(citrusTechniqueUrl, techniqueNumber), new LocalClassService(testOutputDirectory), basedir, techniqueNumber);
+        	List<String> priorityList = new ArrayList<String>();
+			try {
+				priorityList.addAll(priorityListService.getPriorityList());
+				new CitrusTester(classLoader, priorityList, getLog(), reporter).execute();
+				calculateAPFD(reporter.getMeasureList().getList(), techniqueNumber);
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
 
-		getLog().info("Output of prioritylist:");
-		for (String className : priorityList){
-			getLog().info(className);
-		}
+//        try {
+//			//reporter.sendReport();
+//		} catch (ClientHandlerException e) {
+//			getLog().error("Report not sent, could not connect to report server.");
+//		} catch (JAXBException e) {
+//			getLog().error("Exception - send report");
+//		}
+        }
     }
+    
 
-    private void addFileToClassPath(File file) throws MojoExecutionException {
+    private void priorityListsToAPFD(Map<Integer, List<String>> priorityLists, MeasureList measureList) throws IOException {
+		for (Integer localTechniqueNumber : priorityLists.keySet()){
+			List<String> localPriorityList = priorityLists.get(localTechniqueNumber);
+			List<Measure> localMeasureList = new ArrayList<Measure>();
+			for(String priorityItem : localPriorityList){
+				for(Measure measure : measureList.getList()){
+					if(measure.getSource().equals(priorityItem)){
+						localMeasureList.add(measure);
+						break;
+					}
+				}
+			}
+			for(Measure measure : measureList.getList()) {
+				if(!localMeasureList.contains(measure)){
+					localMeasureList.add(measure);
+				}
+			}
+			calculateAPFD(localMeasureList, localTechniqueNumber);
+		}
+	}
+
+
+	private void calculateAPFD(List<Measure> localMeasureList, int localTechniqueNumber) throws IOException {
+		APFD apfd = new APFD(new MeasureList(localMeasureList));
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+		apfd.outputToFile("apfd/" + localTechniqueNumber + "/", sdf.format(new Date()) + ".txt");
+	}
+
+
+	private void collectAllPriorityLists(
+			Map<Integer, List<String>> priorityLists) throws NoWorkTreeException, JSONException, IOException, Exception {
+		for (int tempTechniqueNumber = 1; tempTechniqueNumber <= 6; tempTechniqueNumber++) {
+			PriorityList2 priorityListService = new PriorityList2(new OnlineClassService(citrusTechniqueUrl, tempTechniqueNumber), new LocalClassService(testOutputDirectory), basedir, tempTechniqueNumber);
+			priorityLists.put(tempTechniqueNumber, priorityListService.getPriorityList());
+		}
+		
+	}
+
+	private void addFileToClassPath(File file) throws MojoExecutionException {
         try {
             this.citrusClassPaths.add(file.toURI().toURL());
         } catch (MalformedURLException e) {

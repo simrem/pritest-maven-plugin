@@ -56,16 +56,8 @@ public class PriorityListTest {
 	}
 	
 	@Test
-	public void shouldReturnListInCorrectOrder(){
+	public void shouldReturnListInCorrectOrder() throws JSONException, Exception{
 		PriorityList priorityList = new PriorityList(onlineClassList, localClassList);
-		try {
-			assertThat(priorityList.getPriorityList(), equalTo(expectedResult));
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		assertThat(priorityList.getPriorityList(), equalTo(expectedResult));
 	}
 }
