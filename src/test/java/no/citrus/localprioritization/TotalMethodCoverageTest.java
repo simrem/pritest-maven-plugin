@@ -14,7 +14,7 @@ public class TotalMethodCoverageTest {
 	
 	@Test
 	public void should_give_a_list_of_test_cases_with_size_greater_than_zero() throws ParseException, IOException {
-		TotalMethodCoverage tmc = new TotalMethodCoverage("src/main/java", "src/test/java");
+		MethodCoverage tmc = new TotalMethodCoverage("src/main/java", "src/test/java");
 		List<String> testCases = tmc.getTestCases();
 		
 		assertThat(testCases.size(), is(not(0)));
