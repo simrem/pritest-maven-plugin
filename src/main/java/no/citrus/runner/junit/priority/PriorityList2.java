@@ -6,6 +6,7 @@ import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 
+import no.citrus.localprioritization.AdditionalMethodCoverage;
 import no.citrus.localprioritization.TotalMethodCoverage;
 
 import org.codehaus.jettison.json.JSONException;
@@ -17,13 +18,17 @@ public class PriorityList2 {
 	private final ClassService onlineClassService;
 	private final File baseDir;
 	private final int techniqueNumber;
+	private final String testSourceDirectory;
+	private final String sourceDirectory;
 	
 	
-	public PriorityList2(ClassService onlineClassService, ClassService localClassService, File basedir, int techniqueNumber){
+	public PriorityList2(ClassService onlineClassService, ClassService localClassService, File basedir, int techniqueNumber, String testSourceDirectory, String sourceDirectory){
 		this.localClassService = localClassService;
 		this.onlineClassService = onlineClassService;
 		this.baseDir = basedir;
 		this.techniqueNumber = techniqueNumber;
+		this.testSourceDirectory = testSourceDirectory;
+		this.sourceDirectory = sourceDirectory;
 		
 	}
 	
@@ -42,8 +47,11 @@ public class PriorityList2 {
 				return technique5Strategy();
 				
 			case 6:
-				TotalMethodCoverage tmc = new TotalMethodCoverage("src/main/java", "src/test/java");
+				TotalMethodCoverage tmc = new TotalMethodCoverage(sourceDirectory, testSourceDirectory);
 				return tmc.getTestCases();
+			case 7:
+				AdditionalMethodCoverage amc = new AdditionalMethodCoverage(sourceDirectory, testSourceDirectory);
+				return amc.getTestCases();
 		}
 		return new ArrayList<String>();
 	}

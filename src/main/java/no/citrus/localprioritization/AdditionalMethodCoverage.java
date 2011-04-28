@@ -38,9 +38,9 @@ public class AdditionalMethodCoverage extends MethodCoverage {
 			Collections.sort(prioritizedTestCases);
 			Collections.reverse(prioritizedTestCases);
 			
-			System.out.println(summarizedTestCase.getTestCase().getPackageName() + "." 
-					+ summarizedTestCase.getTestCase().getName() + " "
-					+ summarizedTestCase.getSummarizedCoverage().size());
+//			System.out.println(summarizedTestCase.getTestCase().getPackageName() + "." 
+//					+ summarizedTestCase.getTestCase().getName() + " "
+//					+ summarizedTestCase.getSummarizedCoverage().size());
 		}
 	}
 }

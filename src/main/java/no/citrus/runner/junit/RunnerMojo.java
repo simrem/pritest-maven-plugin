@@ -22,6 +22,7 @@ import no.citrus.runner.junit.priority.LocalClassService;
 import no.citrus.runner.junit.priority.OnlineClassService;
 import no.citrus.runner.junit.priority.PriorityList2;
 import no.citrus.runner.junit.reporter.APFD;
+import no.citrus.runner.junit.reporter.APFDHelper;
 import no.citrus.runner.junit.reporter.Reporter;
 import no.citrus.runner.junit.test.CitrusTester;
 
@@ -109,7 +110,32 @@ public class RunnerMojo extends AbstractMojo {
     /**
      * @parameter
      */
+    private Integer[] technique0;
+    
+    /**
+     * @parameter
+     */
     private String reportUrl;
+    
+    /**
+     * @parameter default-value="false"
+     */
+    private boolean skipSendReport;
+    
+    /**
+     * @parameter default-value="false"
+     */
+    private boolean skipCalculateAPFD;
+    
+    /**
+     * @parameter default-value="${project.build.testSourceDirectory}"
+     */
+    private String testSourceDirectory;
+    
+    /**
+     * @parameter default-value="${project.build.sourceDirectory}"
+     */
+    private String sourceDirectory;
     
 
     private List<URL> citrusClassPaths;
@@ -119,83 +145,65 @@ public class RunnerMojo extends AbstractMojo {
     	addFileToClassPath(testOutputDirectory);
     	addFileToClassPath(classesDirectory);
     	for (Artifact artifact : (Set<Artifact>) mavenProject.getArtifacts()) {
-            addFileToClassPath(artifact.getFile());
-        }
-    	
-        URLClassLoader classLoader = new URLClassLoader(citrusClassPaths.toArray(new URL[]{}), this.getClass().getClassLoader());
-        Reporter reporter = new Reporter(reportUrl, new ArrayList<Measure>());
-        
-        getLog().info(String.format("Technique Number = %d", techniqueNumber));
-        getLog().info("Fetching priority list...");
-        if(techniqueNumber == 0) {
-        	Map<Integer, List<String>> priorityLists = new HashMap<Integer, List<String>>();
-        	try {
-				collectAllPriorityLists(priorityLists);
-				new CitrusTester(classLoader, priorityLists.get(1), getLog(), reporter).execute();
-				priorityListsToAPFD(priorityLists, reporter.getMeasureList());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-        }
-        else {
-        	PriorityList2 priorityListService = new PriorityList2(new OnlineClassService(citrusTechniqueUrl, techniqueNumber), new LocalClassService(testOutputDirectory), basedir, techniqueNumber);
-        	List<String> priorityList = new ArrayList<String>();
-			try {
-				priorityList.addAll(priorityListService.getPriorityList());
-				new CitrusTester(classLoader, priorityList, getLog(), reporter).execute();
-				calculateAPFD(reporter.getMeasureList().getList(), techniqueNumber);
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
+    		addFileToClassPath(artifact.getFile());
+    	}
 
-//        try {
-//			//reporter.sendReport();
-//		} catch (ClientHandlerException e) {
-//			getLog().error("Report not sent, could not connect to report server.");
-//		} catch (JAXBException e) {
-//			getLog().error("Exception - send report");
-//		}
+    	URLClassLoader classLoader = new URLClassLoader(citrusClassPaths.toArray(new URL[]{}), this.getClass().getClassLoader());
+    	Reporter reporter = new Reporter(reportUrl, new ArrayList<Measure>());
+
+    	getLog().info(String.format("Technique Number = %d", techniqueNumber));
+    	getLog().info("Fetching priority list...");
+    	if(techniqueNumber == 0) {
+    		Map<Integer, List<String>> priorityLists = new HashMap<Integer, List<String>>();
+    		try {
+    			collectPriorityLists(technique0, priorityLists);
+    			if(priorityLists.size() > 0) {
+    				new CitrusTester(classLoader, priorityLists.get(technique0[0]), getLog(), reporter).execute();
+    			}
+    			priorityListsToAPFD(priorityLists, reporter.getMeasureList().getList());
+    		} catch (Exception e) {
+    			e.printStackTrace();
+    		}
+
+    	}
+    	else {
+    		PriorityList2 priorityListService = new PriorityList2(new OnlineClassService(citrusTechniqueUrl, techniqueNumber), new LocalClassService(testOutputDirectory), basedir, techniqueNumber, testSourceDirectory, sourceDirectory);
+    		List<String> priorityList = new ArrayList<String>();
+    		try {
+    			priorityList.addAll(priorityListService.getPriorityList());
+    			new CitrusTester(classLoader, priorityList, getLog(), reporter).execute();
+    			APFD apfd = new APFD(reporter.getMeasureList());
+    			APFDHelper.outputAPFDToFile(apfd, techniqueNumber);
+    		} catch (Exception e2) {
+    			e2.printStackTrace();
+    		}
         }
+    	if(!skipSendReport) {
+			try {
+				reporter.sendReport();
+			} catch (ClientHandlerException e) {
+				getLog().error("Report not sent, could not connect to report server.");
+			} catch (JAXBException e) {
+				getLog().error("Exception - send report");
+			}
+		}
     }
     
 
-    private void priorityListsToAPFD(Map<Integer, List<String>> priorityLists, MeasureList measureList) throws IOException {
+    private void priorityListsToAPFD(Map<Integer, List<String>> priorityLists, List<Measure> measureList) throws IOException {
 		for (Integer localTechniqueNumber : priorityLists.keySet()){
 			List<String> localPriorityList = priorityLists.get(localTechniqueNumber);
-			List<Measure> localMeasureList = new ArrayList<Measure>();
-			for(String priorityItem : localPriorityList){
-				for(Measure measure : measureList.getList()){
-					if(measure.getSource().equals(priorityItem)){
-						localMeasureList.add(measure);
-						break;
-					}
-				}
-			}
-			for(Measure measure : measureList.getList()) {
-				if(!localMeasureList.contains(measure)){
-					localMeasureList.add(measure);
-				}
-			}
-			calculateAPFD(localMeasureList, localTechniqueNumber);
+			List<Measure> localMeasureList = APFDHelper.sortMeasureListBySource(localPriorityList, measureList);
+			APFD apfd = new APFD(new MeasureList(localMeasureList));
+			APFDHelper.outputAPFDToFile(apfd, localTechniqueNumber);
 		}
 	}
 
-
-	private void calculateAPFD(List<Measure> localMeasureList, int localTechniqueNumber) throws IOException {
-		APFD apfd = new APFD(new MeasureList(localMeasureList));
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-		apfd.outputToFile("apfd/" + localTechniqueNumber + "/", sdf.format(new Date()) + ".txt");
-	}
-
-
-	private void collectAllPriorityLists(
-			Map<Integer, List<String>> priorityLists) throws NoWorkTreeException, JSONException, IOException, Exception {
-		for (int tempTechniqueNumber = 1; tempTechniqueNumber <= 6; tempTechniqueNumber++) {
-			PriorityList2 priorityListService = new PriorityList2(new OnlineClassService(citrusTechniqueUrl, tempTechniqueNumber), new LocalClassService(testOutputDirectory), basedir, tempTechniqueNumber);
+	private void collectPriorityLists(Integer[] techniqueArray, Map<Integer, List<String>> priorityLists) throws NoWorkTreeException, JSONException, IOException, Exception {
+		for(int tempTechniqueNumber : techniqueArray) {
+			PriorityList2 priorityListService = new PriorityList2(new OnlineClassService(citrusTechniqueUrl, tempTechniqueNumber), new LocalClassService(testOutputDirectory), basedir, tempTechniqueNumber, testSourceDirectory, sourceDirectory);
 			priorityLists.put(tempTechniqueNumber, priorityListService.getPriorityList());
-		}
-		
+		}		
 	}
 
 	private void addFileToClassPath(File file) throws MojoExecutionException {

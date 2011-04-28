@@ -39,17 +39,4 @@ public class APFD {
     	return result;
 	}
 	
-	public void outputToFile(String directory, String filename) throws IOException{
-		File dir = new File(directory);
-		if(!dir.exists()){
-			dir.mkdirs();
-		}
-		File file = new File(directory + filename);
-		if(!file.exists()){
-			file.createNewFile();
-		}
-		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-		bw.write(String.valueOf(calculateAPFD()));
-		bw.close();
-	}
 }
