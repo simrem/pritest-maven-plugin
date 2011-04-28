@@ -9,6 +9,8 @@ import no.citrus.localprioritization.model.MethodCover;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +25,10 @@ public abstract class MethodCoverage {
         testCases = new ArrayList<String>();
     }
     
-    protected void retrieveCoverage(String pathToProjectSource, String pathToTestSuite)
-			throws ParseException, IOException {
-		retrieveClassCoverage(pathToProjectSource);
+    protected void prioritizeTestCases(String pathToProjectSource, String pathToTestSuite) throws ParseException, IOException {
+    	retrieveClassCoverage(pathToProjectSource);
 		retrieveTestClassCoverage(pathToTestSuite);
-	}
+    }
 
     private void retrieveClassCoverage(String pathToProjectSource)
 			throws ParseException, IOException {
@@ -68,13 +69,35 @@ public abstract class MethodCoverage {
     public List<String> getTestCases() {
 		return testCases;
 	}
-    
-    public Map<String, ClassCover> getSourceMethodCoverage() {
+
+	protected Map<String, ClassCover> getSourceMethodCoverage() {
 		return sourceMethodCoverage;
 	}
-    
-	public Map<String, ClassCover> getTestSuiteMethodCoverage() {
+
+	protected Map<String, ClassCover> getTestSuiteMethodCoverage() {
 		return testSuiteMethodCoverage;
+	}
+
+	protected List<SummarizedTestCase> sortTestCasesByCoverage() {
+		List<SummarizedTestCase> prioritizedTestCases = new ArrayList<SummarizedTestCase>();
+	
+	    Collection<ClassCover> testCaseCollection = getTestSuiteMethodCoverage().values();
+	    for (ClassCover testCase : testCaseCollection) {
+	        MethodCoverageSummarizer mcs = new MethodCoverageSummarizer(getSourceMethodCoverage(), testCase);
+	        Map<String, MethodCover> summarizedCoverage = mcs.getSummarizedCoverage();
+	        SummarizedTestCase summarizedTestCase = new SummarizedTestCase(testCase, summarizedCoverage);
+	        prioritizedTestCases.add(summarizedTestCase);
+	    }
+	
+	    Collections.sort(prioritizedTestCases);
+	    Collections.reverse(prioritizedTestCases);
+	    
+		return prioritizedTestCases;
+	}
+
+	protected void addTestCase(SummarizedTestCase summarizedTestCase) {
+		ClassCover testCase = summarizedTestCase.getTestCase();
+		testCases.add(testCase.getPackageName() + "." + testCase.getName());
 	}
 
 	protected class SummarizedTestCase implements Comparable<TotalMethodCoverage.SummarizedTestCase> {
