@@ -62,7 +62,7 @@ Setup citrus-junit-runner in your project:
 			2 = counting number of failing tests during the last three days. (Not working)
 			3 = code changes
 			4 = local code changes (uses git status)
-			5 = 3 and 4 hybrid
+			5 = 1 and 4 hybrid
 			6 = Total method coverage
 			7 = Additional method coverage
 

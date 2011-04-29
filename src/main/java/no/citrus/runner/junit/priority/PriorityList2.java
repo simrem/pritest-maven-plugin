@@ -67,7 +67,7 @@ public class PriorityList2 {
 		
 		List<String> contactCitrusList = new ArrayList<String>();
 		try {
-			// Her vil vi ha tak i samme liste som dersom man bruker teknikk3.
+			// Her vil vi ha tak i samme liste som dersom man bruker teknikk1.
 			contactCitrusList = this.onlineClassService.getClassList();
 		} catch (ConnectException e) {
 			e.printStackTrace();
