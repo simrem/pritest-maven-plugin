@@ -88,7 +88,7 @@ public abstract class MethodCoverage {
 	        SummarizedTestCase summarizedTestCase = new SummarizedTestCase(testCase, summarizedCoverage);
 	        prioritizedTestCases.add(summarizedTestCase);
 	    }
-	
+	    
 	    Collections.sort(prioritizedTestCases);
 	    Collections.reverse(prioritizedTestCases);
 	    

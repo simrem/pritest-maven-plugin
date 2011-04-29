@@ -74,9 +74,19 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
             }
         }
 
-        arg.getMethods().put(methodName,
+        arg.getMethods().put(createUniqueMethodIdentifierString(arg.getName(), methodName, parameters),
         		new MethodCover(arg.getName(), returnType, methodName, parameters, methodCalls));
     }
+
+	private String createUniqueMethodIdentifierString(String className, String methodName, List<ReferenceType> parameters) {
+		String identifier = className + "." + methodName;
+		
+		for (ReferenceType parameter : parameters) {
+			identifier += (":" + parameter.getType());
+		}
+		
+		return identifier;
+	}
 
 	private Map<String, ReferenceType> retrieveFieldVariablesOfCurrentClass(ClassCover arg) {
 		ClassType currentClass = classesInProject.get(arg.getName());

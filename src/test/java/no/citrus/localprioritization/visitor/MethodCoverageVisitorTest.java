@@ -26,7 +26,7 @@ public class MethodCoverageVisitorTest {
     private ClassCover methodDeclarationVisitorClass;
 
     @Before
-    public void setup() throws FileNotFoundException, ParseException {
+    public void setup_MethodDeclarationVisitor_test_object() throws FileNotFoundException, ParseException {
         FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/visitor/MethodDeclarationVisitor.java");
 		CompilationUnit cu = JavaParser.parse(fis);
 
@@ -126,6 +126,34 @@ public class MethodCoverageVisitorTest {
         assertThat(coveredClasses.get("MethodCoverageVisitorTest").getMethods().values(), hasItems(
                 new MethodCover("MethodCoverageVisitorTest", "void", "should_find_classes_in_compilation_unit",
                         new ArrayList<ReferenceType>(), methodCalls)
+        ));
+    }
+    
+    @Test
+    public void should_support_overloaded_method_declarations() throws FileNotFoundException, ParseException {
+    	FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/visitor/MethodCoverageVisitor.java");
+		CompilationUnit cu = JavaParser.parse(fis);
+		
+		MethodCoverageVisitor mcv = new MethodCoverageVisitor(new HashMap<String, ClassType>());
+        cu.accept(mcv, null);
+        ClassCover classCover = mcv.getCoveredClasses().get("MethodCoverageVisitor");
+        
+        List<ReferenceType> params1 = new ArrayList<ReferenceType>();
+        params1.add(new ReferenceType("MethodDeclaration", "n"));
+        params1.add(new ReferenceType("ClassCover", "arg"));
+        
+        List<ReferenceType> params2 = new ArrayList<ReferenceType>();
+        params2.add(new ReferenceType("ClassOrInterfaceDeclaration", "n"));
+        params2.add(new ReferenceType("ClassCover", "arg"));
+        
+        List<ReferenceType> params3 = new ArrayList<ReferenceType>();
+        params3.add(new ReferenceType("CompilationUnit", "arg0"));
+        params3.add(new ReferenceType("ClassCover", "arg1"));
+        
+		assertThat(classCover.getMethods().values(), hasItems(
+        		new MethodCover("MethodCoverageVisitor", "void", "visit", params1, new ArrayList<ProcessedMethodCall>()),
+        		new MethodCover("MethodCoverageVisitor", "void", "visit", params2, new ArrayList<ProcessedMethodCall>()),
+        		new MethodCover("MethodCoverageVisitor", "void", "visit", params3, new ArrayList<ProcessedMethodCall>())
         ));
     }
 }
