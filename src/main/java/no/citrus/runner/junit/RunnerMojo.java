@@ -44,12 +44,12 @@ import com.sun.jersey.api.client.ClientHandlerException;
  */
 public class RunnerMojo extends AbstractMojo {
     /**
-     * @parameter expression="${project}"
+     * @parameter default-value="${project}"
      */
     protected MavenProject mavenProject;
 
     /**
-     * @parameter expression="${project.basedir}"
+     * @parameter default-value="${project.basedir}"
      * @required
      */
     private File basedir;
@@ -66,7 +66,7 @@ public class RunnerMojo extends AbstractMojo {
     /**
      * The project test classpath
      *
-     * @parameter expression="${project.testClasspathElements}"
+     * @parameter default-value="${project.testClasspathElements}"
      * @required
      * @readonly
      */
@@ -75,7 +75,7 @@ public class RunnerMojo extends AbstractMojo {
      /**
      * The project dependency classpath
      *
-     * @parameter expression="${project.dependencies}"
+     * @parameter default-value="${project.dependencies}"
      * @required
      * @readonly
      */

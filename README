@@ -1,0 +1,75 @@
+citrus-junit-runner instruction
+
+Prerequisite:
+- git
+- maven
+- mongodb
+- citrus-core (https://github.com/sdalatun/citrus-core)
+- citrus-server (https://github.com/sdalatun/citrus-server)
+	Technique 1, 3 and 5 require citrus-server to be running.
+
+Installation of citrus-junit-runner:
+	Download the source code from github:
+	git clone git://github.com/simrem/citrus-junit-runner.git
+
+	Install JGit to maven repository:
+	mvn install:install-file -DgroupId=org.eclipse -DartifactId=jgit -Dversion=0.12.0.201103291411 -Dpackaging=jar -Dfile=./externalJars/org.eclipse.jgit_0.12.0.201103291411.jar
+
+	Install citrus-junit-runner:
+	mvn install
+	
+Setup citrus-junit-runner in your project:
+	It's recommended to disable the maven-surefire-plugin.
+	You can do it by adding this to your plugin section in pom.xml:
+		<plugin>
+        	  <groupId>org.apache.maven.plugins</groupId>
+        	  <artifactId>maven-surefire-plugin</artifactId>
+        	  <configuration>
+          	    <skip>true</skip>
+        	  </configuration>
+      		</plugin>
+
+	Add this to your plugin section in pom.xml:
+		<plugin>
+		  <groupId>no.citrus.runner</groupId>
+		  <artifactId>junit</artifactId>
+		  <version>${citrus.junit.runner.version}</version>
+		  <executions>
+		    <execution>
+		      <phase>test</phase>
+		      <goals>
+		        <goal>runtest</goal>
+		      </goals>
+		      <configuration>
+		        <techniqueNumber>0</techniqueNumber>
+		        <technique0>
+		          <param>1</param>
+		          <param>6</param>
+		          <param>7</param>
+		        </technique0>
+		        <citrusTechniqueUrl>http://localhost:8090/testorder/</citrusTechniqueUrl>
+		        <reportUrl>http://localhost:8090/measure</reportUrl>
+		        <skipSendReport>true</skipSendReport>
+		      </configuration>
+		    </execution>
+		  </executions>
+		</plugin>
+
+	Plugin configuration:
+		techniqueNumber:
+			0 = For experimentational purposes only. Runs a list of techniques, specified in the technique0 array.
+			1 = counting number of failing tests
+			2 = counting number of failing tests during the last three days. (Not working)
+			3 = code changes
+			4 = local code changes (uses git status)
+			5 = 3 and 4 hybrid
+			6 = Total method coverage
+			7 = Additional method coverage
+
+		skipCalculateAPFD: true/false
+		skipSendReport: true/false
+		citrusTechniqueUrl: Url to running citrus server
+		reportUrl: Url for posting testresults to citrus server
+
+Run citrus-junit-runner on your project:
+	mvn test
