@@ -74,7 +74,7 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
             }
         }
 
-        arg.getMethods().put(createUniqueMethodIdentifierString(arg.getName(), methodName, parameters),
+        arg.getMethods().put(methodName,
         		new MethodCover(arg.getName(), returnType, methodName, parameters, methodCalls));
     }
 
