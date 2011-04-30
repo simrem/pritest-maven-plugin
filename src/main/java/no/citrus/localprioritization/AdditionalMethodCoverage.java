@@ -1,13 +1,14 @@
 package no.citrus.localprioritization;
 
 import japa.parser.ParseException;
+import no.citrus.localprioritization.algorithm.MethodCoverageAlgorithm;
+import no.citrus.localprioritization.model.MethodCover;
+import no.citrus.localprioritization.model.SummarizedTestCase;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import no.citrus.localprioritization.model.MethodCover;
 
 public class AdditionalMethodCoverage extends MethodCoverage {
 	
@@ -21,7 +22,7 @@ public class AdditionalMethodCoverage extends MethodCoverage {
 			String pathToTestSuite) throws ParseException, IOException {
 		super.prioritizeTestCases(pathToProjectSource, pathToTestSuite);
 		
-		List<SummarizedTestCase> prioritizedTestCases = sortTestCasesByCoverage();
+		List<SummarizedTestCase> prioritizedTestCases = MethodCoverageAlgorithm.additionalMethodCoverage(getTestSuiteMethodCoverage(), getSourceMethodCoverage());
 		
 		while (!prioritizedTestCases.isEmpty()) {
 			SummarizedTestCase summarizedTestCase = prioritizedTestCases.remove(0);
