@@ -65,12 +65,22 @@ public class MethodCover {
     }
     
     public static String createUniqueMapKey(final MethodCover methodCover) {
-		String identifier = methodCover.className + "." + methodCover.methodName;
+		String key = methodCover.className + "." + methodCover.methodName;
 		
 		for (ReferenceType parameter : methodCover.parameters) {
-			identifier += (":" + parameter.getType());
+			key += (":" + parameter.getType());
 		}
 		
-		return identifier;
+		return key;
 	}
+
+    public static String createUniqueMapKey(final ProcessedMethodCall processedCall) {
+        String key = processedCall.getClassName() + "." + processedCall.getMethodName();
+
+		for (String parameter : processedCall.getParameters()) {
+			key += (":" + parameter);
+		}
+
+		return key;
+    }
 }

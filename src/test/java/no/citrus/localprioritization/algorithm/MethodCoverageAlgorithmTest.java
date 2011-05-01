@@ -84,10 +84,11 @@ public class MethodCoverageAlgorithmTest {
 	}
 	
     @Test
-    @Ignore
     public void should_support_total_method_coverage() {
         List<SummarizedTestCase> totalMethodCoverage = MethodCoverageAlgorithm.totalMethodCoverage(testSuiteMethodCoverage, sourceMethodCoverage);
         
-        assertThat(totalMethodCoverage.size(), is(equalTo(3)));
+        assertThat(totalMethodCoverage.get(0).getTestCase().getName(), is(equalTo("test2")));
+        assertThat(totalMethodCoverage.get(1).getTestCase().getName(), is(equalTo("test1")));
+        assertThat(totalMethodCoverage.get(2).getTestCase().getName(), is(equalTo("test3")));
     }
 }
