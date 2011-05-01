@@ -63,4 +63,14 @@ public class MethodCover {
     public List<ProcessedMethodCall> getMethodCalls() {
         return methodCalls;
     }
+    
+    public static String createUniqueMapKey(final MethodCover methodCover) {
+		String identifier = methodCover.className + "." + methodCover.methodName;
+		
+		for (ReferenceType parameter : methodCover.parameters) {
+			identifier += (":" + parameter.getType());
+		}
+		
+		return identifier;
+	}
 }
