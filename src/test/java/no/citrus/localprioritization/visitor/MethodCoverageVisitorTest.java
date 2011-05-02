@@ -131,7 +131,6 @@ public class MethodCoverageVisitorTest {
     }
     
     @Test
-    @Ignore
     public void should_support_overloaded_method_declarations() throws FileNotFoundException, ParseException {
     	FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/visitor/MethodCoverageVisitor.java");
 		CompilationUnit cu = JavaParser.parse(fis);
