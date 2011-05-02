@@ -48,38 +48,53 @@ public class MethodCoverageAlgorithm {
 		
 		List<SummarizedTestCase> results = new ArrayList<SummarizedTestCase>();
 		
-		int amountOfCoveredMethods = 0;
-		for (ClassCover cc : sourceMethodCoverage.values()) {
-			amountOfCoveredMethods += cc.getMethods().values().size();
-		}
+		int amountOfCoveredMethods = coveredMethodsInSource(sourceMethodCoverage);
 		
     	while (!prioritizedTestCases.isEmpty() && amountOfCoveredMethods > 0) {
-			SummarizedTestCase summarizedTestCase = prioritizedTestCases.remove(0);
-			results.add(summarizedTestCase);
+			SummarizedTestCase mostCoveringTestCase = Collections.max(prioritizedTestCases);
+			prioritizedTestCases.remove(mostCoveringTestCase);
 			
-			Map<String, MethodCover> alreadyCoveredMethods = summarizedTestCase.getSummarizedCoverage();
-			amountOfCoveredMethods -= summarizedTestCase.coveredMethods();
+			results.add(mostCoveringTestCase);
 			
-			for (MethodCover coveredMethod : alreadyCoveredMethods.values()) {
-				for (SummarizedTestCase stc : prioritizedTestCases) {
-					stc.markMethod(coveredMethod);
-				}
-			}
+			Map<String, MethodCover> alreadyCoveredMethods = mostCoveringTestCase.getSummarizedCoverage();
+			amountOfCoveredMethods -= mostCoveringTestCase.coveredMethods();
 			
-			Collections.sort(prioritizedTestCases);
-			Collections.reverse(prioritizedTestCases);
+			markMethodAsCovered(prioritizedTestCases, alreadyCoveredMethods);
 		}
     	
     	if (!prioritizedTestCases.isEmpty() && amountOfCoveredMethods == 0) {
-			for (SummarizedTestCase remainingTestCase : prioritizedTestCases) {
-				for (MethodCover methodCover : remainingTestCase.getSummarizedCoverage().values()) {
-					remainingTestCase.unMarkMethod(methodCover);
-				}
-			}
+			unMarkCoveredMethods(prioritizedTestCases);
 			
 			results.addAll(additionalMethodCoverageHelper(sourceMethodCoverage, prioritizedTestCases));
 		}
     	
     	return results;
+	}
+
+	private static void markMethodAsCovered(
+			List<SummarizedTestCase> prioritizedTestCases,
+			Map<String, MethodCover> alreadyCoveredMethods) {
+		
+		for (MethodCover coveredMethod : alreadyCoveredMethods.values()) {
+			for (SummarizedTestCase stc : prioritizedTestCases) {
+				stc.markMethod(coveredMethod);
+			}
+		}
+	}
+
+	private static void unMarkCoveredMethods(List<SummarizedTestCase> prioritizedTestCases) {
+		for (SummarizedTestCase remainingTestCase : prioritizedTestCases) {
+			for (MethodCover methodCover : remainingTestCase.getSummarizedCoverage().values()) {
+				remainingTestCase.unMarkMethod(methodCover);
+			}
+		}
+	}
+	
+	private static int coveredMethodsInSource(Map<String, ClassCover> sourceMethodCoverage) {
+		int amountOfCoveredMethods = 0;
+		for (ClassCover cc : sourceMethodCoverage.values()) {
+			amountOfCoveredMethods += cc.getMethods().values().size();
+		}
+		return amountOfCoveredMethods;
 	}
 }

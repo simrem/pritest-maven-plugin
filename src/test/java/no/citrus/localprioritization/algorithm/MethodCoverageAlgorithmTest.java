@@ -134,4 +134,33 @@ public class MethodCoverageAlgorithmTest {
         assertThat(additionalMethodCoverage.get(3).getTestCase().getName(), is(equalTo("test1")));
         assertThat(additionalMethodCoverage.get(4).getTestCase().getName(), is(equalTo("test4")));
     }
+    
+    @Test
+    public void should_support_test_cases_not_covering_any_methods() {
+    	ClassCover testCase6 = new ClassCover("test6", "no.citrus");
+        MethodCover methodCover6A = new MethodCover("test6", "void", "should_do_6", new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>());
+        testCase6.getMethods().put(MethodCover.createUniqueMapKey(methodCover6A), methodCover6A);
+		testSuiteMethodCoverage.put(testCase6.getName(), testCase6);
+    	
+    	List<SummarizedTestCase> additionalMethodCoverage = MethodCoverageAlgorithm.additionalMethodCoverage(testSuiteMethodCoverage, sourceMethodCoverage);
+    	
+    	assertThat(additionalMethodCoverage.get(5).getTestCase().getName(), is(equalTo("test6")));
+    }
+    
+    @Test
+    public void should_support_uncovered_methods() {
+    	ClassCover classZ = new ClassCover("Z", "no.citrus");
+        List<ProcessedMethodCall> methodCallsZz = new ArrayList<ProcessedMethodCall>();
+        MethodCover methodCoverZz = new MethodCover("Z", "void", "z", new ArrayList<ReferenceType>(), methodCallsZz);
+        classZ.getMethods().put(MethodCover.createUniqueMapKey(methodCoverZz), methodCoverZz);
+        sourceMethodCoverage.put(classZ.getName(), classZ);
+        
+    	List<SummarizedTestCase> additionalMethodCoverage = MethodCoverageAlgorithm.additionalMethodCoverage(testSuiteMethodCoverage, sourceMethodCoverage);
+    	
+    	assertThat(additionalMethodCoverage.get(0).getTestCase().getName(), is(equalTo("test2")));
+        assertThat(additionalMethodCoverage.get(1).getTestCase().getName(), is(equalTo("test3")));
+        assertThat(additionalMethodCoverage.get(2).getTestCase().getName(), is(equalTo("test5")));
+        assertThat(additionalMethodCoverage.get(3).getTestCase().getName(), is(equalTo("test1")));
+        assertThat(additionalMethodCoverage.get(4).getTestCase().getName(), is(equalTo("test4")));
+    }
 }
