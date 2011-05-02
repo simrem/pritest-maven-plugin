@@ -55,6 +55,18 @@ public class MethodCoverageAlgorithmTest {
         MethodCover methodCoverDd = new MethodCover("D", "void", "d", new ArrayList<ReferenceType>(), methodCallsDd);
         classD.getMethods().put(MethodCover.createUniqueMapKey(methodCoverDd), methodCoverDd);
         sourceMethodCoverage.put(classD.getName(), classD);
+        
+        ClassCover classE = new ClassCover("E", "no.citrus");
+        List<ProcessedMethodCall> methodCallsEe = new ArrayList<ProcessedMethodCall>();
+        MethodCover methodCoverEe = new MethodCover("E", "void", "e", new ArrayList<ReferenceType>(), methodCallsEe);
+        classE.getMethods().put(MethodCover.createUniqueMapKey(methodCoverEe), methodCoverEe);
+        sourceMethodCoverage.put(classE.getName(), classE);
+        
+        ClassCover classF = new ClassCover("F", "no.citrus");
+        List<ProcessedMethodCall> methodCallsFf = new ArrayList<ProcessedMethodCall>();
+        MethodCover methodCoverFf = new MethodCover("F", "void", "f", new ArrayList<ReferenceType>(), methodCallsFf);
+        classF.getMethods().put(MethodCover.createUniqueMapKey(methodCoverFf), methodCoverFf);
+        sourceMethodCoverage.put(classF.getName(), classF);
 	}
 
 	private void setupTestSuite() {
@@ -64,6 +76,7 @@ public class MethodCoverageAlgorithmTest {
         MethodCover methodCover1A = new MethodCover("test1", "void", "should_do_1", new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>());
         methodCover1A.getMethodCalls().add(new ProcessedMethodCall("A", "a", new ArrayList<String>()));
         methodCover1A.getMethodCalls().add(new ProcessedMethodCall("D", "d", new ArrayList<String>()));
+        methodCover1A.getMethodCalls().add(new ProcessedMethodCall("E", "e", new ArrayList<String>()));
         testCase1.getMethods().put(MethodCover.createUniqueMapKey(methodCover1A), methodCover1A);
 		testSuiteMethodCoverage.put(testCase1.getName(), testCase1);
 		
@@ -72,6 +85,8 @@ public class MethodCoverageAlgorithmTest {
         methodCover2A.getMethodCalls().add(new ProcessedMethodCall("B", "b", new ArrayList<String>()));
         methodCover2A.getMethodCalls().add(new ProcessedMethodCall("A", "a", new ArrayList<String>()));
         methodCover2A.getMethodCalls().add(new ProcessedMethodCall("D", "d", new ArrayList<String>()));
+        methodCover2A.getMethodCalls().add(new ProcessedMethodCall("E", "e", new ArrayList<String>()));
+        methodCover2A.getMethodCalls().add(new ProcessedMethodCall("F", "f", new ArrayList<String>()));
 		testCase2.getMethods().put(MethodCover.createUniqueMapKey(methodCover2A), methodCover2A);
 		testSuiteMethodCoverage.put(testCase2.getName(), testCase2);
 		
@@ -80,6 +95,22 @@ public class MethodCoverageAlgorithmTest {
         methodCover3A.getMethodCalls().add(new ProcessedMethodCall("C", "c", new ArrayList<String>()));
 		testCase3.getMethods().put(MethodCover.createUniqueMapKey(methodCover3A), methodCover3A);
 		testSuiteMethodCoverage.put(testCase3.getName(), testCase3);
+		
+		ClassCover testCase4 = new ClassCover("test4", "no.citrus");
+        MethodCover methodCover4A = new MethodCover("test4", "void", "should_do_4", new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>());
+        methodCover4A.getMethodCalls().add(new ProcessedMethodCall("A", "a", new ArrayList<String>()));
+        methodCover4A.getMethodCalls().add(new ProcessedMethodCall("D", "d", new ArrayList<String>()));
+		testCase4.getMethods().put(MethodCover.createUniqueMapKey(methodCover4A), methodCover4A);
+		testSuiteMethodCoverage.put(testCase4.getName(), testCase4);
+		
+		ClassCover testCase5 = new ClassCover("test5", "no.citrus");
+        MethodCover methodCover5A = new MethodCover("test5", "void", "should_do_5", new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>());
+        methodCover5A.getMethodCalls().add(new ProcessedMethodCall("A", "a", new ArrayList<String>()));
+        methodCover5A.getMethodCalls().add(new ProcessedMethodCall("B", "b", new ArrayList<String>()));
+        methodCover5A.getMethodCalls().add(new ProcessedMethodCall("D", "d", new ArrayList<String>()));
+        methodCover5A.getMethodCalls().add(new ProcessedMethodCall("F", "f", new ArrayList<String>()));
+		testCase5.getMethods().put(MethodCover.createUniqueMapKey(methodCover5A), methodCover5A);
+		testSuiteMethodCoverage.put(testCase5.getName(), testCase5);
 	}
 	
     @Test
@@ -87,8 +118,10 @@ public class MethodCoverageAlgorithmTest {
         List<SummarizedTestCase> totalMethodCoverage = MethodCoverageAlgorithm.totalMethodCoverage(testSuiteMethodCoverage, sourceMethodCoverage);
         
         assertThat(totalMethodCoverage.get(0).getTestCase().getName(), is(equalTo("test2")));
-        assertThat(totalMethodCoverage.get(1).getTestCase().getName(), is(equalTo("test1")));
-        assertThat(totalMethodCoverage.get(2).getTestCase().getName(), is(equalTo("test3")));
+        assertThat(totalMethodCoverage.get(1).getTestCase().getName(), is(equalTo("test5")));
+        assertThat(totalMethodCoverage.get(2).getTestCase().getName(), is(equalTo("test1")));
+        assertThat(totalMethodCoverage.get(3).getTestCase().getName(), is(equalTo("test4")));
+        assertThat(totalMethodCoverage.get(4).getTestCase().getName(), is(equalTo("test3")));
     }
     
     @Test
@@ -97,6 +130,8 @@ public class MethodCoverageAlgorithmTest {
     	
     	assertThat(additionalMethodCoverage.get(0).getTestCase().getName(), is(equalTo("test2")));
         assertThat(additionalMethodCoverage.get(1).getTestCase().getName(), is(equalTo("test3")));
-        assertThat(additionalMethodCoverage.get(2).getTestCase().getName(), is(equalTo("test1")));
+        assertThat(additionalMethodCoverage.get(2).getTestCase().getName(), is(equalTo("test5")));
+        assertThat(additionalMethodCoverage.get(3).getTestCase().getName(), is(equalTo("test1")));
+        assertThat(additionalMethodCoverage.get(4).getTestCase().getName(), is(equalTo("test4")));
     }
 }

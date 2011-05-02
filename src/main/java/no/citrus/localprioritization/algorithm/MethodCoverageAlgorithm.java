@@ -37,22 +37,49 @@ public class MethodCoverageAlgorithm {
     	List<SummarizedTestCase> prioritizedTestCases = sortTestCasesByCoverage(testSuiteMethodCoverage, sourceMethodCoverage);
     	List<SummarizedTestCase> results = new ArrayList<SummarizedTestCase>();
     	
-    	while (!prioritizedTestCases.isEmpty()) {
+    	results.addAll(additionalMethodCoverageHelper(sourceMethodCoverage, prioritizedTestCases));
+    	
+        return results;
+    }
+
+	private static List<SummarizedTestCase> additionalMethodCoverageHelper(
+			Map<String, ClassCover> sourceMethodCoverage,
+			List<SummarizedTestCase> prioritizedTestCases) {
+		
+		List<SummarizedTestCase> results = new ArrayList<SummarizedTestCase>();
+		
+		int amountOfCoveredMethods = 0;
+		for (ClassCover cc : sourceMethodCoverage.values()) {
+			amountOfCoveredMethods += cc.getMethods().values().size();
+		}
+		
+    	while (!prioritizedTestCases.isEmpty() && amountOfCoveredMethods > 0) {
 			SummarizedTestCase summarizedTestCase = prioritizedTestCases.remove(0);
 			results.add(summarizedTestCase);
 			
 			Map<String, MethodCover> alreadyCoveredMethods = summarizedTestCase.getSummarizedCoverage();
+			amountOfCoveredMethods -= summarizedTestCase.coveredMethods();
 			
 			for (MethodCover coveredMethod : alreadyCoveredMethods.values()) {
 				for (SummarizedTestCase stc : prioritizedTestCases) {
-					stc.getSummarizedCoverage().remove(coveredMethod.getClassName() + "." + coveredMethod.getMethodName());
+					stc.markMethod(coveredMethod);
 				}
 			}
 			
 			Collections.sort(prioritizedTestCases);
-			Collections.reverse(prioritizedTestCases);			
+			Collections.reverse(prioritizedTestCases);
 		}
     	
-        return results;
-    }
+    	if (!prioritizedTestCases.isEmpty() && amountOfCoveredMethods == 0) {
+			for (SummarizedTestCase remainingTestCase : prioritizedTestCases) {
+				for (MethodCover methodCover : remainingTestCase.getSummarizedCoverage().values()) {
+					remainingTestCase.unMarkMethod(methodCover);
+				}
+			}
+			
+			results.addAll(additionalMethodCoverageHelper(sourceMethodCoverage, prioritizedTestCases));
+		}
+    	
+    	return results;
+	}
 }
