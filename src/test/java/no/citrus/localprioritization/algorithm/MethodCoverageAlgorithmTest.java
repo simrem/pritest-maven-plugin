@@ -7,7 +7,6 @@ import no.citrus.localprioritization.model.ReferenceType;
 import no.citrus.localprioritization.model.SummarizedTestCase;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -90,5 +89,14 @@ public class MethodCoverageAlgorithmTest {
         assertThat(totalMethodCoverage.get(0).getTestCase().getName(), is(equalTo("test2")));
         assertThat(totalMethodCoverage.get(1).getTestCase().getName(), is(equalTo("test1")));
         assertThat(totalMethodCoverage.get(2).getTestCase().getName(), is(equalTo("test3")));
+    }
+    
+    @Test
+    public void should_support_additional_method_coverage() {
+    	List<SummarizedTestCase> additionalMethodCoverage = MethodCoverageAlgorithm.additionalMethodCoverage(testSuiteMethodCoverage, sourceMethodCoverage);
+    	
+    	assertThat(additionalMethodCoverage.get(0).getTestCase().getName(), is(equalTo("test2")));
+        assertThat(additionalMethodCoverage.get(1).getTestCase().getName(), is(equalTo("test3")));
+        assertThat(additionalMethodCoverage.get(2).getTestCase().getName(), is(equalTo("test1")));
     }
 }

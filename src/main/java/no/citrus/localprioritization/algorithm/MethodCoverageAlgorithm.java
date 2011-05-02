@@ -34,6 +34,25 @@ public class MethodCoverageAlgorithm {
     }
 
     public static List<SummarizedTestCase> additionalMethodCoverage(Map<String, ClassCover> testSuiteMethodCoverage, Map<String, ClassCover> sourceMethodCoverage) {
-        return sortTestCasesByCoverage(testSuiteMethodCoverage, sourceMethodCoverage);
+    	List<SummarizedTestCase> prioritizedTestCases = sortTestCasesByCoverage(testSuiteMethodCoverage, sourceMethodCoverage);
+    	List<SummarizedTestCase> results = new ArrayList<SummarizedTestCase>();
+    	
+    	while (!prioritizedTestCases.isEmpty()) {
+			SummarizedTestCase summarizedTestCase = prioritizedTestCases.remove(0);
+			results.add(summarizedTestCase);
+			
+			Map<String, MethodCover> alreadyCoveredMethods = summarizedTestCase.getSummarizedCoverage();
+			
+			for (MethodCover coveredMethod : alreadyCoveredMethods.values()) {
+				for (SummarizedTestCase stc : prioritizedTestCases) {
+					stc.getSummarizedCoverage().remove(coveredMethod.getClassName() + "." + coveredMethod.getMethodName());
+				}
+			}
+			
+			Collections.sort(prioritizedTestCases);
+			Collections.reverse(prioritizedTestCases);			
+		}
+    	
+        return results;
     }
 }
