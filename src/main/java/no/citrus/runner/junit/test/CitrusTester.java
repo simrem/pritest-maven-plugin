@@ -41,6 +41,7 @@ public class CitrusTester extends RunListener {
         	measure.setChildren(new ArrayList<Measure>());
         	measure.setSource(file);
         	measure.setDate(new Date(System.currentTimeMillis()));
+        	measure.setNumOfFails(0);
         	long time = System.currentTimeMillis();
             
         	log.info("Loading file: " + file);
@@ -77,6 +78,7 @@ public class CitrusTester extends RunListener {
 		failedMeasure.setSource(failure.getDescription().getClassName());
 		failedMeasure.setDate(new Date(System.currentTimeMillis()));
 		measure.getChildren().add(failedMeasure);
+		measure.setNumOfFails(measure.getNumOfFails() +1);
 	}
 	
 }

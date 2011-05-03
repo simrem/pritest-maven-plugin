@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import no.citrus.localprioritization.AdditionalMethodCoverage;
@@ -52,10 +53,19 @@ public class PriorityList2 {
 			case 7:
 				AdditionalMethodCoverage amc = new AdditionalMethodCoverage(sourceDirectory, testSourceDirectory);
 				return amc.getTestCases();
+			case 8:
+				return localTestClasses;
+			case 9:
+				return randomLocalTestClasses(localTestClasses);
 		}
 		return new ArrayList<String>();
 	}
-	
+
+	private List<String> randomLocalTestClasses(List<String> localTestClasses) {
+		Collections.shuffle(localTestClasses);
+		return localTestClasses;
+	}
+
 	private List<String> technique4Strategy(List<String> localTestClasses) throws NoWorkTreeException, IOException {
 		Technique4Ranker t4 = new Technique4Ranker(localTestClasses, this.baseDir);
 		return t4.getTechnique4PriorityList();
