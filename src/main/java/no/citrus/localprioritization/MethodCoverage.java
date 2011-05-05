@@ -4,13 +4,11 @@ import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import no.citrus.localprioritization.model.ClassCover;
 import no.citrus.localprioritization.model.ClassType;
-import no.citrus.localprioritization.model.MethodCover;
+import no.citrus.localprioritization.model.SummarizedTestCase;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,50 +76,9 @@ public abstract class MethodCoverage {
 		return testSuiteMethodCoverage;
 	}
 
-	protected List<SummarizedTestCase> sortTestCasesByCoverage() {
-		List<SummarizedTestCase> prioritizedTestCases = new ArrayList<SummarizedTestCase>();
-	
-	    Collection<ClassCover> testCaseCollection = getTestSuiteMethodCoverage().values();
-	    for (ClassCover testCase : testCaseCollection) {
-	        MethodCoverageSummarizer mcs = new MethodCoverageSummarizer(getSourceMethodCoverage(), testCase);
-	        Map<String, MethodCover> summarizedCoverage = mcs.getSummarizedCoverage();
-	        SummarizedTestCase summarizedTestCase = new SummarizedTestCase(testCase, summarizedCoverage);
-	        prioritizedTestCases.add(summarizedTestCase);
-	    }
-	    
-	    Collections.sort(prioritizedTestCases);
-	    Collections.reverse(prioritizedTestCases);
-	    
-		return prioritizedTestCases;
-	}
-
 	protected void addTestCase(SummarizedTestCase summarizedTestCase) {
 		ClassCover testCase = summarizedTestCase.getTestCase();
 		testCases.add(testCase.getPackageName() + "." + testCase.getName());
 	}
 
-	protected class SummarizedTestCase implements Comparable<TotalMethodCoverage.SummarizedTestCase> {
-
-        private ClassCover testCase;
-        private Map<String, MethodCover> summarizedCoverage;
-
-        public SummarizedTestCase(ClassCover testCase, Map<String, MethodCover> summarizedCoverage) {
-
-            this.testCase = testCase;
-            this.summarizedCoverage = summarizedCoverage;
-        }
-
-        public ClassCover getTestCase() {
-            return testCase;
-        }
-
-        public Map<String, MethodCover> getSummarizedCoverage() {
-            return summarizedCoverage;
-        }
-
-        public int compareTo(TotalMethodCoverage.SummarizedTestCase summarizedTestCase) {
-            Integer sizeOfThis = new Integer(summarizedCoverage.size());
-            return sizeOfThis.compareTo(new Integer(summarizedTestCase.getSummarizedCoverage().size()));
-        }
-    }
 }

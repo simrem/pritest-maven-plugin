@@ -1,21 +1,20 @@
 package no.citrus.localprioritization;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.collection.IsCollectionContaining.hasItems;
-import static org.junit.Assert.assertThat;
+import no.citrus.localprioritization.model.ClassCover;
+import no.citrus.localprioritization.model.MethodCover;
+import no.citrus.localprioritization.model.ProcessedMethodCall;
+import no.citrus.localprioritization.model.ReferenceType;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import no.citrus.localprioritization.model.ClassCover;
-import no.citrus.localprioritization.model.MethodCover;
-import no.citrus.localprioritization.model.ProcessedMethodCall;
-import no.citrus.localprioritization.model.ReferenceType;
-
-import org.junit.Before;
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.collection.IsCollectionContaining.hasItems;
+import static org.junit.Assert.assertThat;
 
 public class MethodCoverageSummarizerTest {
 	
@@ -29,32 +28,32 @@ public class MethodCoverageSummarizerTest {
 		List<ProcessedMethodCall> methodCallsA = new ArrayList<ProcessedMethodCall>();
 		methodCallsA.add(new ProcessedMethodCall("B", "b", new ArrayList<String>()));
 		methodCallsA.add(new ProcessedMethodCall("C", "c", new ArrayList<String>()));
-		coveredClassA.getMethods().put("a", new MethodCover("A", "void", "a",
-				new ArrayList<ReferenceType>(), methodCallsA));
+        MethodCover methodCoverAa = new MethodCover("A", "void", "a", new ArrayList<ReferenceType>(), methodCallsA);
+		coveredClassA.getMethods().put(MethodCover.createUniqueMapKey(methodCoverAa), methodCoverAa);
 		coveredClasses.put("A", coveredClassA);
 		
 		ClassCover coveredClassB = new ClassCover("B", null);
 		List<ProcessedMethodCall> methodCallsB = new ArrayList<ProcessedMethodCall>();
 		methodCallsB.add(new ProcessedMethodCall("D", "d", new ArrayList<String>()));
-		coveredClassB.getMethods().put("b", new MethodCover("B", "void", "b", 
-				new ArrayList<ReferenceType>(), methodCallsB));
+        MethodCover methodCoverBb = new MethodCover("B", "void", "b", new ArrayList<ReferenceType>(), methodCallsB);
+		coveredClassB.getMethods().put(MethodCover.createUniqueMapKey(methodCoverBb), methodCoverBb);
 		coveredClasses.put("B", coveredClassB);
 		
 		ClassCover coveredClassC = new ClassCover("C", null);
-		coveredClassC.getMethods().put("c", new MethodCover("C", "void", "c", 
-				new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>()));
+        MethodCover methodCoverCc = new MethodCover("C", "void", "c", new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>());
+		coveredClassC.getMethods().put(MethodCover.createUniqueMapKey(methodCoverCc), methodCoverCc);
 		coveredClasses.put("C", coveredClassC);
 		
 		ClassCover coveredClassD = new ClassCover("D", null);
-		coveredClassD.getMethods().put("d", new MethodCover("D", "void", "d", 
-				new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>()));
+        MethodCover methodCoverDd = new MethodCover("D", "void", "d", new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>());
+		coveredClassD.getMethods().put(MethodCover.createUniqueMapKey(methodCoverDd), methodCoverDd);
 		coveredClasses.put("D", coveredClassD);
 		
 		ClassCover coveredTestCase = new ClassCover("ATest", null);
 		List<ProcessedMethodCall> methodsCoveredByTest = new ArrayList<ProcessedMethodCall>();
 		methodsCoveredByTest.add(new ProcessedMethodCall("A", "a", new ArrayList<String>()));
-		coveredTestCase.getMethods().put("should_bla_bla", new MethodCover("ATest", "void", "should_bla_bla",
-				new ArrayList<ReferenceType>(), methodsCoveredByTest));
+        MethodCover methodCoverATest = new MethodCover("ATest", "void", "should_bla_bla", new ArrayList<ReferenceType>(), methodsCoveredByTest);
+		coveredTestCase.getMethods().put(MethodCover.createUniqueMapKey(methodCoverATest), methodCoverATest);
 		
 		MethodCoverageSummarizer mcs = new MethodCoverageSummarizer(coveredClasses, coveredTestCase);
 		summarizedCoverageOfTestCase = mcs.getSummarizedCoverage();
@@ -72,7 +71,7 @@ public class MethodCoverageSummarizerTest {
 	}
 	
 	@Test
-	public void should_find_parallell_method_calls() {
+	public void should_find_parallel_method_calls() {
 		assertThat(summarizedCoverageOfTestCase.values(), hasItems(
 				new MethodCover("C", "void", "c", new ArrayList<ReferenceType>(), new ArrayList<ProcessedMethodCall>())
 		));

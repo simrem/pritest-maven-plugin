@@ -1,12 +1,12 @@
 package no.citrus.localprioritization;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import no.citrus.localprioritization.model.ClassCover;
 import no.citrus.localprioritization.model.MethodCover;
 import no.citrus.localprioritization.model.ProcessedMethodCall;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MethodCoverageSummarizer {
 
@@ -29,7 +29,7 @@ public class MethodCoverageSummarizer {
 			for (ProcessedMethodCall processedCall : methodCalls) {
 				ClassCover calledClass = coveredClasses.get(processedCall.getClassName());
 				if (calledClass != null) {
-					MethodCover calledMethod = calledClass.getMethods().get(processedCall.getMethodName());
+					MethodCover calledMethod = calledClass.getMethods().get(MethodCover.createUniqueMapKey(processedCall));
 					if (calledMethod != null) {
 						transitiveMethodCalls = summarizeRecursively(calledMethod, transitiveMethodCalls);
 					}
@@ -42,16 +42,18 @@ public class MethodCoverageSummarizer {
 
 	private Map<String, MethodCover> summarizeRecursively(MethodCover methodCall,
 			Map<String, MethodCover> transitiveMethodCalls) {
-		
-		if (transitiveMethodCalls.get(makeClassAndMethodNameString(methodCall)) == null) {
+
+
+        String methodCallKey = MethodCover.createUniqueMapKey(methodCall);
+        if (transitiveMethodCalls.get(methodCallKey) == null) {
 			
-			transitiveMethodCalls.put(makeClassAndMethodNameString(methodCall), methodCall);
+			transitiveMethodCalls.put(methodCallKey, methodCall);
 			
 			List<ProcessedMethodCall> methodCalls = methodCall.getMethodCalls();
 			for (ProcessedMethodCall processedCall : methodCalls) {
 				ClassCover calledClass = coveredClasses.get(processedCall.getClassName());
 				if (calledClass != null) {
-					MethodCover calledMethod = calledClass.getMethods().get(processedCall.getMethodName());
+					MethodCover calledMethod = calledClass.getMethods().get(MethodCover.createUniqueMapKey(processedCall));
 					if (calledMethod != null) {
 						transitiveMethodCalls = summarizeRecursively(calledMethod, transitiveMethodCalls);
 					}
@@ -60,10 +62,6 @@ public class MethodCoverageSummarizer {
 		}
 		
 		return transitiveMethodCalls;
-	}
-
-	private String makeClassAndMethodNameString(MethodCover methodCall) {
-		return methodCall.getClassName() + "." + methodCall.getMethodName();
 	}
 
 	public Map<String, MethodCover> getSummarizedCoverage() {

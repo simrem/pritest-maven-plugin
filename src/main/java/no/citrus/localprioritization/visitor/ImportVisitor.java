@@ -8,7 +8,7 @@ import japa.parser.ast.expr.NameExpr;
 import japa.parser.ast.expr.QualifiedNameExpr;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 
-class ImportVisitor extends VoidVisitorAdapter<String> {
+public class ImportVisitor extends VoidVisitorAdapter<String> {
 
 	private String importStatement;
 	
