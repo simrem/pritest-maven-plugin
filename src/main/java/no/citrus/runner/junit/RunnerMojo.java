@@ -205,6 +205,7 @@ public class RunnerMojo extends AbstractMojo {
 
     private List<String> getOptimizedPriorityList(List<Measure> list) {
 		Collections.sort(list);
+		Collections.reverse(list);
 		List<String> optimizedList = new ArrayList<String>();
 		for(Measure measure : list){
 			optimizedList.add(measure.getSource());
