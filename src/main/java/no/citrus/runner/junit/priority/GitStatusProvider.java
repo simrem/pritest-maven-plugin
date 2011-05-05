@@ -15,32 +15,25 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryBuilder;
 
 
-public class Technique4Ranker {
+public class GitStatusProvider {
 	
-	private List<String> localTestClasses = new ArrayList<String>();
 	private File basedir;
 	private final String sourceDirectory;
 	private final String testSourceDirectory;
 
-	public Technique4Ranker(List<String> localTestClasses, File basedir, String sourceDirectory, String testSourceDirectory) {
-		this.localTestClasses = localTestClasses;
+	public GitStatusProvider(File basedir, String sourceDirectory, String testSourceDirectory) {
 		this.basedir = basedir;
 		this.sourceDirectory = sourceDirectory.replace(basedir + File.separator, "");
 		this.testSourceDirectory = testSourceDirectory.replace(basedir + File.separator, "");;
 	}
 	
-	public List<String> getTechnique4PriorityList() throws NoWorkTreeException, IOException {
+	public List<String> getGitStatusPriorityList() throws NoWorkTreeException, IOException {
 		List<String> gitStatusList = new ArrayList<String>();
 		gitStatusList = callGitStatus();
 		List<String> finalList = new ArrayList<String>();
 		
 		finalList.addAll(gitStatusList);
-		
-		for (String localTestClass : localTestClasses) {
-			if (!finalList.contains(localTestClass)) {
-					finalList.add(localTestClass);
-			}
-		}
+
 		return finalList;
 	}
 	

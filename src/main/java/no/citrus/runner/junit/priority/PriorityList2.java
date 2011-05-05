@@ -66,13 +66,19 @@ public class PriorityList2 {
 	
 
 	private List<String> technique4Strategy(List<String> localTestClasses) throws NoWorkTreeException, IOException {
-		Technique4Ranker t4 = new Technique4Ranker(localTestClasses, baseDir, sourceDirectory, testSourceDirectory);
-		return t4.getTechnique4PriorityList();
+		GitStatusProvider gsp = new GitStatusProvider(baseDir, sourceDirectory, testSourceDirectory);
+		List<String> gitStatusPriorityList = gsp.getGitStatusPriorityList();
+		for(String localTestClass : localTestClasses) {
+			if(!gitStatusPriorityList.contains(localTestClass)) {
+				gitStatusPriorityList.add(localTestClass);
+			}
+		}
+		return gitStatusPriorityList;
 	}
 	
 	private List<String> technique5Strategy() throws NoWorkTreeException, IOException {
-		Technique5Ranker t5 = new Technique5Ranker(this.baseDir);
-		List<String> t5GitStatusList = t5.getTechnique5PriorityList();
+		GitStatusProvider gsp = new GitStatusProvider(baseDir, sourceDirectory, testSourceDirectory);
+		List<String> gitStatusPriorityList = gsp.getGitStatusPriorityList();
 		
 		List<String> contactCitrusList = new ArrayList<String>();
 		try {
@@ -87,12 +93,12 @@ public class PriorityList2 {
 		}
 		
 		for (String s : contactCitrusList) {
-			if (!t5GitStatusList.contains(s)) {
-				t5GitStatusList.add(s);
+			if (!gitStatusPriorityList.contains(s)) {
+				gitStatusPriorityList.add(s);
 			}
 		}
 		
-		return t5GitStatusList;
+		return gitStatusPriorityList;
 	}
 
 	private List<String> onlineListStrategy(List<String> localTestClasses, List<String> onlineTestClasses) {
