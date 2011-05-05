@@ -29,7 +29,7 @@ import static org.junit.Assert.assertThat;
 public class ReporterTest {
 
     @Test
-    public void reporterTest(){
+    public void test_functionality_of_reporter(){
         MyReporter reporter = new MyReporter("", new ArrayList<Measure>());
         Measure m = new Measure();
         m.setChildren(new ArrayList<Measure>());

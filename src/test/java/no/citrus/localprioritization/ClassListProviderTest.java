@@ -20,7 +20,7 @@ public class ClassListProviderTest {
 	};
 	
 	@Before
-	public void setupDirectoryMock(){
+	public void setup_directory_mock(){
 		File readme = mock(File.class);
 		when(readme.getAbsolutePath()).thenReturn("/project/Readme.txt");
 		when(readme.getName()).thenReturn("Readme.txt");
@@ -63,13 +63,13 @@ public class ClassListProviderTest {
 	
 	
 	@Test
-	public void shouldReturnClassList(){
+	public void should_return_list_of_classes(){
 		List<String> classList = ClassListProvider.getClassList(directory);
 		assertThat(classList.toArray(new String[0]), equalTo(expectedClassListResult));
 	}
 	
 	@Test
-	public void shouldReturnFileList(){
+	public void should_return_list_of_files(){
 		List<File> fileList = ClassListProvider.getFileList(directory, new String[] {".java"});
 		assertThat(fileList.toArray(new File[0]), equalTo(expectedFileListResult));
 	}

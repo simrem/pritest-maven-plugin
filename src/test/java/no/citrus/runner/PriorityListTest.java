@@ -35,7 +35,7 @@ public class PriorityListTest {
 	private List<String> expectedResult;
 	
 	@Before
-	public void setupEnvironment(){
+	public void setup_environment(){
 		ArrayList<String> localList = new ArrayList<String>();
 		localList.add("no.test.ClassA");
 		localList.add("no.test.ClassB");
@@ -56,7 +56,7 @@ public class PriorityListTest {
 	}
 	
 	@Test
-	public void shouldReturnListInCorrectOrder() throws JSONException, Exception{
+	public void should_return_list_in_correct_order() throws JSONException, Exception{
 		PriorityList priorityList = new PriorityList(onlineClassList, localClassList);
 		assertThat(priorityList.getPriorityList(), equalTo(expectedResult));
 	}

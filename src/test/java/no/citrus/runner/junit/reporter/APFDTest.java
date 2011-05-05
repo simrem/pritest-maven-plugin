@@ -19,7 +19,7 @@ public class APFDTest {
     private MeasureList measureList;
 
     @Before
-    public void prepareMeasureList(){
+    public void prepare_MeasureList(){
         List<Measure> list = new ArrayList<Measure>();
         for(int i = 0; i < 2; i++){
             Measure testMeasure;
