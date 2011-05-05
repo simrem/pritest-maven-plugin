@@ -40,13 +40,10 @@ public class PriorityList2 {
 		switch (techniqueNumber) {
 			case 1: case 2: case 3:
 				return onlineListStrategy(localTestClasses, onlineTestClasses);
-
 			case 4:
 				return technique4Strategy(localTestClasses);
-				
 			case 5:
 				return technique5Strategy();
-				
 			case 6:
 				TotalMethodCoverage tmc = new TotalMethodCoverage(sourceDirectory, testSourceDirectory);
 				return tmc.getTestCases();
@@ -65,9 +62,11 @@ public class PriorityList2 {
 		Collections.shuffle(localTestClasses);
 		return localTestClasses;
 	}
+	
+	
 
 	private List<String> technique4Strategy(List<String> localTestClasses) throws NoWorkTreeException, IOException {
-		Technique4Ranker t4 = new Technique4Ranker(localTestClasses, this.baseDir);
+		Technique4Ranker t4 = new Technique4Ranker(localTestClasses, baseDir, sourceDirectory, testSourceDirectory);
 		return t4.getTechnique4PriorityList();
 	}
 	

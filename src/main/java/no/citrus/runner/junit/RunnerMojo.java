@@ -131,11 +131,13 @@ public class RunnerMojo extends AbstractMojo {
     
     /**
      * @parameter default-value="${project.build.testSourceDirectory}"
+     * @readonly
      */
     private String testSourceDirectory;
     
     /**
      * @parameter default-value="${project.build.sourceDirectory}"
+     * @readonly
      */
     private String sourceDirectory;
     
@@ -172,7 +174,10 @@ public class RunnerMojo extends AbstractMojo {
 
     	}
     	else {
-    		PriorityList2 priorityListService = new PriorityList2(new OnlineClassService(citrusTechniqueUrl, techniqueNumber), new LocalClassService(testOutputDirectory), basedir, techniqueNumber, testSourceDirectory, sourceDirectory);
+    		PriorityList2 priorityListService = new PriorityList2(
+    				new OnlineClassService(citrusTechniqueUrl, techniqueNumber), 
+    				new LocalClassService(testOutputDirectory), 
+    				basedir, techniqueNumber, testSourceDirectory, sourceDirectory);
     		List<String> priorityList = new ArrayList<String>();
     		try {
     			priorityList.addAll(priorityListService.getPriorityList());
@@ -192,6 +197,9 @@ public class RunnerMojo extends AbstractMojo {
 				getLog().error("Exception - send report");
 			}
 		}
+    	if(reporter.hasFailures()) {
+    		throw new org.apache.maven.plugin.MojoFailureException("Has failing tests");
+    	}
     }
     
 

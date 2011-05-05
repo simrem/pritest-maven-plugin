@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import no.citrus.util.JavaPackageUtil;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
@@ -16,10 +19,14 @@ public class Technique4Ranker {
 	
 	private List<String> localTestClasses = new ArrayList<String>();
 	private File basedir;
+	private final String sourceDirectory;
+	private final String testSourceDirectory;
 
-	public Technique4Ranker(List<String> localTestClasses, File basedir) {
+	public Technique4Ranker(List<String> localTestClasses, File basedir, String sourceDirectory, String testSourceDirectory) {
 		this.localTestClasses = localTestClasses;
 		this.basedir = basedir;
+		this.sourceDirectory = sourceDirectory.replace(basedir + File.separator, "");
+		this.testSourceDirectory = testSourceDirectory.replace(basedir + File.separator, "");;
 	}
 	
 	public List<String> getTechnique4PriorityList() throws NoWorkTreeException, IOException {
@@ -34,45 +41,36 @@ public class Technique4Ranker {
 					finalList.add(localTestClass);
 			}
 		}
-		
 		return finalList;
 	}
 	
 	public List<String> callGitStatus() throws NoWorkTreeException, IOException {
-		List<String> gitStatusList = new ArrayList<String>();
-		
 		File repoPath = new File(basedir.getAbsolutePath() + "/.git");
 		RepositoryBuilder repoBuilder = new RepositoryBuilder();
 		Repository repo = repoBuilder.setGitDir(repoPath).build();
 		
 		Git git = new Git(repo);
 		Status status = git.status().call();
-			
-		for (String untrackedFile : status.getUntracked()) {
-			addIfJavaSuffix(untrackedFile, gitStatusList);
-		}
 		
-		for (String modifiedFile : status.getModified()) {
-			addIfJavaSuffix(modifiedFile, gitStatusList);
-		}
+		List<String> gitStatusList = new ArrayList<String>();
+		
+		addTestCasesToList(status.getUntracked(), gitStatusList);
+		addTestCasesToList(status.getModified(), gitStatusList);
 		
 		return gitStatusList;
 	}
-	
-	private boolean addIfJavaSuffix(String fileName, List<String> listToAddStringTo) {
-		if(fileName.endsWith(".java") && fileName.startsWith("src/main/java/")) {
-			fileName = fileName.substring("src/main/java/".length(), fileName.length() - ".java".length());
-			if (fileName.length() > 0 && !fileName.endsWith("Test")) {
-				
-				if (!listToAddStringTo.contains(fileName)) {
-					fileName = fileName.replaceAll("/", ".");
-					fileName = fileName + "Test";
-					listToAddStringTo.add(fileName);
-					return true;
-				}
+
+	private void addTestCasesToList(Set<String> untracked, 
+			List<String> gitStatusList) {
+		
+		JavaPackageUtil jpu = 
+			new JavaPackageUtil(new String[]{sourceDirectory, testSourceDirectory});
+		
+		for (String untrackedFile : untracked) {
+			String testCaseName = jpu.prepareTestCaseName(untrackedFile);
+			if (testCaseName != null && !gitStatusList.contains(testCaseName)) {
+				gitStatusList.add(testCaseName);
 			}
 		}
-		
-		return false;
-	} 
+	}
 }
