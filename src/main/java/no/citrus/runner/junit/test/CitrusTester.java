@@ -31,37 +31,41 @@ public class CitrusTester extends RunListener {
         this.reporter = reporter;
     }
 
-    public boolean execute() throws ClassNotFoundException, InitializationError {
+    public boolean execute() throws InitializationError {
         RunNotifier runnerNotifier = new RunNotifier();
         runnerNotifier.addListener(this);
         
         for (String file : testOrder) {
         	
-        	measure = new Measure();
-        	measure.setChildren(new ArrayList<Measure>());
-        	measure.setSource(file);
-        	measure.setDate(new Date(System.currentTimeMillis()));
-        	long time = System.currentTimeMillis();
-            
-        	log.info("Loading file: " + file);
-            Class<?> aClass = this.classLoader.loadClass(file);
-            boolean isJunit4Present = false;
-            for(Method m : aClass.getDeclaredMethods()){
-            	if(m.isAnnotationPresent(Test.class)){
-            		isJunit4Present = true;
-            	}
-            }
-            if(isJunit4Present){
-            	log.info("Running file: " + file);
-            	BlockJUnit4ClassRunner runner = new BlockJUnit4ClassRunner(aClass);
-            	runner.run(runnerNotifier);
-            	
-            	measure.setValue(System.currentTimeMillis() - time);
-                reporter.addMeasure(measure);
-            }
-            else{
-            	log.warn("Not junit4 class: " + file);
-            }
+			try {
+				measure = new Measure();
+	        	measure.setChildren(new ArrayList<Measure>());
+	        	measure.setSource(file);
+	        	measure.setDate(new Date(System.currentTimeMillis()));
+	        	measure.setNumOfFails(0);
+	        	long time = System.currentTimeMillis();
+	            
+	            Class<?> aClass = this.classLoader.loadClass(file);
+	            boolean isJunit4Present = false;
+	            for(Method m : aClass.getDeclaredMethods()){
+	            	if(m.isAnnotationPresent(Test.class)){
+	            		isJunit4Present = true;
+	            	}
+	            }
+	            if(isJunit4Present){
+	            	log.info("Running test: " + file);
+	            	BlockJUnit4ClassRunner runner = new BlockJUnit4ClassRunner(aClass);
+	            	runner.run(runnerNotifier);
+	            	
+	            	measure.setValue(System.currentTimeMillis() - time);
+	                reporter.addMeasure(measure);
+	            }
+	            else{
+	            	log.warn("Not junit4 class: " + file);
+	            }
+			} catch (ClassNotFoundException e) {
+				log.debug(file + " not found");
+			}
         }
         return true;
     }
@@ -77,6 +81,7 @@ public class CitrusTester extends RunListener {
 		failedMeasure.setSource(failure.getDescription().getClassName());
 		failedMeasure.setDate(new Date(System.currentTimeMillis()));
 		measure.getChildren().add(failedMeasure);
+		measure.setNumOfFails(measure.getNumOfFails() +1);
 	}
 	
 }

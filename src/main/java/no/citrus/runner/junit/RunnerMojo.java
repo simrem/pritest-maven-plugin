@@ -8,6 +8,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -129,11 +131,13 @@ public class RunnerMojo extends AbstractMojo {
     
     /**
      * @parameter default-value="${project.build.testSourceDirectory}"
+     * @readonly
      */
     private String testSourceDirectory;
     
     /**
      * @parameter default-value="${project.build.sourceDirectory}"
+     * @readonly
      */
     private String sourceDirectory;
     
@@ -160,6 +164,9 @@ public class RunnerMojo extends AbstractMojo {
     			if(priorityLists.size() > 0) {
     				new CitrusTester(classLoader, priorityLists.get(technique0[0]), getLog(), reporter).execute();
     			}
+    			if(Arrays.asList(technique0).contains(10)) {
+    				priorityLists.put(10, getOptimizedPriorityList(reporter.getMeasureList().getList()));
+    			}
     			priorityListsToAPFD(priorityLists, reporter.getMeasureList().getList());
     		} catch (Exception e) {
     			e.printStackTrace();
@@ -167,7 +174,10 @@ public class RunnerMojo extends AbstractMojo {
 
     	}
     	else {
-    		PriorityList2 priorityListService = new PriorityList2(new OnlineClassService(citrusTechniqueUrl, techniqueNumber), new LocalClassService(testOutputDirectory), basedir, techniqueNumber, testSourceDirectory, sourceDirectory);
+    		PriorityList2 priorityListService = new PriorityList2(
+    				new OnlineClassService(citrusTechniqueUrl, techniqueNumber), 
+    				new LocalClassService(testOutputDirectory), 
+    				basedir, techniqueNumber, testSourceDirectory, sourceDirectory);
     		List<String> priorityList = new ArrayList<String>();
     		try {
     			priorityList.addAll(priorityListService.getPriorityList());
@@ -187,10 +197,24 @@ public class RunnerMojo extends AbstractMojo {
 				getLog().error("Exception - send report");
 			}
 		}
+    	if(reporter.hasFailures()) {
+    		throw new org.apache.maven.plugin.MojoFailureException("Has failing tests");
+    	}
     }
     
 
-    private void priorityListsToAPFD(Map<Integer, List<String>> priorityLists, List<Measure> measureList) throws IOException {
+    private List<String> getOptimizedPriorityList(List<Measure> list) {
+		Collections.sort(list);
+		Collections.reverse(list);
+		List<String> optimizedList = new ArrayList<String>();
+		for(Measure measure : list){
+			optimizedList.add(measure.getSource());
+		}
+		return optimizedList;
+	}
+
+
+	private void priorityListsToAPFD(Map<Integer, List<String>> priorityLists, List<Measure> measureList) throws IOException {
 		for (Integer localTechniqueNumber : priorityLists.keySet()){
 			List<String> localPriorityList = priorityLists.get(localTechniqueNumber);
 			List<Measure> localMeasureList = APFDHelper.sortMeasureListBySource(localPriorityList, measureList);

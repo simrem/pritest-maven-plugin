@@ -20,16 +20,24 @@ public class Reporter {
 	
 	private MeasureList measureList;
 	private final String reportURL;
+	private boolean hasFailures;
 	
 	public Reporter(String reportURL, List<Measure> measureList){
 		this.reportURL = reportURL;
 		this.measureList = new MeasureList(measureList);
+		hasFailures = false;
 	}
 	
 	public boolean addMeasure(Measure measure){
+		if(measure.numOfFails > 0) {
+			hasFailures = true;
+		}
 		return measureList.getList().add(measure);
 	}
 	
+	public boolean hasFailures(){
+		return hasFailures;
+	}
 //	public void outputAPFDToFile(String directory, String filename) throws IOException{
 //		APFD apfd = new APFD(measureList);
 //		apfd.outputToFile(directory, filename);
