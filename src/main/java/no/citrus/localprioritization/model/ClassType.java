@@ -21,6 +21,8 @@ public class ClassType {
         this.fields = new HashMap<String, ReferenceType>();
         this.methodDeclarations = new ArrayList<MethodDecl>();
         this.innerClasses = new ArrayList<ClassType>();
+
+        fields.put("this", new ReferenceType(this.name, "this"));
 	}
 
 	public String getName() {

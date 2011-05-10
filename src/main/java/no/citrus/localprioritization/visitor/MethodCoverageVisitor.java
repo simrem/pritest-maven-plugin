@@ -113,7 +113,7 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
         
         return null;
     }
-    
+
     private boolean isClassInProject(ReferenceType variable) {
         return classesInProject.get(variable.getType()) != null;
     }

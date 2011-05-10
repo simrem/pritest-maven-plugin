@@ -62,4 +62,28 @@ public class MethodCallVisitorTest {
 				new RawMethodCall("methodCalls", "add", methodCallsAddParameters)
 		));
 	}
+
+    @Test
+    public void should_support_this_calls_as_arguments() throws FileNotFoundException, ParseException {
+        FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/visitor/MethodCoverageVisitor.java");
+        CompilationUnit cu = JavaParser.parse(fis);
+
+        Map<String,ReferenceType> localVariables = new HashMap<String,ReferenceType>();
+        localVariables.put("currentClass", new ReferenceType("ClassCover", "currentClass"));
+
+        Map<String,ReferenceType> fieldVariables = new HashMap<String,ReferenceType>();
+        fieldVariables.put("this", new ReferenceType("MethodCoverageVisitor", "this"));
+        
+        MethodCallVisitor mcv = new MethodCallVisitor(localVariables, fieldVariables);
+        cu.getTypes().get(0).getMembers().get(5).accept(mcv, null);
+        List<RawMethodCall> rawMethodCalls = mcv.getRawMethodCalls();
+
+        List<String> parameters = new ArrayList<String>();
+        parameters.add("MethodCoverageVisitor");
+        parameters.add("ClassCover");
+
+        assertThat(rawMethodCalls, hasItems(
+                new RawMethodCall("member", "accept", parameters)
+        ));
+    }
 }

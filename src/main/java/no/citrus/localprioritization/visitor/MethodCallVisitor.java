@@ -1,10 +1,6 @@
 package no.citrus.localprioritization.visitor;
 
-import japa.parser.ast.expr.Expression;
-import japa.parser.ast.expr.MethodCallExpr;
-import japa.parser.ast.expr.NameExpr;
-import japa.parser.ast.expr.NullLiteralExpr;
-import japa.parser.ast.expr.ObjectCreationExpr;
+import japa.parser.ast.expr.*;
 import japa.parser.ast.visitor.GenericVisitorAdapter;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 import no.citrus.localprioritization.model.RawMethodCall;
@@ -157,7 +153,12 @@ public class MethodCallVisitor extends VoidVisitorAdapter<Object> {
 		public ArgumentReference visit(NameExpr n, Object arg) {
 			return new ArgumentReference(null, n.getName());
 		}
-	}
+
+        @Override
+        public ArgumentReference visit(ThisExpr n, Object arg) {
+            return new ArgumentReference(null, "this");
+        }
+    }
     
     private class ArgumentReference extends ReferenceType {
 
