@@ -12,10 +12,12 @@ public class ClassType {
     private Map<String, ReferenceType> fields;
 	private List<ClassType> innerClasses;
 	private String packageName;
+    private String superClass;
 
-    public ClassType(String packageName, String className) {
+    public ClassType(String packageName, String className, String superClass) {
 		this.packageName = packageName;
 		this.name = className;
+        this.superClass = superClass;
         this.fields = new HashMap<String, ReferenceType>();
         this.methodDeclarations = new ArrayList<MethodDecl>();
         this.innerClasses = new ArrayList<ClassType>();
@@ -40,4 +42,8 @@ public class ClassType {
 	public String getPackageName() {
 		return packageName;
 	}
+
+    public String getSuperClass() {
+        return superClass;
+    }
 }

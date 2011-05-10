@@ -6,7 +6,6 @@ import japa.parser.ast.CompilationUnit;
 import no.citrus.localprioritization.model.*;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -33,19 +32,19 @@ public class MethodCoverageVisitorTest {
 
         Map<String, ClassType> classesInProject = new HashMap<String, ClassType>();
 
-        ClassType callingClass = new ClassType("no.citrus.localprioritization.visitor", "MethodDeclarationVisitor");
+        ClassType callingClass = new ClassType("no.citrus.localprioritization.visitor", "MethodDeclarationVisitor", null);
         callingClass.getMethodDeclarations().add(new MethodDecl("List", "getMethodDeclarations", new ArrayList<ReferenceType>()));
         List<ReferenceType> params1 = new ArrayList<ReferenceType>();
         params1.add(new ReferenceType("MethodDeclaration", "n"));
         params1.add(new ReferenceType("Object", "arg1"));
         callingClass.getMethodDeclarations().add(new MethodDecl("void", "visit", params1));
 
-        ClassType firstClass = new ClassType("japa.parser.ast.body", "MethodDeclaration");
+        ClassType firstClass = new ClassType("japa.parser.ast.body", "MethodDeclaration", null);
         firstClass.getMethodDeclarations().add(new MethodDecl("String", "getName", new ArrayList<ReferenceType>()));
         firstClass.getMethodDeclarations().add(new MethodDecl("Type", "getType", new ArrayList<ReferenceType>()));
         firstClass.getMethodDeclarations().add(new MethodDecl("List", "getParameters", new ArrayList<ReferenceType>()));
 
-        ClassType secondClass = new ClassType("japa.parser.ast.body", "Parameter");
+        ClassType secondClass = new ClassType("japa.parser.ast.body", "Parameter", null);
         List<ReferenceType> params2 = new ArrayList<ReferenceType>();
         params2.add(new ReferenceType("GenericVisitor", "v"));
         params2.add(new ReferenceType("A", "arg"));
@@ -55,7 +54,7 @@ public class MethodCoverageVisitorTest {
         params3.add(new ReferenceType("A", "arg"));
         secondClass.getMethodDeclarations().add(new MethodDecl("void", "accept", params3));
 
-        ClassType thirdClass = new ClassType("no.citrus.localprioritization.visitor", "ReturnTypeVisitor");
+        ClassType thirdClass = new ClassType("no.citrus.localprioritization.visitor", "ReturnTypeVisitor", null);
         thirdClass.getMethodDeclarations().add(new MethodDecl("String", "getTypeName", new ArrayList<ReferenceType>()));
 
         classesInProject.put("MethodDeclarationVisitor", callingClass);
@@ -108,11 +107,11 @@ public class MethodCoverageVisitorTest {
 		
 		Map<String, ClassType> classesInProject = new HashMap<String, ClassType>();
 		
-		ClassType classCoverClass = new ClassType("no.citrus.localprioritization.model", "ClassCover");
+		ClassType classCoverClass = new ClassType("no.citrus.localprioritization.model", "ClassCover", null);
 		classCoverClass.getMethodDeclarations().add(new MethodDecl("String", "getName", new ArrayList<ReferenceType>()));
 		classesInProject.put("ClassCover", classCoverClass);
 
-        ClassType theTestClass = new ClassType("no.citrus.localprioritization.visitor", "MethodCoverageVisitorTest");
+        ClassType theTestClass = new ClassType("no.citrus.localprioritization.visitor", "MethodCoverageVisitorTest", null);
         theTestClass.getMethodDeclarations().add(new MethodDecl("void", "should_find_classes_in_compilation_unit", new ArrayList<ReferenceType>()));
         theTestClass.getFields().put("methodDeclarationVisitorClass", new ReferenceType("ClassCover", "methodDeclarationVisitorClass"));
         classesInProject.put("MethodCoverageVisitorTest", theTestClass);

@@ -92,4 +92,11 @@ public class ClassOrInterfaceDeclarationVisitorTest {
                 new MethodDecl("NestedMethodCall", "getNestedCall", params3)
         ));
 	}
+
+    @Test
+    public void should_support_extend_statements() {
+        ClassType theClass = classes.get(0);
+
+        assertThat(theClass.getSuperClass(), is(equalTo("VoidVisitorAdapter")));
+    }
 }
