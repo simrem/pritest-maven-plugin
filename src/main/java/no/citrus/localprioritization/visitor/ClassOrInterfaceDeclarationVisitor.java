@@ -67,6 +67,7 @@ public class ClassOrInterfaceDeclarationVisitor extends GenericVisitorAdapter<Cl
 		MethodDecl methodDecl = methodDeclaration.accept(new MethodDeclarationVisitor(), classType);
 		
 		classType.getMethodDeclarations().add(methodDecl);
+        classType.putMethodDeclaration(methodDecl);
 		
 		return classType;
 	}

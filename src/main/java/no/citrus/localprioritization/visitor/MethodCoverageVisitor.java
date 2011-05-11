@@ -96,17 +96,28 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
     }
     
     private ProcessedMethodCall processRawMethodCall(Map<String, ReferenceType> localVariables, RawMethodCall rawMethodCall, ClassCover belongingClass) {
-    	ReferenceType variable = localVariables.get(rawMethodCall.getScope());
-        if (variable != null) {
-            if (isClassInProject(variable)) {
-                return new ProcessedMethodCall(variable.getType(), rawMethodCall.getMethodName(), rawMethodCall.getParameters());
+
+        if (rawMethodCall.getScope() != null) {
+            ReferenceType variable = localVariables.get(rawMethodCall.getScope());
+            if (variable != null) {
+                if (isClassInProject(variable)) {
+                    return new ProcessedMethodCall(variable.getType(), rawMethodCall.getMethodName(), rawMethodCall.getParameters());
+                }
+            } else {
+                ClassType currentClass = classesInProject.get(belongingClass.getName());
+                if (currentClass != null) {
+                    variable = currentClass.getFields().get(rawMethodCall.getScope());
+                    if (variable != null) {
+                        return new ProcessedMethodCall(variable.getType(), rawMethodCall.getMethodName(), rawMethodCall.getParameters());
+                    }
+                }
             }
         } else {
-            ClassType currentClass = classesInProject.get(belongingClass.getName());
-            if (currentClass != null) {
-                variable = currentClass.getFields().get(rawMethodCall.getScope());
-                if (variable != null) {
-                    return new ProcessedMethodCall(variable.getType(), rawMethodCall.getMethodName(), rawMethodCall.getParameters());
+            ClassType referencedClass = this.classesInProject.get(belongingClass.getName());
+            if (referencedClass != null) {
+                String key = MethodDecl.createUniqueKeyForClass(rawMethodCall.getMethodName(), rawMethodCall.getParameters());
+                if(referencedClass.getMethodDeclMap().get(key) != null) {
+                    return new ProcessedMethodCall(belongingClass.getName(), rawMethodCall.getMethodName(), rawMethodCall.getParameters());
                 }
             }
         }

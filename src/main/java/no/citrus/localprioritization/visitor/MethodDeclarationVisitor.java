@@ -18,26 +18,37 @@ public class MethodDeclarationVisitor extends GenericVisitorAdapter<MethodDecl, 
 		String methodName = n.getName();
 		
 		if (n.getType() != null) {
-			ReturnTypeVisitor rtv = new ReturnTypeVisitor();
-			n.getType().accept(rtv, null);
-			returnType = rtv.getTypeName();
-			
-			if (returnType == null) {
-				returnType = "void";
-			}
+            returnType = extractMethodReturnType(n);
 		}
 		
 		List<ReferenceType> parameters = new ArrayList<ReferenceType>();
 		
 		if (n.getParameters() != null) {
 			for (Parameter p : n.getParameters()) {
-				ParameterVisitor pv = new ParameterVisitor();
-				p.accept(pv, null);
-				parameters.add(new ReferenceType(pv.getParameterType(), pv.getParameterVariable()));
+                ReferenceType referenceType = extractParameter(p);
+                parameters.add(referenceType);
 			}
 		}
 		
 		return new MethodDecl(returnType, methodName, parameters);
 	}
+
+    private ReferenceType extractParameter(Parameter p) {
+        ParameterVisitor pv = new ParameterVisitor();
+        p.accept(pv, null);
+        return new ReferenceType(pv.getParameterType(), pv.getParameterVariable());
+    }
+
+    private String extractMethodReturnType(MethodDeclaration n) {
+        String returnType;
+        ReturnTypeVisitor rtv = new ReturnTypeVisitor();
+        n.getType().accept(rtv, null);
+        returnType = rtv.getTypeName();
+
+        if (returnType == null) {
+            returnType = "void";
+        }
+        return returnType;
+    }
 
 }
