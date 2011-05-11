@@ -30,12 +30,8 @@ public class ClassType {
 	public String getName() {
 		return this.name;
 	}
-
-    public List<MethodDecl> getMethodDeclarations() {
-        return methodDeclarations;
-    }
-
-    public Map<String, MethodDecl> getMethodDeclMap() {
+    
+    public Map<String, MethodDecl> getMethodDeclarations() {
         return methodDeclMap;
     }
 

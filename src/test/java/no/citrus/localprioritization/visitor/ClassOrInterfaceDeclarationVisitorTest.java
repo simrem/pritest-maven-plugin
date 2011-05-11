@@ -79,13 +79,13 @@ public class ClassOrInterfaceDeclarationVisitorTest {
         params2.add(new ReferenceType("Object", "arg1"));
         
         assertThat(outerClass.getMethodDeclarations().size(), is(equalTo(5)));
-		assertThat(outerClass.getMethodDeclarations(), hasItems(
+		assertThat(outerClass.getMethodDeclarations().values(), hasItems(
                 new MethodDecl("List", "getRawMethodCalls", params1),
                 new MethodDecl("void", "visit", params2)
         ));
 		
 		assertThat(innerClass.getMethodDeclarations().size(), is(equalTo(3)));
-		assertThat(innerClass.getMethodDeclarations(), hasItems(
+		assertThat(innerClass.getMethodDeclarations().values(), hasItems(
                 new MethodDecl("String", "getScope", params1),
                 new MethodDecl("NestedMethodCall", "getNestedCall", params3)
         ));

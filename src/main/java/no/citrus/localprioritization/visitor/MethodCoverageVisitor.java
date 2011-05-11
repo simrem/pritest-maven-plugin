@@ -116,7 +116,7 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
             ClassType referencedClass = this.classesInProject.get(belongingClass.getName());
             if (referencedClass != null) {
                 String key = MethodDecl.createUniqueKeyForClass(rawMethodCall.getMethodName(), rawMethodCall.getParameters());
-                if(referencedClass.getMethodDeclMap().get(key) != null) {
+                if(referencedClass.getMethodDeclarations().get(key) != null) {
                     return new ProcessedMethodCall(belongingClass.getName(), rawMethodCall.getMethodName(), rawMethodCall.getParameters());
                 }
             }

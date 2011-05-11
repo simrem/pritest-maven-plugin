@@ -56,7 +56,6 @@ public class ClassOrInterfaceDeclarationVisitor extends GenericVisitorAdapter<Cl
     	FieldVisitor fv = new FieldVisitor();
     	fieldDeclaration.accept(fv, classType);
     	
-    	//classType.getFields().addAll(fv.getFields());
     	classType.getFields().putAll(fv.getFields());
     	
 		return classType;
@@ -66,7 +65,6 @@ public class ClassOrInterfaceDeclarationVisitor extends GenericVisitorAdapter<Cl
 	public ClassType visit(MethodDeclaration methodDeclaration, ClassType classType) {
 		MethodDecl methodDecl = methodDeclaration.accept(new MethodDeclarationVisitor(), classType);
 		
-		classType.getMethodDeclarations().add(methodDecl);
         classType.putMethodDeclaration(methodDecl);
 		
 		return classType;

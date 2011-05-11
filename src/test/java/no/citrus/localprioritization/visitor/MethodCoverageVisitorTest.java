@@ -34,35 +34,27 @@ public class MethodCoverageVisitorTest {
         List<ReferenceType> params1 = new ArrayList<ReferenceType>();
         params1.add(new ReferenceType("MethodDeclaration", "n"));
         params1.add(new ReferenceType("Object", "arg1"));
-        callingClass.getMethodDeclarations().add(new MethodDecl("void", "visit", params1));
         callingClass.putMethodDeclaration(new MethodDecl("void", "visit", params1));
         List<ReferenceType> extractParameterParams = new ArrayList<ReferenceType>();
         extractParameterParams.add(new ReferenceType("Parameter", "p"));
-        callingClass.getMethodDeclarations().add(new MethodDecl("ReferenceType", "extractParameter", extractParameterParams));
         callingClass.putMethodDeclaration(new MethodDecl("ReferenceType", "extractParameter", extractParameterParams));
 
         ClassType firstClass = new ClassType("japa.parser.ast.body", "MethodDeclaration", null);
-        firstClass.getMethodDeclarations().add(new MethodDecl("String", "getName", new ArrayList<ReferenceType>()));
         firstClass.putMethodDeclaration(new MethodDecl("String", "getName", new ArrayList<ReferenceType>()));
-        firstClass.getMethodDeclarations().add(new MethodDecl("Type", "getType", new ArrayList<ReferenceType>()));
         firstClass.putMethodDeclaration(new MethodDecl("Type", "getType", new ArrayList<ReferenceType>()));
-        firstClass.getMethodDeclarations().add(new MethodDecl("List", "getParameters", new ArrayList<ReferenceType>()));
         firstClass.putMethodDeclaration(new MethodDecl("List", "getParameters", new ArrayList<ReferenceType>()));
 
         ClassType secondClass = new ClassType("japa.parser.ast.body", "Parameter", null);
         List<ReferenceType> params2 = new ArrayList<ReferenceType>();
         params2.add(new ReferenceType("GenericVisitor", "v"));
         params2.add(new ReferenceType("A", "arg"));
-        secondClass.getMethodDeclarations().add(new MethodDecl("R", "accept", params2));
         secondClass.putMethodDeclaration(new MethodDecl("R", "accept", params2));
         List<ReferenceType> params3 = new ArrayList<ReferenceType>();
         params3.add(new ReferenceType("VoidVisitor", "v"));
         params3.add(new ReferenceType("A", "arg"));
-        secondClass.getMethodDeclarations().add(new MethodDecl("void", "accept", params3));
         secondClass.putMethodDeclaration(new MethodDecl("void", "accept", params3));
 
         ClassType thirdClass = new ClassType("no.citrus.localprioritization.visitor", "ReturnTypeVisitor", null);
-        thirdClass.getMethodDeclarations().add(new MethodDecl("String", "getTypeName", new ArrayList<ReferenceType>()));
         thirdClass.putMethodDeclaration(new MethodDecl("String", "getTypeName", new ArrayList<ReferenceType>()));
 
         classesInProject.put("MethodDeclarationVisitor", callingClass);
@@ -130,11 +122,11 @@ public class MethodCoverageVisitorTest {
 		Map<String, ClassType> classesInProject = new HashMap<String, ClassType>();
 		
 		ClassType classCoverClass = new ClassType("no.citrus.localprioritization.model", "ClassCover", null);
-		classCoverClass.getMethodDeclarations().add(new MethodDecl("String", "getName", new ArrayList<ReferenceType>()));
+        classCoverClass.putMethodDeclaration(new MethodDecl("String", "getName", new ArrayList<ReferenceType>()));
 		classesInProject.put("ClassCover", classCoverClass);
 
         ClassType theTestClass = new ClassType("no.citrus.localprioritization.visitor", "MethodCoverageVisitorTest", null);
-        theTestClass.getMethodDeclarations().add(new MethodDecl("void", "should_find_classes_in_compilation_unit", new ArrayList<ReferenceType>()));
+        theTestClass.putMethodDeclaration(new MethodDecl("void", "should_find_classes_in_compilation_unit", new ArrayList<ReferenceType>()));
         theTestClass.getFields().put("methodDeclarationVisitorClass", new ReferenceType("ClassCover", "methodDeclarationVisitorClass"));
         classesInProject.put("MethodCoverageVisitorTest", theTestClass);
 
