@@ -54,7 +54,7 @@ public class MethodCallVisitorTest {
 	}
 	
 	@Test
-	public void should_discover_the_type_of_parameters_where_local_variables_are_refered() {
+	public void should_discover_the_type_of_parameters_where_local_variables_are_referred() {
 		List<String> methodCallsAddParameters = new ArrayList<String>();
 		methodCallsAddParameters.add("RawMethodCall");
 		
@@ -84,6 +84,20 @@ public class MethodCallVisitorTest {
 
         assertThat(rawMethodCalls, hasItems(
                 new RawMethodCall("member", "accept", parameters)
+        ));
+    }
+
+    @Test
+    public void should_support_calls_to_private_methods() throws FileNotFoundException, ParseException {
+        List<String> parameters1 = new ArrayList<String>();
+        parameters1.add("MethodCallExpr");
+
+        List<String> parameters2 = new ArrayList<String>();
+        parameters2.add("MethodCallExpr");
+
+        assertThat(methodCalls, hasItems(
+                new RawMethodCall(null, "retrieveScope", parameters1),
+                new RawMethodCall(null, "retrieveArguments", parameters2)
         ));
     }
 }
