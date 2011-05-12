@@ -54,7 +54,7 @@ public class MethodCallVisitorTest {
 	}
 	
 	@Test
-	public void should_discover_the_type_of_parameters_where_local_variables_are_refered() {
+	public void should_discover_the_type_of_parameters_where_local_variables_are_referred() {
 		List<String> methodCallsAddParameters = new ArrayList<String>();
 		methodCallsAddParameters.add("RawMethodCall");
 		
@@ -62,4 +62,42 @@ public class MethodCallVisitorTest {
 				new RawMethodCall("methodCalls", "add", methodCallsAddParameters)
 		));
 	}
+
+    @Test
+    public void should_support_this_calls_as_arguments() throws FileNotFoundException, ParseException {
+        FileInputStream fis = new FileInputStream("src/main/java/no/citrus/localprioritization/visitor/MethodCoverageVisitor.java");
+        CompilationUnit cu = JavaParser.parse(fis);
+
+        Map<String,ReferenceType> localVariables = new HashMap<String,ReferenceType>();
+        localVariables.put("currentClass", new ReferenceType("ClassCover", "currentClass"));
+
+        Map<String,ReferenceType> fieldVariables = new HashMap<String,ReferenceType>();
+        fieldVariables.put("this", new ReferenceType("MethodCoverageVisitor", "this"));
+        
+        MethodCallVisitor mcv = new MethodCallVisitor(localVariables, fieldVariables);
+        cu.getTypes().get(0).getMembers().get(5).accept(mcv, null);
+        List<RawMethodCall> rawMethodCalls = mcv.getRawMethodCalls();
+
+        List<String> parameters = new ArrayList<String>();
+        parameters.add("MethodCoverageVisitor");
+        parameters.add("ClassCover");
+
+        assertThat(rawMethodCalls, hasItems(
+                new RawMethodCall("member", "accept", parameters)
+        ));
+    }
+
+    @Test
+    public void should_support_calls_to_private_methods() throws FileNotFoundException, ParseException {
+        List<String> parameters1 = new ArrayList<String>();
+        parameters1.add("MethodCallExpr");
+
+        List<String> parameters2 = new ArrayList<String>();
+        parameters2.add("MethodCallExpr");
+
+        assertThat(methodCalls, hasItems(
+                new RawMethodCall(null, "retrieveScope", parameters1),
+                new RawMethodCall(null, "retrieveArguments", parameters2)
+        ));
+    }
 }

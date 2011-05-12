@@ -61,10 +61,8 @@ public class ClassOrInterfaceDeclarationVisitorTest {
         ClassType outerClass = classes.get(0);
         ClassType innerClass = classes.get(0).getInnerClasses().get(2);
 
-        assertThat(outerClass.getFields().size(), is(equalTo(3)));
         assertThat(outerClass.getFields().values(), hasItem(new ReferenceType("List", "methodCalls")));
         
-        assertThat(innerClass.getFields().size(), is(equalTo(3)));
         assertThat(innerClass.getFields().values(), hasItem(new ReferenceType("String", "scope")));
     }
 
@@ -81,15 +79,22 @@ public class ClassOrInterfaceDeclarationVisitorTest {
         params2.add(new ReferenceType("Object", "arg1"));
         
         assertThat(outerClass.getMethodDeclarations().size(), is(equalTo(5)));
-		assertThat(outerClass.getMethodDeclarations(), hasItems(
+		assertThat(outerClass.getMethodDeclarations().values(), hasItems(
                 new MethodDecl("List", "getRawMethodCalls", params1),
                 new MethodDecl("void", "visit", params2)
         ));
 		
 		assertThat(innerClass.getMethodDeclarations().size(), is(equalTo(3)));
-		assertThat(innerClass.getMethodDeclarations(), hasItems(
+		assertThat(innerClass.getMethodDeclarations().values(), hasItems(
                 new MethodDecl("String", "getScope", params1),
                 new MethodDecl("NestedMethodCall", "getNestedCall", params3)
         ));
 	}
+
+    @Test
+    public void should_support_extend_statements() {
+        ClassType theClass = classes.get(0);
+
+        assertThat(theClass.getSuperClass(), is(equalTo("VoidVisitorAdapter")));
+    }
 }

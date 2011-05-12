@@ -65,4 +65,24 @@ public class MethodDecl {
 			return false;
 		return true;
 	}
+
+    public static String createUniqueKeyForClass(MethodDecl methodDeclaration) {
+        String key = methodDeclaration.getMethodName();
+
+        for (ReferenceType parameter : methodDeclaration.getParameters()) {
+            key += "." + parameter.getType();
+        }
+
+        return key;
+    }
+
+    public static String createUniqueKeyForClass(String methodName, List<String> parameters) {
+        String key = methodName;
+
+        for (String parameter : parameters) {
+            key += "." + parameter;
+        }
+
+        return key;
+    }
 }

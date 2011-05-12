@@ -5,13 +5,14 @@ import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 
 import no.citrus.localprioritization.model.ClassType;
-import no.citrus.localprioritization.visitor.CompilationUnitVisitor;
+import no.citrus.localprioritization.model.MethodDecl;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -68,8 +69,12 @@ public class CompilationUnitVisitorTest {
 		Map<String, ClassType> types = cuv.getTypesAsMapItems();
 		
 		ClassType type = types.get("CompilationUnitVisitor");
-		
-		assertThat(type.getName(), is(equalTo("CompilationUnitVisitor")));
-		assertThat(type.getMethodDeclarations().get(0).getMethodName(), is(equalTo("visit")));
+
+        List<String> params = new ArrayList<String>();
+        params.add("CompilationUnit");
+        params.add("Object");
+
+        assertThat(type.getName(), is(equalTo("CompilationUnitVisitor")));
+        assertThat(type.getMethodDeclarations().get(MethodDecl.createUniqueKeyForClass("visit", params)).getMethodName(), is(equalTo("visit")));
 	}
 }

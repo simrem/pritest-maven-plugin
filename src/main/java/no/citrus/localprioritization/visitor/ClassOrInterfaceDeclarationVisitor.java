@@ -4,6 +4,7 @@ import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
+import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.visitor.GenericVisitorAdapter;
 import no.citrus.localprioritization.model.ClassType;
 import no.citrus.localprioritization.model.MethodDecl;
@@ -24,8 +25,15 @@ public class ClassOrInterfaceDeclarationVisitor extends GenericVisitorAdapter<Cl
     @Override
 	public ClassType visit(ClassOrInterfaceDeclaration cid, ClassType classType) {
 		String className = cid.getName();
+        String superClassName = null;
 
-        ClassType newClass = new ClassType(this.packageName, className);
+        if (cid.getExtends() != null) {
+            if (cid.getExtends().size() == 1) {
+                superClassName = cid.getExtends().get(0).getName();
+            }
+        }
+
+        ClassType newClass = new ClassType(this.packageName, className, superClassName);
 
         ClassOrInterfaceDeclarationVisitor cidVisitor =
         	new ClassOrInterfaceDeclarationVisitor(this.packageName + "." + newClass.getName());
@@ -48,7 +56,6 @@ public class ClassOrInterfaceDeclarationVisitor extends GenericVisitorAdapter<Cl
     	FieldVisitor fv = new FieldVisitor();
     	fieldDeclaration.accept(fv, classType);
     	
-    	//classType.getFields().addAll(fv.getFields());
     	classType.getFields().putAll(fv.getFields());
     	
 		return classType;
@@ -58,7 +65,7 @@ public class ClassOrInterfaceDeclarationVisitor extends GenericVisitorAdapter<Cl
 	public ClassType visit(MethodDeclaration methodDeclaration, ClassType classType) {
 		MethodDecl methodDecl = methodDeclaration.accept(new MethodDeclarationVisitor(), classType);
 		
-		classType.getMethodDeclarations().add(methodDecl);
+        classType.putMethodDeclaration(methodDecl);
 		
 		return classType;
 	}
