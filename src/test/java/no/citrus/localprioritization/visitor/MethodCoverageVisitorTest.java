@@ -5,10 +5,12 @@ import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import no.citrus.localprioritization.model.*;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +32,6 @@ public class MethodCoverageVisitorTest {
         Map<String, ClassType> classesInProject = new HashMap<String, ClassType>();
 
         ClassType callingClass = new ClassType("no.citrus.localprioritization.visitor", "MethodDeclarationVisitor", null);
-//        callingClass.getMethodDeclarations().add(new MethodDecl("List", "getMethodDeclarations", new ArrayList<ReferenceType>()));
         List<ReferenceType> params1 = new ArrayList<ReferenceType>();
         params1.add(new ReferenceType("MethodDeclaration", "n"));
         params1.add(new ReferenceType("Object", "arg1"));
@@ -89,12 +90,18 @@ public class MethodCoverageVisitorTest {
     }
 
     @Test
-    public void should_find_calls_to_private_methods() {
+    public void should_find_calls_to_private_methods_and_parameters() {
+        //  TODO: split into two tests
         List<ReferenceType> params = new ArrayList<ReferenceType>();
         params.add(new ReferenceType("MethodDeclaration", "n"));
         params.add(new ReferenceType("Object", "arg1"));
         
         List<ProcessedMethodCall> methodCalls = new ArrayList<ProcessedMethodCall>();
+        methodCalls.add(new ProcessedMethodCall("MethodDeclaration", "getName", new ArrayList<String>()));
+        methodCalls.add(new ProcessedMethodCall("MethodDeclaration", "getType", new ArrayList<String>()));
+        methodCalls.add(new ProcessedMethodCall("MethodDeclaration", "getParameters", new ArrayList<String>()));
+        methodCalls.add(new ProcessedMethodCall("MethodDeclaration", "getParameters", new ArrayList<String>()));
+
         List<String> extractParameterParams = new ArrayList<String>();
         extractParameterParams.add("Parameter");
         methodCalls.add(new ProcessedMethodCall("MethodDeclarationVisitor", "extractParameter", extractParameterParams));
