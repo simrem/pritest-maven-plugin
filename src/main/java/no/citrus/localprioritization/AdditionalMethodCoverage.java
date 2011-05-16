@@ -23,7 +23,7 @@ public class AdditionalMethodCoverage extends MethodCoverage {
 		
 		for (SummarizedTestCase stc : prioritizedTestCases) {
             addTestCase(stc);
-//            System.out.println(stc.getTestCase().getPackageName() + "." + stc.getTestCase().getName() + " " + stc.getSummarizedCoverage().size());
+            System.out.println(stc.getTestCase().getPackageName() + "." + stc.getTestCase().getName() + " " + stc.getSummarizedCoverage().size());
         }
 	}
 }
