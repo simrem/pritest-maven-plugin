@@ -61,6 +61,11 @@ public class MethodCoverageVisitor extends VoidVisitorAdapter<ClassCover> {
 
         if (n.getBody() != null) {
         	Map<String, ReferenceType> localVariables = extractLocalVariables(n);
+
+            for (ReferenceType parameter : parameters) {
+                localVariables.put(parameter.getVariableName(), parameter);
+            }
+
         	Map<String, ReferenceType> fieldVariables = retrieveFieldVariablesOfCurrentClass(arg);
         	
             MethodCallVisitor mcv = new MethodCallVisitor(localVariables, fieldVariables);
