@@ -3,15 +3,25 @@ package no.citrus.localprioritization;
 import japa.parser.ParseException;
 import no.citrus.localprioritization.algorithm.MethodCoverageAlgorithm;
 import no.citrus.localprioritization.model.SummarizedTestCase;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.SimpleLayout;
 
 import java.io.IOException;
 import java.util.List;
 
 public class TotalMethodCoverage extends MethodCoverage {
 
+    private static Logger logger = Logger.getLogger(TotalMethodCoverage.class);
+
     public TotalMethodCoverage(String pathToProjectSource, String pathToTestSuite)
 			throws ParseException, IOException {
         super();
+
+        try {
+            logger.addAppender(new FileAppender(new SimpleLayout(), "TotalMethodCoverage.log"));
+        } catch (IOException e1) {
+        }
 
         prioritizeTestCases(pathToProjectSource, pathToTestSuite);
 	}
@@ -25,7 +35,11 @@ public class TotalMethodCoverage extends MethodCoverage {
 
         for (SummarizedTestCase stc : prioritizedTestCases) {
             addTestCase(stc);
-            System.out.println(stc.getTestCase().getPackageName() + "." + stc.getTestCase().getName() + " " + stc.getSummarizedCoverage().size());
+            logTestCase(stc);
         }
+    }
+
+    private void logTestCase(SummarizedTestCase stc) {
+        logger.info(stc.getTestCase().getPackageName() + "." + stc.getTestCase().getName() + " " + stc.getSummarizedCoverage().size());
     }
 }

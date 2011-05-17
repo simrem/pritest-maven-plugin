@@ -23,7 +23,6 @@ public class PriorityListTest {
 			this.list = list;
 		}
 
-		@Override
 		public List<String> getClassList() throws Exception, JSONException,
 				ConnectException {
 			return this.list;
