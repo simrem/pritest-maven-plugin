@@ -28,9 +28,13 @@ public class MethodCoverageProvider {
 		MethodCoverageVisitor mcv;
 		classCovers = new HashMap<String, ClassCover>();
 		for(CompilationUnit cu : compilationUnits){
-			mcv = new MethodCoverageVisitor(classTypes);
-			cu.accept(mcv, null);
-			classCovers.putAll(mcv.getCoveredClasses());
+            try {
+                mcv = new MethodCoverageVisitor(classTypes);
+                cu.accept(mcv, null);
+                classCovers.putAll(mcv.getCoveredClasses());
+            } catch (Exception e) {
+                //  TODO: should log errors for later analysis
+            }
 		}
 	}
 

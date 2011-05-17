@@ -22,9 +22,13 @@ public class ClassTypeProvider {
 	private void retrieveClassTypes() {
 		CompilationUnitVisitor cuv;
 		for(CompilationUnit cu : compilationUnits){
-			cuv = new CompilationUnitVisitor();
-			cu.accept(cuv, null);
-			classTypeMap.putAll(cuv.getTypesAsMapItems());
+            try {
+                cuv = new CompilationUnitVisitor();
+                cu.accept(cuv, null);
+                classTypeMap.putAll(cuv.getTypesAsMapItems());
+            } catch (Exception e) {
+                //  TODO: should log errors for later analysis
+            }
 		}
 	}
 
