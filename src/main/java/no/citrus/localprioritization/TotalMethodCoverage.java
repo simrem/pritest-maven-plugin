@@ -19,7 +19,7 @@ public class TotalMethodCoverage extends MethodCoverage {
         super();
 
         try {
-            logger.addAppender(new FileAppender(new SimpleLayout(), "TotalMethodCoverage.log"));
+            logger.addAppender(new FileAppender(new SimpleLayout(), "logs/TotalMethodCoverage.log"));
         } catch (IOException e1) {
         }
 

@@ -23,7 +23,7 @@ public class ClassTypeProvider {
 		this.compilationUnits = compilationUnits;
 
         try {
-            logger.addAppender(new FileAppender(new SimpleLayout(), "ClassTypeProvider.log"));
+            logger.addAppender(new FileAppender(new SimpleLayout(), "logs/ClassTypeProvider.log"));
         } catch (IOException e1) {
         }
 

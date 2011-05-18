@@ -27,7 +27,7 @@ public class MethodCoverageProvider {
 		this.compilationUnits = compilationUnits;
 
         try {
-            logger.addAppender(new FileAppender(new SimpleLayout(), "MethodCoverageProvider.log"));
+            logger.addAppender(new FileAppender(new SimpleLayout(), "logs/MethodCoverageProvider.log"));
         } catch (IOException e1) {
         }
 
@@ -43,10 +43,11 @@ public class MethodCoverageProvider {
                 cu.accept(mcv, null);
                 classCovers.putAll(mcv.getCoveredClasses());
             } catch (Exception e) {
-                logger.warn("Unsupported java syntax");
-                for (StackTraceElement stackTraceElement : e.getStackTrace()) {
-                    logger.warn(stackTraceElement.toString());
-                }
+//                logger.warn("Unsupported java syntax");
+                logger.warn("Unsupported java syntax", e);
+//                for (StackTraceElement stackTraceElement : e.getStackTrace()) {
+//                    logger.warn(stackTraceElement.toString());
+//                }
             }
 		}
 	}
