@@ -14,7 +14,10 @@ public class CompilationUnitProvider {
 	public static List<CompilationUnit> getCompilationUnits(List<File> files) throws ParseException, IOException {
 		List<CompilationUnit> compilationUnits = new ArrayList<CompilationUnit>();
 		for(File f : files){
-			compilationUnits.add(JavaParser.parse(f));
+			try {
+				compilationUnits.add(JavaParser.parse(f));
+			} catch (Exception e) {
+			}
 		}
 		return compilationUnits;
 	}
