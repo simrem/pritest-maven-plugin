@@ -33,6 +33,7 @@ public class TotalMethodCoverage extends MethodCoverage {
     	
         List<SummarizedTestCase> prioritizedTestCases = MethodCoverageAlgorithm.totalMethodCoverage(getTestSuiteMethodCoverage(), getSourceMethodCoverage());
 
+        logger.info("Method calls found:");
         for (SummarizedTestCase stc : prioritizedTestCases) {
             addTestCase(stc);
             logTestCase(stc);

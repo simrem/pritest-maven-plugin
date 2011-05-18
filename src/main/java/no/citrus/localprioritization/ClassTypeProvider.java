@@ -39,10 +39,7 @@ public class ClassTypeProvider {
                 classTypeMap.putAll(cuv.getTypesAsMapItems());
                 
             } catch (Exception e) {
-                logger.warn("Unsupported java syntax");
-                for (StackTraceElement stackTraceElement : e.getStackTrace()) {
-                    logger.warn(stackTraceElement.toString());
-                }
+            	logger.warn("Unsupported java syntax", e);
             }
 		}
 	}
