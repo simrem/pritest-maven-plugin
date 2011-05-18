@@ -15,7 +15,7 @@ public class CompilationUnitProvider {
 		List<CompilationUnit> compilationUnits = new ArrayList<CompilationUnit>();
 		for(File f : files){
 			try {
-				compilationUnits.add(JavaParser.parse(f));
+				compilationUnits.add(JavaParser.parse(f, "UTF-8"));
 			} catch (Exception e) {
 			}
 		}
