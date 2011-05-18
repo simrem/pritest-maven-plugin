@@ -43,6 +43,7 @@ import com.sun.jersey.api.client.ClientHandlerException;
 
 /**
  * @goal runtest
+ * @requiresDependencyResolution test
  */
 public class RunnerMojo extends AbstractMojo {
     /**

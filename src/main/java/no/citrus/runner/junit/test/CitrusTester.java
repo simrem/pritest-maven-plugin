@@ -11,6 +11,7 @@ import no.citrus.runner.junit.reporter.Reporter;
 
 import org.apache.maven.plugin.logging.Log;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
@@ -46,13 +47,19 @@ public class CitrusTester extends RunListener {
 	        	long time = System.currentTimeMillis();
 	            
 	            Class<?> aClass = this.classLoader.loadClass(file);
+	            
+	            boolean isRunWithPresent = false;
+	            if (aClass.isAnnotationPresent(RunWith.class)) {
+	            	isRunWithPresent = true;
+	            }
+	            
 	            boolean isJunit4Present = false;
 	            for(Method m : aClass.getDeclaredMethods()){
 	            	if(m.isAnnotationPresent(Test.class)){
 	            		isJunit4Present = true;
 	            	}
 	            }
-	            if(isJunit4Present){
+	            if(isJunit4Present && !isRunWithPresent){
 	            	log.info("Running test: " + file);
 	            	BlockJUnit4ClassRunner runner = new BlockJUnit4ClassRunner(aClass);
 	            	runner.run(runnerNotifier);
@@ -61,7 +68,7 @@ public class CitrusTester extends RunListener {
 	                reporter.addMeasure(measure);
 	            }
 	            else{
-	            	log.warn("Not junit4 class: " + file);
+	            	log.warn("Not junit4 class or RunWith present: " + file);
 	            }
 			} catch (ClassNotFoundException e) {
 				log.debug(file + " not found");
