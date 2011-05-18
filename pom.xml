@@ -15,20 +15,24 @@
         <mockito.version>1.8.5</mockito.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
+
     <repositories>
-  	  <repository>
-	      <id>javaparser</id>
-	      <name>JavaParser Repository</name>
-	      <url>http://javaparser.googlecode.com/svn/maven2</url>
-	      <snapshots>
-	          <enabled>false</enabled>
-	      </snapshots>
-	  </repository>
-          <repository>
-              <id>java</id>
-              <url>http://download.java.net/maven/2</url>
-          </repository>
+      <repository>
+        <id>javaparser</id>
+        <name>JavaParser Repository</name>
+        <url>http://javaparser.googlecode.com/svn/maven2</url>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+      </repository>
+      <repository>
+        <id>jgit-repository</id>
+        <url>http://download.eclipse.org/jgit/maven</url>
+      </repository>
+      <repository>
+          <id>java</id>
+          <url>http://download.java.net/maven/2</url>
+      </repository>
     </repositories>
 
     <dependencies>
@@ -78,9 +82,9 @@
             <version>1.0.8</version>
         </dependency>
         <dependency>
-            <groupId>org.eclipse</groupId>
-            <artifactId>jgit</artifactId>
-            <version>0.12.0.201103291411</version>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>0.12.1</version>
             <type>jar</type>
         </dependency>
         <dependency>
