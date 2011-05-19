@@ -16,6 +16,7 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.JUnit4;
 import org.junit.runners.model.InitializationError;
 
 public class CitrusTester extends RunListener {
@@ -61,7 +62,8 @@ public class CitrusTester extends RunListener {
 	            }
 	            if(isJunit4Present && !isRunWithPresent){
 	            	log.info("Running test: " + file);
-	            	BlockJUnit4ClassRunner runner = new BlockJUnit4ClassRunner(aClass);
+	            	JUnit4 runner = new JUnit4(aClass);
+//	            	BlockJUnit4ClassRunner runner = new BlockJUnit4ClassRunner(aClass);
 	            	runner.run(runnerNotifier);
 	            	
 	            	measure.setValue(System.currentTimeMillis() - time);
