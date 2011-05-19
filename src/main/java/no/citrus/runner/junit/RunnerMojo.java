@@ -213,19 +213,24 @@ public class RunnerMojo extends AbstractMojo {
     
 
     private void addDependenciesToSystemClassPath() {
-    	TreeSet<String> dependencies = new TreeSet<String>();
-    	for (String cpElement : compileClasspathElements) {
-    		dependencies.add(cpElement);
-    	}
+//    	TreeSet<String> dependencies = new TreeSet<String>();
+    	List<String> dependencies = new ArrayList<String>();
     	for (String cpElement : testClasspathElements) {
-    		dependencies.add(cpElement);
+    		if (!dependencies.contains(cpElement)) {
+    			dependencies.add(cpElement);
+    		}
+    	}
+    	for (String cpElement : compileClasspathElements) {
+    		if (!dependencies.contains(cpElement)) {
+    			dependencies.add(cpElement);
+    		}
     	}
     	
-    	String systemClassPath = System.getProperty("java.class.path");
-    	String[] systemDependencies = systemClassPath.split(File.pathSeparator);
-    	for (String dep : systemDependencies) {
-    		dependencies.add(dep);
-    	}
+//    	String systemClassPath = System.getProperty("java.class.path");
+//    	String[] systemDependencies = systemClassPath.split(File.pathSeparator);
+//    	for (String dep : systemDependencies) {
+//    		dependencies.add(dep);
+//    	}
     	
     	StringBuffer sb = new StringBuffer();
     	//sb.append(System.getProperty("java.class.path")).append(File.pathSeparatorChar);
