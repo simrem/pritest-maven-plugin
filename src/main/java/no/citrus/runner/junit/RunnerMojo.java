@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -146,37 +147,20 @@ public class RunnerMojo extends AbstractMojo {
     private List<URL> citrusClassPaths;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-//    	getLog().info("CLASSPATH: " + System.getProperty("java.class.path"));
-    	
     	citrusClassPaths = new ArrayList<URL>();
     	addFileToClassPath(testOutputDirectory);
     	addFileToClassPath(classesDirectory);
+    	
+    	addDependenciesToSystemClassPath();
     	
 //    	getLog().info("getArtifacts");
     	for (Artifact artifact : (Set<Artifact>) mavenProject.getArtifacts()) {
 //    		getLog().info(artifact.getFile().getAbsolutePath());
     		addFileToClassPath(artifact.getFile());
     	}
-    	
-//    	getLog().info("compileClasspathElements");
-    	for (String cpElement : compileClasspathElements) {
-    		File cpFile = new File(cpElement);
-    		if (!cpFile.isDirectory()) {
-//    			getLog().info(cpFile.getAbsolutePath());
-    			addFileToClassPath(cpFile);
-    		}
-    	}
-    	
-//    	getLog().info("testClasspathElements");
-    	for (String cpElement : testClasspathElements) {
-    		File cpFile = new File(cpElement);
-    		if (!cpFile.isDirectory()) {
-//    			getLog().info(cpFile.getAbsolutePath());
-    			addFileToClassPath(cpFile);
-    		}
-    	}
 
     	URLClassLoader classLoader = new URLClassLoader(citrusClassPaths.toArray(new URL[]{}), this.getClass().getClassLoader());
+    	
     	Reporter reporter = new Reporter(reportUrl, new ArrayList<Measure>());
 
     	getLog().info(String.format("Technique Number = %d", techniqueNumber));
@@ -227,7 +211,24 @@ public class RunnerMojo extends AbstractMojo {
     }
     
 
-    private List<String> getOptimizedPriorityList(List<Measure> list) {
+    private void addDependenciesToSystemClassPath() {
+    	getLog().info("CLASSPATH: " + System.getProperty("java.class.path"));
+    	
+    	StringBuffer sb = new StringBuffer();
+    	sb.append(System.getProperty("java.class.path")).append(File.pathSeparatorChar);
+    	for (String cpElement : compileClasspathElements) {
+    		sb.append(cpElement).append(File.pathSeparatorChar);
+    	}
+    	for (String cpElement : testClasspathElements) {
+    		sb.append(cpElement).append(File.pathSeparatorChar);
+    	}
+    	System.setProperty("java.class.path", sb.toString());
+    	
+    	getLog().info("CLASSPATH: " + System.getProperty("java.class.path"));
+	}
+
+
+	private List<String> getOptimizedPriorityList(List<Measure> list) {
 		Collections.sort(list);
 		Collections.reverse(list);
 		List<String> optimizedList = new ArrayList<String>();
