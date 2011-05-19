@@ -146,11 +146,34 @@ public class RunnerMojo extends AbstractMojo {
     private List<URL> citrusClassPaths;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
+//    	getLog().info("CLASSPATH: " + System.getProperty("java.class.path"));
+    	
     	citrusClassPaths = new ArrayList<URL>();
     	addFileToClassPath(testOutputDirectory);
     	addFileToClassPath(classesDirectory);
+    	
+//    	getLog().info("getArtifacts");
     	for (Artifact artifact : (Set<Artifact>) mavenProject.getArtifacts()) {
+//    		getLog().info(artifact.getFile().getAbsolutePath());
     		addFileToClassPath(artifact.getFile());
+    	}
+    	
+//    	getLog().info("compileClasspathElements");
+    	for (String cpElement : compileClasspathElements) {
+    		File cpFile = new File(cpElement);
+    		if (!cpFile.isDirectory()) {
+//    			getLog().info(cpFile.getAbsolutePath());
+    			addFileToClassPath(cpFile);
+    		}
+    	}
+    	
+//    	getLog().info("testClasspathElements");
+    	for (String cpElement : testClasspathElements) {
+    		File cpFile = new File(cpElement);
+    		if (!cpFile.isDirectory()) {
+//    			getLog().info(cpFile.getAbsolutePath());
+    			addFileToClassPath(cpFile);
+    		}
     	}
 
     	URLClassLoader classLoader = new URLClassLoader(citrusClassPaths.toArray(new URL[]{}), this.getClass().getClassLoader());
