@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.xml.bind.JAXBException;
 
@@ -212,16 +213,26 @@ public class RunnerMojo extends AbstractMojo {
     
 
     private void addDependenciesToSystemClassPath() {
-    	getLog().info("CLASSPATH: " + System.getProperty("java.class.path"));
-    	
-    	StringBuffer sb = new StringBuffer();
-    	sb.append(System.getProperty("java.class.path")).append(File.pathSeparatorChar);
+    	TreeSet<String> dependencies = new TreeSet<String>();
     	for (String cpElement : compileClasspathElements) {
-    		sb.append(cpElement).append(File.pathSeparatorChar);
+    		dependencies.add(cpElement);
     	}
     	for (String cpElement : testClasspathElements) {
+    		dependencies.add(cpElement);
+    	}
+    	
+    	String systemClassPath = System.getProperty("java.class.path");
+    	String[] systemDependencies = systemClassPath.split(File.pathSeparator);
+    	for (String dep : systemDependencies) {
+    		dependencies.add(dep);
+    	}
+    	
+    	StringBuffer sb = new StringBuffer();
+    	//sb.append(System.getProperty("java.class.path")).append(File.pathSeparatorChar);
+    	for (String cpElement : dependencies) {
     		sb.append(cpElement).append(File.pathSeparatorChar);
     	}
+    	
     	System.setProperty("java.class.path", sb.toString());
     	
     	getLog().info("CLASSPATH: " + System.getProperty("java.class.path"));
