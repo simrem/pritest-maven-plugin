@@ -82,7 +82,10 @@ public class CitrusTester extends RunListener {
 	@Override
 	public void testFailure(Failure failure) throws Exception {
 		super.testFailure(failure);
-		log.warn("Test failed: " + failure.getTestHeader() + failure.getMessage());
+		log.warn("Test failed: " + failure.getTestHeader() + failure.getMessage() + "\n"
+				+ failure.getDescription() + "\n"
+				+ failure.getTrace() + "\n"
+				+ failure.getException());
 		
 		Measure failedMeasure = new Measure();
 		failedMeasure.setFailed(true);
