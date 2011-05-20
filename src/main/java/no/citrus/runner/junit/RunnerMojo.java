@@ -2,21 +2,16 @@ package no.citrus.runner.junit;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.xml.bind.JAXBException;
 
@@ -38,7 +33,6 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.jettison.json.JSONException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
-import org.junit.runners.model.InitializationError;
 
 import com.sun.jersey.api.client.ClientHandlerException;
 
@@ -154,9 +148,7 @@ public class RunnerMojo extends AbstractMojo {
     	
     	addDependenciesToSystemClassPath();
     	
-//    	getLog().info("getArtifacts");
     	for (Artifact artifact : (Set<Artifact>) mavenProject.getArtifacts()) {
-//    		getLog().info(artifact.getFile().getAbsolutePath());
     		addFileToClassPath(artifact.getFile());
     	}
 
@@ -213,27 +205,16 @@ public class RunnerMojo extends AbstractMojo {
     
 
     private void addDependenciesToSystemClassPath() {
-//    	TreeSet<String> dependencies = new TreeSet<String>();
     	List<String> dependencies = new ArrayList<String>();
-    	for (String cpElement : testClasspathElements) {
-    		if (!dependencies.contains(cpElement)) {
-    			dependencies.add(cpElement);
-    		}
-    	}
-    	for (String cpElement : compileClasspathElements) {
-    		if (!dependencies.contains(cpElement)) {
-    			dependencies.add(cpElement);
-    		}
-    	}
     	
-//    	String systemClassPath = System.getProperty("java.class.path");
-//    	String[] systemDependencies = systemClassPath.split(File.pathSeparator);
-//    	for (String dep : systemDependencies) {
-//    		dependencies.add(dep);
-//    	}
+    	addDependenciesToList(dependencies, testClasspathElements);
+    	addDependenciesToList(dependencies, compileClasspathElements);
     	
+    	addDependenciesToSystemClassPath(dependencies);
+	}
+    
+    private void addDependenciesToSystemClassPath(List<String> dependencies) {
     	StringBuffer sb = new StringBuffer();
-    	//sb.append(System.getProperty("java.class.path")).append(File.pathSeparatorChar);
     	for (String cpElement : dependencies) {
     		sb.append(cpElement).append(File.pathSeparatorChar);
     	}
@@ -242,7 +223,14 @@ public class RunnerMojo extends AbstractMojo {
     	
     	getLog().info("CLASSPATH: " + System.getProperty("java.class.path"));
 	}
-
+    
+    private void addDependenciesToList(List<String> dependencies, List<String> classPathElements) {
+		for (String cpElement : classPathElements) {
+    		if (!dependencies.contains(cpElement)) {
+    			dependencies.add(cpElement);
+    		}
+    	}
+	}
 
 	private List<String> getOptimizedPriorityList(List<Measure> list) {
 		Collections.sort(list);
