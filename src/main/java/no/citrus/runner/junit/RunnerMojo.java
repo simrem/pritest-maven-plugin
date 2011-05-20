@@ -202,7 +202,6 @@ public class RunnerMojo extends AbstractMojo {
     		throw new org.apache.maven.plugin.MojoFailureException("Has failing tests");
     	}
     }
-    
 
     private void addDependenciesToSystemClassPath() {
     	List<String> dependencies = new ArrayList<String>();
@@ -210,10 +209,24 @@ public class RunnerMojo extends AbstractMojo {
     	addDependenciesToList(dependencies, testClasspathElements);
     	addDependenciesToList(dependencies, compileClasspathElements);
     	
+    	addWebInfClassesToList(dependencies);
+    	
     	addDependenciesToSystemClassPath(dependencies);
 	}
     
-    private void addDependenciesToSystemClassPath(List<String> dependencies) {
+    private void addWebInfClassesToList(List<String> dependencies) {
+		if (mavenProject.getPackaging().equals("war")) {
+			String webInfClasses = "target/" + mavenProject.getArtifactId() + "-" + mavenProject.getVersion() + "/WEB-INF/classes/";
+			File dependency = new File(webInfClasses);
+			if (dependency.exists()) {
+				getLog().info("Adds WEB-INF: " + dependency.getAbsolutePath());
+				dependencies.add(dependency.getAbsolutePath());
+			}
+		}
+	}
+
+
+	private void addDependenciesToSystemClassPath(List<String> dependencies) {
     	StringBuffer sb = new StringBuffer();
     	for (String cpElement : dependencies) {
     		sb.append(cpElement).append(File.pathSeparatorChar);
