@@ -152,7 +152,20 @@ public class RunnerMojo extends AbstractMojo {
     	addFileToClassPath(testOutputDirectory);
     	addFileToClassPath(classesDirectory);
     	
-    	addDependenciesToSystemClassPath();
+    	List<String> dependencies = collectDependencies();
+    	addDependenciesToSystemClassPath(dependencies);
+    	
+    	AppendableClassLoader classLoader = new AppendableClassLoader(citrusClassPaths.toArray(new URL[]{}), this.getClass().getClassLoader());
+    	for (String dependency : dependencies) {
+    		File dep = new File(dependency);
+    		try {
+				classLoader.addURL(dep.toURI().toURL());
+			} catch (MalformedURLException e) {
+				getLog().warn("Malformed classpath URL", e);
+			}
+    	}
+    	
+    	Thread.currentThread().setContextClassLoader(classLoader);
     	
 //    	getLog().info("getArtifacts");
     	for (Artifact artifact : (Set<Artifact>) mavenProject.getArtifacts()) {
@@ -160,7 +173,7 @@ public class RunnerMojo extends AbstractMojo {
     		addFileToClassPath(artifact.getFile());
     	}
 
-    	URLClassLoader classLoader = new URLClassLoader(citrusClassPaths.toArray(new URL[]{}), this.getClass().getClassLoader());
+//    	URLClassLoader classLoader = new URLClassLoader(citrusClassPaths.toArray(new URL[]{}), this.getClass().getClassLoader());
     	
     	Reporter reporter = new Reporter(reportUrl, new ArrayList<Measure>());
 
@@ -211,29 +224,25 @@ public class RunnerMojo extends AbstractMojo {
     	}
     }
     
-
-    private void addDependenciesToSystemClassPath() {
-//    	TreeSet<String> dependencies = new TreeSet<String>();
+    private List<String> collectDependencies() {
     	List<String> dependencies = new ArrayList<String>();
-    	for (String cpElement : testClasspathElements) {
+    	
+    	addDependenciesToList(dependencies, testClasspathElements);
+    	addDependenciesToList(dependencies, compileClasspathElements);
+    	
+    	return dependencies;
+    }
+
+	private void addDependenciesToList(List<String> dependencies, List<String> classPathElements) {
+		for (String cpElement : classPathElements) {
     		if (!dependencies.contains(cpElement)) {
     			dependencies.add(cpElement);
     		}
     	}
-    	for (String cpElement : compileClasspathElements) {
-    		if (!dependencies.contains(cpElement)) {
-    			dependencies.add(cpElement);
-    		}
-    	}
-    	
-//    	String systemClassPath = System.getProperty("java.class.path");
-//    	String[] systemDependencies = systemClassPath.split(File.pathSeparator);
-//    	for (String dep : systemDependencies) {
-//    		dependencies.add(dep);
-//    	}
-    	
+	}
+
+    private void addDependenciesToSystemClassPath(List<String> dependencies) {
     	StringBuffer sb = new StringBuffer();
-    	//sb.append(System.getProperty("java.class.path")).append(File.pathSeparatorChar);
     	for (String cpElement : dependencies) {
     		sb.append(cpElement).append(File.pathSeparatorChar);
     	}
