@@ -1,9 +1,5 @@
 package no.citrus.runner.junit.reporter;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 import no.citrus.restapi.model.Measure;
 import no.citrus.restapi.model.MeasureList;

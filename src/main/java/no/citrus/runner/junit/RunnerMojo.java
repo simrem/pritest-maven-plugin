@@ -36,6 +36,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.jettison.json.JSONException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
+import org.jfree.data.xy.XYSeriesCollection;
 import org.junit.runners.model.InitializationError;
 
 import com.sun.jersey.api.client.ClientHandlerException;
@@ -215,12 +216,17 @@ public class RunnerMojo extends AbstractMojo {
 
 
 	private void priorityListsToAPFD(Map<Integer, List<String>> priorityLists, List<Measure> measureList) throws IOException {
+		XYSeriesCollection plotdata = new XYSeriesCollection();
 		for (Integer localTechniqueNumber : priorityLists.keySet()){
 			List<String> localPriorityList = priorityLists.get(localTechniqueNumber);
 			List<Measure> localMeasureList = APFDHelper.sortMeasureListBySource(localPriorityList, measureList);
+			
+			plotdata.addSeries(APFDHelper.getXYSeries(localTechniqueNumber, localMeasureList));
+			
 			APFD apfd = new APFD(new MeasureList(localMeasureList));
 			APFDHelper.outputAPFDToFile(apfd, localTechniqueNumber);
 		}
+		APFDHelper.outputAPFDGraphToFile(plotdata);
 	}
 
 	private void collectPriorityLists(Integer[] techniqueArray, Map<Integer, List<String>> priorityLists) throws NoWorkTreeException, JSONException, IOException, Exception {
