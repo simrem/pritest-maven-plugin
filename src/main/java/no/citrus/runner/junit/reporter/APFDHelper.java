@@ -56,6 +56,7 @@ public class APFDHelper {
 
 	public static XYSeries getXYSeries(Integer localTechniqueNumber, List<Measure> localMeasureList) {
 		XYSeries result = new XYSeries(localTechniqueNumber);
+		result.add(0.0, 0.0);
 		int totalNumberOfFaults = 0;
 		int numberOfTestcases = localMeasureList.size();
 		List<Integer> numberOfFaultsInTestCases = new ArrayList<Integer>();
@@ -66,15 +67,10 @@ public class APFDHelper {
 		double covered = 0.0;
 		for(int testcaseOrder = 0; testcaseOrder < numberOfTestcases; testcaseOrder++) {
 			covered += (double)numberOfFaultsInTestCases.get(testcaseOrder) / (double)totalNumberOfFaults;
-			System.out.println((double)(testcaseOrder + 1) / (double)numberOfTestcases);
-			System.out.println((double)(numberOfFaultsInTestCases.get(testcaseOrder) / totalNumberOfFaults));
-			result.add(0.0, 0.0);
 			result.add(
 					(double)(testcaseOrder + 1) / (double)numberOfTestcases, 
 					covered);
 		}
-		
-		
 		return result;
 	}
 
@@ -82,9 +78,31 @@ public class APFDHelper {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 		String directory = "apfd/graphs/";
 		String filename = sdf.format(new Date()) + ".png";
-		File output = new File(filename);
+		
+		File dir = new File(directory);
+		if(!dir.exists()){
+			dir.mkdirs();
+		}
+		
+		File output = new File(directory + filename);
 		
 		APFDGraph graph = new APFDGraph(plotdata, output);
+		graph.saveAsPNG();
+		
+	}
+
+	public static void outputSingleAPFDGraphToFile(XYSeries localPlotdata,
+			Integer techniqueNumber) throws IOException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+		String directory = "apfd/" + techniqueNumber + "/";
+		String filename = sdf.format(new Date()) + ".png";
+//		
+//		File dir = new File(directory);
+//		if(!dir.exists()){
+//			dir.mkdirs();
+//		}
+		File file = new File(directory + filename);
+		APFDGraph graph = new APFDGraph(new XYSeriesCollection(localPlotdata), file);
 		graph.saveAsPNG();
 		
 	}

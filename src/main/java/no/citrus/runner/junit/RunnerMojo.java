@@ -33,6 +33,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.jettison.json.JSONException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
+import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.junit.runners.model.InitializationError;
 
@@ -187,6 +188,8 @@ public class RunnerMojo extends AbstractMojo {
     			new CitrusTester(classLoader, priorityList, getLog(), reporter).execute();
     			APFD apfd = new APFD(reporter.getMeasureList());
     			APFDHelper.outputAPFDToFile(apfd, techniqueNumber);
+    			XYSeries plotData = APFDHelper.getXYSeries(techniqueNumber, reporter.getMeasureList().getList());
+    			APFDHelper.outputSingleAPFDGraphToFile(plotData, techniqueNumber);
     		} catch (Exception e2) {
     			e2.printStackTrace();
     		}
@@ -263,11 +266,12 @@ public class RunnerMojo extends AbstractMojo {
 		for (Integer localTechniqueNumber : priorityLists.keySet()){
 			List<String> localPriorityList = priorityLists.get(localTechniqueNumber);
 			List<Measure> localMeasureList = APFDHelper.sortMeasureListBySource(localPriorityList, measureList);
-			
-			plotdata.addSeries(APFDHelper.getXYSeries(localTechniqueNumber, localMeasureList));
+			XYSeries localPlotdata = APFDHelper.getXYSeries(localTechniqueNumber, localMeasureList);
+			plotdata.addSeries(localPlotdata);
 			
 			APFD apfd = new APFD(new MeasureList(localMeasureList));
 			APFDHelper.outputAPFDToFile(apfd, localTechniqueNumber);
+			APFDHelper.outputSingleAPFDGraphToFile(localPlotdata, localTechniqueNumber);
 		}
 		APFDHelper.outputAPFDGraphToFile(plotdata);
 	}
