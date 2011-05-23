@@ -11,10 +11,12 @@ import no.citrus.runner.junit.reporter.Reporter;
 
 import org.apache.maven.plugin.logging.Log;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
+import org.junit.runners.JUnit4;
 import org.junit.runners.model.InitializationError;
 
 public class CitrusTester extends RunListener {
@@ -46,22 +48,29 @@ public class CitrusTester extends RunListener {
 	        	long time = System.currentTimeMillis();
 	            
 	            Class<?> aClass = this.classLoader.loadClass(file);
+	            
+	            boolean isRunWithPresent = false;
+	            if (aClass.isAnnotationPresent(RunWith.class)) {
+	            	isRunWithPresent = true;
+	            }
+	            
 	            boolean isJunit4Present = false;
 	            for(Method m : aClass.getDeclaredMethods()){
 	            	if(m.isAnnotationPresent(Test.class)){
 	            		isJunit4Present = true;
 	            	}
 	            }
-	            if(isJunit4Present){
+	            if(isJunit4Present && !isRunWithPresent){
 	            	log.info("Running test: " + file);
-	            	BlockJUnit4ClassRunner runner = new BlockJUnit4ClassRunner(aClass);
+	            	JUnit4 runner = new JUnit4(aClass);
+//	            	BlockJUnit4ClassRunner runner = new BlockJUnit4ClassRunner(aClass);
 	            	runner.run(runnerNotifier);
 	            	
 	            	measure.setValue(System.currentTimeMillis() - time);
 	                reporter.addMeasure(measure);
 	            }
 	            else{
-	            	log.warn("Not junit4 class: " + file);
+	            	log.warn("Not junit4 class or RunWith present: " + file);
 	            }
 			} catch (ClassNotFoundException e) {
 				log.debug(file + " not found");
@@ -73,7 +82,10 @@ public class CitrusTester extends RunListener {
 	@Override
 	public void testFailure(Failure failure) throws Exception {
 		super.testFailure(failure);
-		log.warn("Test failed: " + failure.getTestHeader() + failure.getMessage());
+		log.warn("Test failed: " + failure.getTestHeader() + failure.getMessage() + "\n"
+				+ failure.getDescription() + "\n"
+				+ failure.getTrace() + "\n"
+				+ failure.getException());
 		
 		Measure failedMeasure = new Measure();
 		failedMeasure.setFailed(true);

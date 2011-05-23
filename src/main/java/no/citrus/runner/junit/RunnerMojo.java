@@ -2,15 +2,12 @@ package no.citrus.runner.junit;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +41,7 @@ import com.sun.jersey.api.client.ClientHandlerException;
 
 /**
  * @goal runtest
+ * @requiresDependencyResolution test
  */
 public class RunnerMojo extends AbstractMojo {
     /**
@@ -149,11 +147,15 @@ public class RunnerMojo extends AbstractMojo {
     	citrusClassPaths = new ArrayList<URL>();
     	addFileToClassPath(testOutputDirectory);
     	addFileToClassPath(classesDirectory);
+    	
+    	addDependenciesToSystemClassPath();
+    	
     	for (Artifact artifact : (Set<Artifact>) mavenProject.getArtifacts()) {
     		addFileToClassPath(artifact.getFile());
     	}
 
     	URLClassLoader classLoader = new URLClassLoader(citrusClassPaths.toArray(new URL[]{}), this.getClass().getClassLoader());
+    	
     	Reporter reporter = new Reporter(reportUrl, new ArrayList<Measure>());
 
     	getLog().info(String.format("Technique Number = %d", techniqueNumber));
@@ -202,9 +204,50 @@ public class RunnerMojo extends AbstractMojo {
     		throw new org.apache.maven.plugin.MojoFailureException("Has failing tests");
     	}
     }
-    
 
-    private List<String> getOptimizedPriorityList(List<Measure> list) {
+    private void addDependenciesToSystemClassPath() {
+    	List<String> dependencies = new ArrayList<String>();
+    	
+    	addDependenciesToList(dependencies, testClasspathElements);
+    	addDependenciesToList(dependencies, compileClasspathElements);
+    	
+    	addWebInfClassesToList(dependencies);
+    	
+    	addDependenciesToSystemClassPath(dependencies);
+	}
+    
+    private void addWebInfClassesToList(List<String> dependencies) {
+		if (mavenProject.getPackaging().equals("war")) {
+			String webInfClasses = "target/" + mavenProject.getArtifactId() + "-" + mavenProject.getVersion() + "/WEB-INF/classes/";
+			File dependency = new File(webInfClasses);
+			if (dependency.exists()) {
+				getLog().info("Adds WEB-INF: " + dependency.getAbsolutePath());
+				dependencies.add(dependency.getAbsolutePath());
+			}
+		}
+	}
+
+
+	private void addDependenciesToSystemClassPath(List<String> dependencies) {
+    	StringBuffer sb = new StringBuffer();
+    	for (String cpElement : dependencies) {
+    		sb.append(cpElement).append(File.pathSeparatorChar);
+    	}
+    	
+    	System.setProperty("java.class.path", sb.toString());
+    	
+    	getLog().info("CLASSPATH: " + System.getProperty("java.class.path"));
+	}
+    
+    private void addDependenciesToList(List<String> dependencies, List<String> classPathElements) {
+		for (String cpElement : classPathElements) {
+    		if (!dependencies.contains(cpElement)) {
+    			dependencies.add(cpElement);
+    		}
+    	}
+	}
+
+	private List<String> getOptimizedPriorityList(List<Measure> list) {
 		Collections.sort(list);
 		Collections.reverse(list);
 		List<String> optimizedList = new ArrayList<String>();
