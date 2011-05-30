@@ -2,21 +2,16 @@ package no.citrus.runner.junit;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.xml.bind.JAXBException;
 
@@ -38,6 +33,8 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.jettison.json.JSONException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import org.junit.runners.model.InitializationError;
 
 import com.sun.jersey.api.client.ClientHandlerException;
@@ -165,11 +162,10 @@ public class RunnerMojo extends AbstractMojo {
 			}
     	}
     	
+    	getLog().info("Using experimental class loader");
     	Thread.currentThread().setContextClassLoader(classLoader);
     	
-//    	getLog().info("getArtifacts");
     	for (Artifact artifact : (Set<Artifact>) mavenProject.getArtifacts()) {
-//    		getLog().info(artifact.getFile().getAbsolutePath());
     		addFileToClassPath(artifact.getFile());
     	}
 
@@ -206,6 +202,8 @@ public class RunnerMojo extends AbstractMojo {
     			new CitrusTester(classLoader, priorityList, getLog(), reporter).execute();
     			APFD apfd = new APFD(reporter.getMeasureList());
     			APFDHelper.outputAPFDToFile(apfd, techniqueNumber);
+    			XYSeries plotData = APFDHelper.getXYSeries(techniqueNumber, reporter.getMeasureList().getList());
+    			APFDHelper.outputSingleAPFDGraphToFile(plotData, techniqueNumber);
     		} catch (Exception e2) {
     			e2.printStackTrace();
     		}
@@ -223,15 +221,28 @@ public class RunnerMojo extends AbstractMojo {
     		throw new org.apache.maven.plugin.MojoFailureException("Has failing tests");
     	}
     }
-    
+
     private List<String> collectDependencies() {
     	List<String> dependencies = new ArrayList<String>();
     	
     	addDependenciesToList(dependencies, testClasspathElements);
     	addDependenciesToList(dependencies, compileClasspathElements);
     	
+    	addWebInfClassesToList(dependencies);
+    	
     	return dependencies;
     }
+
+//    private void addDependenciesToSystemClassPath() {
+//    	List<String> dependencies = new ArrayList<String>();
+//    	
+//    	addDependenciesToList(dependencies, testClasspathElements);
+//    	addDependenciesToList(dependencies, compileClasspathElements);
+//    	
+//    	addWebInfClassesToList(dependencies);
+//    	
+//    	addDependenciesToSystemClassPath(dependencies);
+//    }
 
 	private void addDependenciesToList(List<String> dependencies, List<String> classPathElements) {
 		for (String cpElement : classPathElements) {
@@ -241,7 +252,26 @@ public class RunnerMojo extends AbstractMojo {
     	}
 	}
 
-    private void addDependenciesToSystemClassPath(List<String> dependencies) {
+//    private void addDependenciesToSystemClassPath(List<String> dependencies) {
+//=======
+//    	addWebInfClassesToList(dependencies);
+//    	
+//    	addDependenciesToSystemClassPath(dependencies);
+//	}
+    
+    private void addWebInfClassesToList(List<String> dependencies) {
+		if (mavenProject.getPackaging().equals("war")) {
+			String webInfClasses = "target/" + mavenProject.getArtifactId() + "-" + mavenProject.getVersion() + "/WEB-INF/classes/";
+			File dependency = new File(webInfClasses);
+			if (dependency.exists()) {
+				getLog().info("Adds WEB-INF: " + dependency.getAbsolutePath());
+				dependencies.add(dependency.getAbsolutePath());
+			}
+		}
+	}
+
+
+	private void addDependenciesToSystemClassPath(List<String> dependencies) {
     	StringBuffer sb = new StringBuffer();
     	for (String cpElement : dependencies) {
     		sb.append(cpElement).append(File.pathSeparatorChar);
@@ -251,7 +281,6 @@ public class RunnerMojo extends AbstractMojo {
     	
     	getLog().info("CLASSPATH: " + System.getProperty("java.class.path"));
 	}
-
 
 	private List<String> getOptimizedPriorityList(List<Measure> list) {
 		Collections.sort(list);
@@ -265,12 +294,18 @@ public class RunnerMojo extends AbstractMojo {
 
 
 	private void priorityListsToAPFD(Map<Integer, List<String>> priorityLists, List<Measure> measureList) throws IOException {
+		XYSeriesCollection plotdata = new XYSeriesCollection();
 		for (Integer localTechniqueNumber : priorityLists.keySet()){
 			List<String> localPriorityList = priorityLists.get(localTechniqueNumber);
 			List<Measure> localMeasureList = APFDHelper.sortMeasureListBySource(localPriorityList, measureList);
+			XYSeries localPlotdata = APFDHelper.getXYSeries(localTechniqueNumber, localMeasureList);
+			plotdata.addSeries(localPlotdata);
+			
 			APFD apfd = new APFD(new MeasureList(localMeasureList));
 			APFDHelper.outputAPFDToFile(apfd, localTechniqueNumber);
+			APFDHelper.outputSingleAPFDGraphToFile(localPlotdata, localTechniqueNumber);
 		}
+		APFDHelper.outputAPFDGraphToFile(plotdata);
 	}
 
 	private void collectPriorityLists(Integer[] techniqueArray, Map<Integer, List<String>> priorityLists) throws NoWorkTreeException, JSONException, IOException, Exception {

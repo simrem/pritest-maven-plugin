@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
 import no.citrus.restapi.model.Measure;
 import no.citrus.restapi.model.MeasureList;
 
@@ -49,5 +52,58 @@ public class APFDHelper {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 		bw.write(String.valueOf(apfd.calculateAPFD()));
 		bw.close();
+	}
+
+	public static XYSeries getXYSeries(Integer localTechniqueNumber, List<Measure> localMeasureList) {
+		XYSeries result = new XYSeries(localTechniqueNumber);
+		result.add(0.0, 0.0);
+		int totalNumberOfFaults = 0;
+		int numberOfTestcases = localMeasureList.size();
+		List<Integer> numberOfFaultsInTestCases = new ArrayList<Integer>();
+		for(Measure measure : localMeasureList) {
+			totalNumberOfFaults += measure.numOfFails;
+			numberOfFaultsInTestCases.add(measure.numOfFails);
+		}
+		double covered = 0.0;
+		for(int testcaseOrder = 0; testcaseOrder < numberOfTestcases; testcaseOrder++) {
+			covered += (double)numberOfFaultsInTestCases.get(testcaseOrder) / (double)totalNumberOfFaults;
+			result.add(
+					(double)(testcaseOrder + 1) / (double)numberOfTestcases, 
+					covered);
+		}
+		return result;
+	}
+
+	public static void outputAPFDGraphToFile(XYSeriesCollection plotdata) throws IOException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+		String directory = "apfd/graphs/";
+		String filename = sdf.format(new Date()) + ".png";
+		
+		File dir = new File(directory);
+		if(!dir.exists()){
+			dir.mkdirs();
+		}
+		
+		File output = new File(directory + filename);
+		
+		APFDGraph graph = new APFDGraph(plotdata, output);
+		graph.saveAsPNG();
+		
+	}
+
+	public static void outputSingleAPFDGraphToFile(XYSeries localPlotdata,
+			Integer techniqueNumber) throws IOException {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+		String directory = "apfd/" + techniqueNumber + "/";
+		String filename = sdf.format(new Date()) + ".png";
+//		
+//		File dir = new File(directory);
+//		if(!dir.exists()){
+//			dir.mkdirs();
+//		}
+		File file = new File(directory + filename);
+		APFDGraph graph = new APFDGraph(new XYSeriesCollection(localPlotdata), file);
+		graph.saveAsPNG();
+		
 	}
 }

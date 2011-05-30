@@ -27,10 +27,10 @@ public abstract class MethodCoverage {
     	retrieveClassCoverage(pathToProjectSource);
 		retrieveTestClassCoverage(pathToTestSuite);
     }
-
+    
     private void retrieveClassCoverage(String pathToProjectSource)
 			throws ParseException, IOException {
-
+    	
 		List<File> fileList =
 			ClassListProvider.getFileList(new File(pathToProjectSource), new String[] {".java"});
 
