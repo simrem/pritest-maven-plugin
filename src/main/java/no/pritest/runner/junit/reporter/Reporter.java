@@ -20,8 +20,8 @@ package no.pritest.runner.junit.reporter;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.WebResource;
-import no.citrus.restapi.model.Measure;
-import no.citrus.restapi.model.MeasureList;
+import no.pritest.restapi.model.Measure;
+import no.pritest.restapi.model.MeasureList;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;

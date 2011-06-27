@@ -17,7 +17,7 @@
 
 package no.pritest.runner.junit.reporter;
 
-import no.citrus.restapi.model.Measure;
+import no.pritest.restapi.model.Measure;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 

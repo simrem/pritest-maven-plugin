@@ -17,7 +17,7 @@
 
 package no.pritest.runner.junit.priority;
 
-import no.citrus.util.JavaPackageUtil;
+import no.pritest.util.JavaPackageUtil;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.errors.NoWorkTreeException;
@@ -72,7 +72,7 @@ public class GitStatusProvider {
 	private void addTestCasesToList(Set<String> untracked, 
 			List<String> gitStatusList) {
 		
-		JavaPackageUtil jpu = 
+		JavaPackageUtil jpu =
 			new JavaPackageUtil(new String[]{sourceDirectory, testSourceDirectory});
 		
 		for (String untrackedFile : untracked) {

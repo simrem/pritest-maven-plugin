@@ -17,8 +17,8 @@
 
 package no.pritest.runner.junit.priority;
 
-import no.pritest.localprioritization.AdditionalMethodCoverage;
-import no.pritest.localprioritization.TotalMethodCoverage;
+import no.pritest.prioritization.methodcoverage.AdditionalMethodCoverage;
+import no.pritest.prioritization.methodcoverage.TotalMethodCoverage;
 import org.codehaus.jettison.json.JSONException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 

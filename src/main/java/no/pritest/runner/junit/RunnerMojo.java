@@ -18,8 +18,8 @@
 package no.pritest.runner.junit;
 
 import com.sun.jersey.api.client.ClientHandlerException;
-import no.citrus.restapi.model.Measure;
-import no.citrus.restapi.model.MeasureList;
+import no.pritest.restapi.model.Measure;
+import no.pritest.restapi.model.MeasureList;
 import no.pritest.runner.junit.priority.LocalClassService;
 import no.pritest.runner.junit.priority.OnlineClassService;
 import no.pritest.runner.junit.priority.PriorityList2;

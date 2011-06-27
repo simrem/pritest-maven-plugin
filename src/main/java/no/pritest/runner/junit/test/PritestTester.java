@@ -17,7 +17,7 @@
 
 package no.pritest.runner.junit.test;
 
-import no.citrus.restapi.model.Measure;
+import no.pritest.restapi.model.Measure;
 import no.pritest.runner.junit.reporter.Reporter;
 import org.apache.maven.plugin.logging.Log;
 import org.junit.Test;

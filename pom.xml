@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>no.citrus.runner</groupId>
+    <groupId>no.pritest.runner</groupId>
     <artifactId>junit</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>maven-plugin</packaging>
@@ -18,14 +18,6 @@
 
     <repositories>
       <repository>
-        <id>javaparser</id>
-        <name>JavaParser Repository</name>
-        <url>http://javaparser.googlecode.com/svn/maven2</url>
-        <snapshots>
-            <enabled>false</enabled>
-        </snapshots>
-      </repository>
-      <repository>
         <id>jgit-repository</id>
         <url>http://download.eclipse.org/jgit/maven</url>
       </repository>
@@ -37,8 +29,8 @@
 
     <dependencies>
         <dependency>
-           <groupId>no.citrus</groupId>
-           <artifactId>citrus-core</artifactId>
+           <groupId>no.pritest</groupId>
+           <artifactId>pritest-core</artifactId>
            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -77,11 +69,6 @@
             <version>${jersey.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.google.code.javaparser</groupId>
-            <artifactId>javaparser</artifactId>
-            <version>1.0.8</version>
-        </dependency>
-        <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
             <version>0.12.1</version>
@@ -97,11 +84,6 @@
              <groupId>jfree</groupId>
              <artifactId>jfreechart</artifactId>
              <version>1.0.9</version>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
         </dependency>
     </dependencies>
     <build>

@@ -17,9 +17,8 @@
 
 package no.pritest.runner.junit.reporter;
 
-
-import no.citrus.restapi.model.Measure;
-import no.citrus.restapi.model.MeasureList;
+import no.pritest.restapi.model.Measure;
+import no.pritest.restapi.model.MeasureList;
 
 public class APFD {
 	public final MeasureList measureList;

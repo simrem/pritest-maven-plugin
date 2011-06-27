@@ -17,7 +17,7 @@
 
 package no.pritest.runner.junit.priority;
 
-import no.pritest.localprioritization.ClassListProvider;
+import no.pritest.prioritization.methodcoverage.ClassListProvider;
 
 import java.io.File;
 import java.util.List;
