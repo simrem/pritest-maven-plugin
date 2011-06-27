@@ -19,15 +19,12 @@ package no.pritest.localprioritization;
 
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
-import no.pritest.localprioritization.ClassListProvider;
-import no.pritest.localprioritization.CompilationUnitProvider;
-import org.junit.Before;
-import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;

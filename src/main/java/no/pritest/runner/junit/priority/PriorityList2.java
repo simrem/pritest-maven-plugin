@@ -17,20 +17,17 @@
 
 package no.pritest.runner.junit.priority;
 
+import no.pritest.localprioritization.AdditionalMethodCoverage;
+import no.pritest.localprioritization.TotalMethodCoverage;
+import org.codehaus.jettison.json.JSONException;
+import org.eclipse.jgit.errors.NoWorkTreeException;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import no.pritest.localprioritization.AdditionalMethodCoverage;
-import no.pritest.localprioritization.TotalMethodCoverage;
-
-import no.pritest.localprioritization.AdditionalMethodCoverage;
-import no.pritest.localprioritization.TotalMethodCoverage;
-import org.codehaus.jettison.json.JSONException;
-import org.eclipse.jgit.errors.NoWorkTreeException;
 
 public class PriorityList2 {
 	

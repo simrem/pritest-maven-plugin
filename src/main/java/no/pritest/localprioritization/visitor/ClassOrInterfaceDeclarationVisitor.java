@@ -4,11 +4,8 @@ import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
-import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.visitor.GenericVisitorAdapter;
 import no.pritest.localprioritization.model.ClassType;
-import no.pritest.localprioritization.model.ClassType;
-import no.pritest.localprioritization.model.MethodDecl;
 import no.pritest.localprioritization.model.MethodDecl;
 
 import java.util.ArrayList;

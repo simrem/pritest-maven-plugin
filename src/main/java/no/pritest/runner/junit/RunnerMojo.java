@@ -17,32 +17,14 @@
 
 package no.pritest.runner.junit;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.xml.bind.JAXBException;
-
+import com.sun.jersey.api.client.ClientHandlerException;
 import no.citrus.restapi.model.Measure;
 import no.citrus.restapi.model.MeasureList;
-import no.pritest.runner.junit.priority.*;
-import no.pritest.runner.junit.priority.OnlineClassService;
 import no.pritest.runner.junit.priority.LocalClassService;
+import no.pritest.runner.junit.priority.OnlineClassService;
 import no.pritest.runner.junit.priority.PriorityList2;
-import no.pritest.runner.junit.reporter.*;
-import no.pritest.runner.junit.reporter.APFDHelper;
-import no.pritest.runner.junit.test.PritestTester;
-
 import no.pritest.runner.junit.reporter.APFD;
+import no.pritest.runner.junit.reporter.APFDHelper;
 import no.pritest.runner.junit.reporter.Reporter;
 import no.pritest.runner.junit.test.PritestTester;
 import org.apache.maven.artifact.Artifact;
@@ -56,7 +38,13 @@ import org.eclipse.jgit.errors.NoWorkTreeException;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import com.sun.jersey.api.client.ClientHandlerException;
+import javax.xml.bind.JAXBException;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.*;
 
 
 /**

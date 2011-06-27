@@ -5,8 +5,6 @@ import japa.parser.ast.visitor.GenericVisitorAdapter;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 import no.pritest.localprioritization.model.RawMethodCall;
 import no.pritest.localprioritization.model.ReferenceType;
-import no.pritest.localprioritization.model.RawMethodCall;
-import no.pritest.localprioritization.model.ReferenceType;
 
 import java.util.ArrayList;
 import java.util.List;

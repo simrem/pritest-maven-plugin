@@ -23,10 +23,6 @@ import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.BodyDeclaration;
 import no.pritest.localprioritization.model.MethodDecl;
 import no.pritest.localprioritization.model.ReferenceType;
-
-import no.pritest.localprioritization.model.MethodDecl;
-import no.pritest.localprioritization.model.ReferenceType;
-import no.pritest.localprioritization.visitor.MethodDeclarationVisitor;
 import org.junit.Before;
 import org.junit.Test;
 

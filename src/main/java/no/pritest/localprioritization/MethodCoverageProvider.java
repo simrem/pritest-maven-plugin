@@ -18,21 +18,17 @@
 package no.pritest.localprioritization;
 
 import japa.parser.ast.CompilationUnit;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import no.pritest.localprioritization.model.ClassCover;
-import no.pritest.localprioritization.model.ClassType;
-import no.pritest.localprioritization.model.ClassCover;
-import no.pritest.localprioritization.visitor.MethodCoverageVisitor;
 import no.pritest.localprioritization.model.ClassType;
 import no.pritest.localprioritization.visitor.MethodCoverageVisitor;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.SimpleLayout;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MethodCoverageProvider {
 

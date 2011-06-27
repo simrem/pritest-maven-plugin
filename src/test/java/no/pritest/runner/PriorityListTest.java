@@ -17,16 +17,15 @@
 
 package no.pritest.runner;
 
-import java.net.ConnectException;
-import java.util.ArrayList;
-import java.util.List;
-
 import no.pritest.runner.junit.priority.ClassService;
 import no.pritest.runner.junit.priority.PriorityList;
-
 import org.codehaus.jettison.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.net.ConnectException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;

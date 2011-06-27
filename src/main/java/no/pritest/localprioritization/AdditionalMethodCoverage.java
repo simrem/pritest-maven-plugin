@@ -20,8 +20,6 @@ package no.pritest.localprioritization;
 import japa.parser.ParseException;
 import no.pritest.localprioritization.algorithm.MethodCoverageAlgorithm;
 import no.pritest.localprioritization.model.SummarizedTestCase;
-import no.pritest.localprioritization.algorithm.MethodCoverageAlgorithm;
-import no.pritest.localprioritization.model.SummarizedTestCase;
 
 import java.io.IOException;
 import java.util.List;

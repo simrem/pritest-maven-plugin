@@ -17,10 +17,10 @@
 
 package no.pritest.runner.junit.priority;
 
+import org.codehaus.jettison.json.JSONException;
+
 import java.net.ConnectException;
 import java.util.List;
-
-import org.codehaus.jettison.json.JSONException;
 
 public interface ClassService {
 	public List<String> getClassList() throws Exception, JSONException, ConnectException;

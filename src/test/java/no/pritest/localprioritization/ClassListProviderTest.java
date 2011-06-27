@@ -17,18 +17,16 @@
 
 package no.pritest.localprioritization;
 
-import java.io.File;
-import java.util.List;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import no.pritest.localprioritization.ClassListProvider;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertThat;
+import java.io.File;
+import java.util.List;
+
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class ClassListProviderTest {
 	File directory;

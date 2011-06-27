@@ -20,8 +20,6 @@ package no.pritest.localprioritization;
 import japa.parser.ast.CompilationUnit;
 import no.pritest.localprioritization.model.ClassType;
 import no.pritest.localprioritization.visitor.CompilationUnitVisitor;
-import no.pritest.localprioritization.model.ClassType;
-import no.pritest.localprioritization.visitor.CompilationUnitVisitor;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.SimpleLayout;

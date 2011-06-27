@@ -19,8 +19,6 @@ package no.pritest.runner.junit.reporter;
 
 import no.citrus.restapi.model.Measure;
 import no.citrus.restapi.model.MeasureList;
-import no.pritest.runner.junit.reporter.APFD;
-
 import org.junit.Before;
 import org.junit.Test;
 

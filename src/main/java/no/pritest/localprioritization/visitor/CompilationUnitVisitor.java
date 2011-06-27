@@ -1,16 +1,15 @@
 package no.pritest.localprioritization.visitor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 import no.pritest.localprioritization.model.ClassType;
-import no.pritest.localprioritization.model.ClassType;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CompilationUnitVisitor extends VoidVisitorAdapter<Object> {
 

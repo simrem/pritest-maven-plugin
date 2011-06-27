@@ -17,15 +17,7 @@
 
 package no.pritest.runner.junit.test;
 
-import java.lang.reflect.Method;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import no.citrus.restapi.model.Measure;
-import no.pritest.runner.junit.reporter.Reporter;
-
 import no.pritest.runner.junit.reporter.Reporter;
 import org.apache.maven.plugin.logging.Log;
 import org.junit.Test;
@@ -33,9 +25,14 @@ import org.junit.runner.RunWith;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
-import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.JUnit4;
 import org.junit.runners.model.InitializationError;
+
+import java.lang.reflect.Method;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class PritestTester extends RunListener {
     private final URLClassLoader classLoader;

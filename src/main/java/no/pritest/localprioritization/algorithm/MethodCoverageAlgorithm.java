@@ -19,16 +19,10 @@ package no.pritest.localprioritization.algorithm;
 
 import no.pritest.localprioritization.MethodCoverageSummarizer;
 import no.pritest.localprioritization.model.ClassCover;
-import no.pritest.localprioritization.MethodCoverageSummarizer;
-import no.pritest.localprioritization.model.*;
 import no.pritest.localprioritization.model.MethodCover;
 import no.pritest.localprioritization.model.SummarizedTestCase;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MethodCoverageAlgorithm {
     private static List<SummarizedTestCase> sortTestCasesByCoverage(Map<String, ClassCover> testSuiteMethodCoverage, Map<String, ClassCover> sourceMethodCoverage) {

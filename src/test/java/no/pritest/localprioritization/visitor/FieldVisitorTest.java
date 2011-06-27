@@ -22,8 +22,6 @@ import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.TypeDeclaration;
 import no.pritest.localprioritization.model.ReferenceType;
-import no.pritest.localprioritization.model.ReferenceType;
-import no.pritest.localprioritization.visitor.FieldVisitor;
 import org.junit.Test;
 
 import java.io.FileInputStream;

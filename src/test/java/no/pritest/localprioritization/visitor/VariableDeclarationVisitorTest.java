@@ -17,20 +17,18 @@
 
 package no.pritest.localprioritization.visitor;
 
-import static org.hamcrest.collection.IsCollectionContaining.hasItems;
-import static org.junit.Assert.assertThat;
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
+import no.pritest.localprioritization.model.ReferenceType;
+import org.junit.Test;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
-import no.pritest.localprioritization.model.ReferenceType;
-
-import no.pritest.localprioritization.visitor.VariableDeclarationVisitor;
-import org.junit.Test;
+import static org.hamcrest.collection.IsCollectionContaining.hasItems;
+import static org.junit.Assert.assertThat;
 
 public class VariableDeclarationVisitorTest {
 	

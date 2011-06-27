@@ -17,7 +17,6 @@
 
 package no.pritest.localprioritization.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProcessedMethodCall extends MethodCall {

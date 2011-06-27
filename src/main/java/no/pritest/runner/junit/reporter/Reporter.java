@@ -17,21 +17,17 @@
 
 package no.pritest.runner.junit.reporter;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.List;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientHandlerException;
+import com.sun.jersey.api.client.WebResource;
+import no.citrus.restapi.model.Measure;
+import no.citrus.restapi.model.MeasureList;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-
-import no.citrus.restapi.model.Measure;
-import no.citrus.restapi.model.MeasureList;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.WebResource;
+import java.io.StringWriter;
+import java.util.List;
 
 public class Reporter {
 	

@@ -21,7 +21,6 @@ import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import no.pritest.localprioritization.model.*;
-import no.pritest.localprioritization.visitor.MethodCoverageVisitor;
 import org.junit.Before;
 import org.junit.Test;
 

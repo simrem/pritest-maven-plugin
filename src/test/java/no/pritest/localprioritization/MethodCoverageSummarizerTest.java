@@ -18,10 +18,8 @@
 package no.pritest.localprioritization;
 
 import no.pritest.localprioritization.model.ClassCover;
-import no.pritest.localprioritization.MethodCoverageSummarizer;
-import no.pritest.localprioritization.model.*;
-import no.pritest.localprioritization.model.ProcessedMethodCall;
 import no.pritest.localprioritization.model.MethodCover;
+import no.pritest.localprioritization.model.ProcessedMethodCall;
 import no.pritest.localprioritization.model.ReferenceType;
 import org.junit.Before;
 import org.junit.Test;

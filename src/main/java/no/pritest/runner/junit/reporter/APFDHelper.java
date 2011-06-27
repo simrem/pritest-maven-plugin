@@ -17,6 +17,10 @@
 
 package no.pritest.runner.junit.reporter;
 
+import no.citrus.restapi.model.Measure;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -25,12 +29,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-
-import no.citrus.restapi.model.Measure;
-import no.citrus.restapi.model.MeasureList;
 
 public class APFDHelper {
 

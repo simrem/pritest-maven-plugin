@@ -23,11 +23,7 @@ import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
 import no.pritest.localprioritization.model.RawMethodCall;
-import no.pritest.localprioritization.model.RawMethodCall;
 import no.pritest.localprioritization.model.ReferenceType;
-
-import no.pritest.localprioritization.model.ReferenceType;
-import no.pritest.localprioritization.visitor.MethodCallVisitor;
 import org.junit.Before;
 import org.junit.Test;
 

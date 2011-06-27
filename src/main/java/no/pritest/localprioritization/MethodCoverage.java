@@ -20,7 +20,6 @@ package no.pritest.localprioritization;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import no.pritest.localprioritization.model.ClassCover;
-import no.pritest.localprioritization.model.*;
 import no.pritest.localprioritization.model.ClassType;
 import no.pritest.localprioritization.model.SummarizedTestCase;
 

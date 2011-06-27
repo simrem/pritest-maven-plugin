@@ -17,17 +17,15 @@
 
 package no.pritest.runner.junit.reporter;
 
+import no.citrus.restapi.model.Measure;
+import org.jfree.data.xy.XYDataItem;
+import org.jfree.data.xy.XYSeries;
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import no.citrus.restapi.model.Measure;
-
-import no.pritest.runner.junit.reporter.APFDHelper;
-import org.jfree.data.xy.XYDataItem;
-import org.jfree.data.xy.XYSeries;
-import org.junit.Test;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertTrue;
 
 public class APFDHelperTest {

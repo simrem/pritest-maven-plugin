@@ -17,14 +17,7 @@
 
 package no.pritest.localprioritization.algorithm;
 
-import no.pritest.localprioritization.model.ClassCover;
-import no.pritest.localprioritization.model.MethodCover;
-import no.pritest.localprioritization.model.ProcessedMethodCall;
-import no.pritest.localprioritization.algorithm.MethodCoverageAlgorithm;
 import no.pritest.localprioritization.model.*;
-
-import no.pritest.localprioritization.model.ReferenceType;
-import no.pritest.localprioritization.model.SummarizedTestCase;
 import org.junit.Before;
 import org.junit.Test;
 

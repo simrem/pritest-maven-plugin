@@ -1,13 +1,12 @@
 package no.pritest.localprioritization.visitor;
 
-import java.util.Map;
-import java.util.HashMap;
-
-import no.pritest.localprioritization.model.ReferenceType;
 import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.expr.VariableDeclarationExpr;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 import no.pritest.localprioritization.model.ReferenceType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class VariableDeclarationVisitor extends VoidVisitorAdapter<Object> {
 

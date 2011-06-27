@@ -17,16 +17,15 @@
 
 package no.pritest.runner.junit.reporter;
 
-import java.io.File;
-import java.io.IOException;
-
-import no.pritest.runner.junit.reporter.APFDGraph;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
 
 public class APFDGraphTest {
 	XYDataset dataset;

@@ -21,10 +21,8 @@ import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 import no.pritest.localprioritization.model.ClassType;
-import no.pritest.localprioritization.model.*;
 import no.pritest.localprioritization.model.MethodDecl;
 import no.pritest.localprioritization.model.ReferenceType;
-import no.pritest.localprioritization.visitor.ClassOrInterfaceDeclarationVisitor;
 import org.junit.Before;
 import org.junit.Test;
 

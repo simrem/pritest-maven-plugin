@@ -17,10 +17,10 @@
 
 package no.pritest.runner.junit.priority;
 
+import org.codehaus.jettison.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.codehaus.jettison.json.JSONException;
 
 public class PriorityList {
 	

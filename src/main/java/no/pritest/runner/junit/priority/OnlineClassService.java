@@ -17,15 +17,14 @@
 
 package no.pritest.runner.junit.priority;
 
-import java.net.ConnectException;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
+import java.net.ConnectException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OnlineClassService implements ClassService {
 

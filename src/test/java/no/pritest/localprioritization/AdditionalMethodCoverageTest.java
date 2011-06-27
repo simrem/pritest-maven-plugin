@@ -18,7 +18,6 @@
 package no.pritest.localprioritization;
 
 import japa.parser.ParseException;
-import no.pritest.localprioritization.AdditionalMethodCoverage;
 import org.junit.Test;
 
 import java.io.IOException;

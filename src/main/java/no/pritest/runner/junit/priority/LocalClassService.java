@@ -17,11 +17,10 @@
 
 package no.pritest.runner.junit.priority;
 
+import no.pritest.localprioritization.ClassListProvider;
+
 import java.io.File;
 import java.util.List;
-
-import no.pritest.localprioritization.ClassListProvider;
-import no.pritest.localprioritization.ClassListProvider;
 
 
 public class LocalClassService implements ClassService {
