@@ -40,7 +40,7 @@ public class GitStatusProvider {
 	public GitStatusProvider(File basedir, String sourceDirectory, String testSourceDirectory) {
 		this.basedir = basedir;
 		this.sourceDirectory = sourceDirectory.replace(basedir + File.separator, "");
-		this.testSourceDirectory = testSourceDirectory.replace(basedir + File.separator, "");;
+		this.testSourceDirectory = testSourceDirectory.replace(basedir + File.separator, "");
 	}
 	
 	public List<String> getGitStatusPriorityList() throws NoWorkTreeException, IOException {
@@ -54,11 +54,11 @@ public class GitStatusProvider {
 	}
 	
 	public List<String> callGitStatus() throws NoWorkTreeException, IOException {
-		File repoPath = new File(basedir.getAbsolutePath() + "/.git");
-		RepositoryBuilder repoBuilder = new RepositoryBuilder();
-		Repository repo = repoBuilder.setGitDir(repoPath).build();
+		File repositoryPath = new File(basedir.getAbsolutePath());
+		RepositoryBuilder repositoryBuilder = new RepositoryBuilder();
+		Repository repository = repositoryBuilder.findGitDir(repositoryPath).build();
 		
-		Git git = new Git(repo);
+		Git git = new Git(repository);
 		Status status = git.status().call();
 		
 		List<String> gitStatusList = new ArrayList<String>();
@@ -69,16 +69,15 @@ public class GitStatusProvider {
 		return gitStatusList;
 	}
 
-	private void addTestCasesToList(Set<String> untracked, 
-			List<String> gitStatusList) {
+	private void addTestCasesToList(Set<String> changedFiles, List<String> statusList) {
 		
 		JavaPackageUtil jpu =
 			new JavaPackageUtil(new String[]{sourceDirectory, testSourceDirectory});
 		
-		for (String untrackedFile : untracked) {
+		for (String untrackedFile : changedFiles) {
 			String testCaseName = jpu.prepareTestCaseName(untrackedFile);
-			if (testCaseName != null && !gitStatusList.contains(testCaseName)) {
-				gitStatusList.add(testCaseName);
+			if (testCaseName != null && !statusList.contains(testCaseName)) {
+				statusList.add(testCaseName);
 			}
 		}
 	}
