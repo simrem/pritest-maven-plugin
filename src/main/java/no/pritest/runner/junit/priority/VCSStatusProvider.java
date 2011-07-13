@@ -18,6 +18,8 @@
 package no.pritest.runner.junit.priority;
 
 import no.pritest.util.JavaPackageUtil;
+import no.pritest.vcs.GitStatus;
+import no.pritest.vcs.VCSStatus;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.errors.NoWorkTreeException;
@@ -31,38 +33,33 @@ import java.util.List;
 import java.util.Set;
 
 
-public class GitStatusProvider {
+public class VCSStatusProvider {
 	
 	private File basedir;
 	private final String sourceDirectory;
-	private final String testSourceDirectory;
+    private final String testSourceDirectory;
+    VCSStatus status;
 
-	public GitStatusProvider(File basedir, String sourceDirectory, String testSourceDirectory) {
+    public VCSStatusProvider(File basedir, String sourceDirectory, String testSourceDirectory, VCSStatus status) throws IOException {
 		this.basedir = basedir;
 		this.sourceDirectory = sourceDirectory.replace(basedir + File.separator, "");
 		this.testSourceDirectory = testSourceDirectory.replace(basedir + File.separator, "");
+        this.status = status;
 	}
 	
 	public List<String> getGitStatusPriorityList() throws NoWorkTreeException, IOException {
-		List<String> gitStatusList = new ArrayList<String>();
-		gitStatusList = callGitStatus();
+		List<String> statusList = new ArrayList<String>();
+		statusList = callStatus();
 		List<String> finalList = new ArrayList<String>();
 		
-		finalList.addAll(gitStatusList);
+		finalList.addAll(statusList);
 
 		return finalList;
 	}
 	
-	public List<String> callGitStatus() throws NoWorkTreeException, IOException {
-		File repositoryPath = new File(basedir.getAbsolutePath());
-		RepositoryBuilder repositoryBuilder = new RepositoryBuilder();
-		Repository repository = repositoryBuilder.findGitDir(repositoryPath).build();
-		
-		Git git = new Git(repository);
-		Status status = git.status().call();
-		
+	public List<String> callStatus() throws IOException {
 		List<String> gitStatusList = new ArrayList<String>();
-		
+
 		addTestCasesToList(status.getUntracked(), gitStatusList);
 		addTestCasesToList(status.getModified(), gitStatusList);
 		
@@ -72,10 +69,18 @@ public class GitStatusProvider {
 	private void addTestCasesToList(Set<String> changedFiles, List<String> statusList) {
 		
 		JavaPackageUtil jpu =
-			new JavaPackageUtil(new String[]{sourceDirectory, testSourceDirectory});
+			new JavaPackageUtil(new String[]{sourceDirectory, testSourceDirectory,
+                    basedir.getName() + File.separator + sourceDirectory,
+                    basedir.getName() + File.separator + testSourceDirectory});
+
+        System.out.println(basedir.getName() + File.separator + sourceDirectory);
+        System.out.println(basedir.getName() + File.separator + testSourceDirectory);
 		
-		for (String untrackedFile : changedFiles) {
-			String testCaseName = jpu.prepareTestCaseName(untrackedFile);
+		for (String changedFile : changedFiles) {
+			String testCaseName = jpu.prepareTestCaseName(changedFile);
+
+            System.out.println("File: " + changedFile);
+
 			if (testCaseName != null && !statusList.contains(testCaseName)) {
 				statusList.add(testCaseName);
 			}

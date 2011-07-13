@@ -19,6 +19,7 @@ package no.pritest.runner.junit.priority;
 
 import no.pritest.prioritization.methodcoverage.AdditionalMethodCoverage;
 import no.pritest.prioritization.methodcoverage.TotalMethodCoverage;
+import no.pritest.vcs.GitStatus;
 import org.codehaus.jettison.json.JSONException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
 
@@ -82,7 +83,7 @@ public class PriorityList2 {
 	
 
 	private List<String> technique4Strategy(List<String> localTestClasses) throws NoWorkTreeException, IOException {
-		GitStatusProvider gsp = new GitStatusProvider(baseDir, sourceDirectory, testSourceDirectory);
+		VCSStatusProvider gsp = new VCSStatusProvider(baseDir, sourceDirectory, testSourceDirectory, new GitStatus(baseDir));
 		List<String> gitStatusPriorityList = gsp.getGitStatusPriorityList();
 		for(String localTestClass : localTestClasses) {
 			if(!gitStatusPriorityList.contains(localTestClass)) {
@@ -93,7 +94,7 @@ public class PriorityList2 {
 	}
 	
 	private List<String> technique5Strategy() throws NoWorkTreeException, IOException {
-		GitStatusProvider gsp = new GitStatusProvider(baseDir, sourceDirectory, testSourceDirectory);
+		VCSStatusProvider gsp = new VCSStatusProvider(baseDir, sourceDirectory, testSourceDirectory, new GitStatus(baseDir));
 		List<String> gitStatusPriorityList = gsp.getGitStatusPriorityList();
 		
 		List<String> contactCitrusList = new ArrayList<String>();
