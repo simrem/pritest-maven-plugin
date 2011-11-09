@@ -18,13 +18,8 @@
 package no.pritest.runner.junit.priority;
 
 import no.pritest.util.JavaPackageUtil;
-import no.pritest.vcs.GitStatus;
 import no.pritest.vcs.VCSStatus;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.errors.NoWorkTreeException;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.RepositoryBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,10 +43,9 @@ public class VCSStatusProvider {
 	}
 	
 	public List<String> getGitStatusPriorityList() throws NoWorkTreeException, IOException {
-		List<String> statusList = new ArrayList<String>();
-		statusList = callStatus();
+		List<String> statusList = callStatus();
 		List<String> finalList = new ArrayList<String>();
-		
+
 		finalList.addAll(statusList);
 
 		return finalList;
@@ -73,13 +67,8 @@ public class VCSStatusProvider {
                     basedir.getName() + File.separator + sourceDirectory,
                     basedir.getName() + File.separator + testSourceDirectory});
 
-        System.out.println(basedir.getName() + File.separator + sourceDirectory);
-        System.out.println(basedir.getName() + File.separator + testSourceDirectory);
-		
 		for (String changedFile : changedFiles) {
 			String testCaseName = jpu.prepareTestCaseName(changedFile);
-
-            System.out.println("File: " + changedFile);
 
 			if (testCaseName != null && !statusList.contains(testCaseName)) {
 				statusList.add(testCaseName);
