@@ -42,8 +42,8 @@ public class VCSStatusProvider {
 
     public VCSStatusProvider(File basedir, String sourceDirectory, String testSourceDirectory, VCSStatus status) throws IOException {
 		this.basedir = basedir;
-		this.sourceDirectory = sourceDirectory.replace(basedir + File.separator, "");
-		this.testSourceDirectory = testSourceDirectory.replace(basedir + File.separator, "");
+		this.sourceDirectory = sourceDirectory.replace(basedir.getPath() + File.separator, "");
+		this.testSourceDirectory = testSourceDirectory.replace(basedir.getPath() + File.separator, "");
         this.status = status;
 	}
 	
