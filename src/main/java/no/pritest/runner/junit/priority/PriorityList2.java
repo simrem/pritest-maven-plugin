@@ -58,7 +58,7 @@ public class PriorityList2 {
 			case 1: case 2: case 3:
 				return onlineListStrategy(localTestClasses, onlineTestClasses);
 			case 4:
-				return technique4Strategy(localTestClasses);
+				return technique4Strategy(localTestClasses, baseDir, sourceDirectory, testSourceDirectory);
 			case 5:
 				return technique5Strategy();
 			case 6:
@@ -80,9 +80,8 @@ public class PriorityList2 {
 		return localTestClasses;
 	}
 	
-	
-
-	private List<String> technique4Strategy(List<String> localTestClasses) throws NoWorkTreeException, IOException {
+    private List<String> technique4Strategy(List<String> localTestClasses, File baseDir, String sourceDirectory, String testSourceDirectory)
+            throws NoWorkTreeException, IOException {
 		VCSStatusProvider gsp = new VCSStatusProvider(baseDir, sourceDirectory, testSourceDirectory, new GitStatus(baseDir));
 		List<String> gitStatusPriorityList = gsp.getGitStatusPriorityList();
 		for(String localTestClass : localTestClasses) {
