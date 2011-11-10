@@ -19,6 +19,7 @@ package no.pritest.runner.junit.priority;
 
 import no.pritest.prioritization.methodcoverage.AdditionalMethodCoverage;
 import no.pritest.prioritization.methodcoverage.TotalMethodCoverage;
+import no.pritest.util.VCSStatusProvider;
 import no.pritest.vcs.GitStatus;
 import org.codehaus.jettison.json.JSONException;
 import org.eclipse.jgit.errors.NoWorkTreeException;
