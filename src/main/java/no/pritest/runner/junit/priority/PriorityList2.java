@@ -52,7 +52,7 @@ public class PriorityList2 {
 		
 	}
 	
-	public List<String> getPriorityList() throws JSONException, NoWorkTreeException, IOException, Exception {
+	public List<String> getPriorityList() throws Exception {
 		List<String> localTestClasses = this.localClassService.getClassList();
 		List<String> onlineTestClasses = new ArrayList<String>();
 		
@@ -61,7 +61,9 @@ public class PriorityList2 {
 				return onlineListStrategy(localTestClasses, onlineTestClasses);
 			case 4:
                 CurrentCodeChanges currentCodeChanges = new CurrentCodeChanges();
-                return currentCodeChanges.prioritize(localTestClasses, baseDir, sourceDirectory, testSourceDirectory);
+                VCSStatusProvider statusProvider = new VCSStatusProvider(baseDir, sourceDirectory, testSourceDirectory,
+                        new GitStatus(baseDir));
+                return currentCodeChanges.prioritize(localTestClasses, statusProvider);
 			case 5:
 				return technique5Strategy();
 			case 6:
