@@ -60,10 +60,10 @@ public class PriorityList2 {
 			case 1: case 2: case 3:
 				return onlineListStrategy(localTestClasses, onlineTestClasses);
 			case 4:
-                CurrentCodeChanges currentCodeChanges = new CurrentCodeChanges();
                 VCSStatusProvider statusProvider = new VCSStatusProvider(baseDir, sourceDirectory, testSourceDirectory,
                         new GitStatus(baseDir));
-                return currentCodeChanges.prioritize(localTestClasses, statusProvider);
+                CurrentCodeChanges currentCodeChanges = new CurrentCodeChanges(statusProvider);
+                return currentCodeChanges.prioritize(localTestClasses);
 			case 5:
 				return technique5Strategy();
 			case 6:
