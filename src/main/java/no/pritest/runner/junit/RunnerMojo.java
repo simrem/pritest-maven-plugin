@@ -239,7 +239,7 @@ public class RunnerMojo extends AbstractMojo {
 
 
 	private void addDependenciesToSystemClassPath(List<String> dependencies) {
-    	StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
     	for (String cpElement : dependencies) {
     		sb.append(cpElement).append(File.pathSeparatorChar);
     	}
