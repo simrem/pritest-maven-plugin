@@ -17,8 +17,8 @@
 
 package no.pritest.runner;
 
-import no.pritest.runner.junit.priority.ClassService;
-import no.pritest.runner.junit.priority.PriorityList;
+import no.pritest.priority.ClassService;
+import no.pritest.priority.PriorityList;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;

@@ -15,10 +15,10 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package no.pritest.runner.junit.test;
+package no.pritest.test;
 
 import no.pritest.restapi.model.Measure;
-import no.pritest.runner.junit.reporter.Reporter;
+import no.pritest.reporter.Reporter;
 import org.apache.maven.plugin.logging.Log;
 import org.junit.Test;
 import org.junit.runner.RunWith;

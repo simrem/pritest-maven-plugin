@@ -15,18 +15,18 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package no.pritest.runner.junit;
+package no.pritest;
 
 import com.sun.jersey.api.client.ClientHandlerException;
 import no.pritest.restapi.model.Measure;
 import no.pritest.restapi.model.MeasureList;
-import no.pritest.runner.junit.priority.LocalClassService;
-import no.pritest.runner.junit.priority.OnlineClassService;
-import no.pritest.runner.junit.priority.PriorityList2;
-import no.pritest.runner.junit.reporter.APFD;
-import no.pritest.runner.junit.reporter.APFDHelper;
-import no.pritest.runner.junit.reporter.Reporter;
-import no.pritest.runner.junit.test.PritestTester;
+import no.pritest.priority.LocalClassService;
+import no.pritest.priority.OnlineClassService;
+import no.pritest.priority.PriorityList2;
+import no.pritest.reporter.APFD;
+import no.pritest.reporter.APFDHelper;
+import no.pritest.reporter.Reporter;
+import no.pritest.test.PritestTester;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.plugin.AbstractMojo;

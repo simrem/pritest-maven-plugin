@@ -15,7 +15,7 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package no.pritest.runner.junit.priority;
+package no.pritest.priority;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;

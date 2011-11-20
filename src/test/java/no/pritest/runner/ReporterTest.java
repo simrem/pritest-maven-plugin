@@ -19,7 +19,7 @@ package no.pritest.runner;
 
 import com.sun.jersey.api.client.ClientHandlerException;
 import no.pritest.restapi.model.Measure;
-import no.pritest.runner.junit.reporter.Reporter;
+import no.pritest.reporter.Reporter;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;

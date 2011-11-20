@@ -30,9 +30,9 @@ Setup citrus-junit-runner in your project:
 
 	Add this to your plugin section in pom.xml:
 		<plugin>
-		  <groupId>no.citrus.runner</groupId>
-		  <artifactId>junit</artifactId>
-		  <version>${citrus.junit.runner.version}</version>
+		  <groupId>no.citrus</groupId>
+		  <artifactId>pritest-maven-plugin</artifactId>
+		  <version>${pritest.maven.plugin.version}</version>
 		  <executions>
 		    <execution>
 		      <phase>test</phase>

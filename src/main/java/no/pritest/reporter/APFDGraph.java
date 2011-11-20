@@ -15,44 +15,45 @@
     along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package no.pritest.runner.junit.reporter;
+package no.pritest.reporter;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 
-public class APFDGraphTest {
-	XYDataset dataset;
-	File output;
-	
-	@Before
-	public void setup(){
-		XYSeries series = new XYSeries("APFD");
-		series.add(0, 0);
-		series.add(0.2, 0.2);
-		series.add(0.3, 0.3);
-		series.add(0.4, 0.4);
-		series.add(0.5, 0.5);
-		series.add(0.6, 0.6);
-		series.add(0.7, 0.7);
-		dataset = new XYSeriesCollection(series);
-		output = new File("./testoutput");
+public class APFDGraph {
+
+	private final XYDataset dataset;
+	private final File output;
+	private JFreeChart chart; 
+
+	public APFDGraph(XYDataset dataset, File output) {
+		this.dataset = dataset;
+		this.output = output;
+		makeGraph();
 	}
-	
-	@Test
-	public void should_make_chart() throws IOException{
-		APFDGraph graph = new APFDGraph(dataset, output);
-		graph.saveAsPNG();
+
+	private void makeGraph() {
+		chart = ChartFactory.createXYLineChart(
+				"APFD", 
+				"Test suite fraction", 
+				"Precent Detected Faults", 
+				dataset, 
+				PlotOrientation.VERTICAL, 
+				true, 
+				true, 
+				false);
+		
 	}
-	
-	@After
-	public void cleanup(){
-		output.delete();
+
+	public void saveAsPNG() throws IOException {
+		ChartUtilities.saveChartAsPNG(output, chart, 640, 480, null, true, 0);
+		
 	}
+
 }
